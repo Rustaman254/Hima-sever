@@ -1,0 +1,45 @@
+{
+  "name": "hima-server",
+  "version": "1.0.0",
+  "description": "Himer server",
+  "type": "module",
+  "main": "app.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node dist/app.js",
+    "dev": "nodemon src/app.ts",
+    "build": "tsc",
+    "compile": "npx hardhat compile",
+    "deploy:testnet": "npx hardhat run scripts/deploy.ts --network mantleTestnet",
+    "deploy:mainnet": "npx hardhat run scripts/deploy.ts --network mantleMainnet"
+  },
+  "author": "Anwar Magara",
+  "license": "MIT",
+  "dependencies": {
+    "@openzeppelin/contracts": "^5.2.0",
+    "@types/jsonwebtoken": "^9.0.10",
+    "axios": "^1.13.2",
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.3",
+    "ethers": "^6.16.0",
+    "express": "^5.1.0",
+    "jsonwebtoken": "^9.0.3",
+    "mongoose": "^9.0.1",
+    "twilio": "^5.10.7",
+    "typescript": "^5.9.3",
+    "viem": "^2.41.2",
+    "web3": "^4.16.0",
+    "whatsapp": "^0.0.5-Alpha"
+  },
+  "devDependencies": {
+    "@nomicfoundation/hardhat-toolbox": "^5.0.0",
+    "@types/cors": "^2.8.19",
+    "@types/express": "^5.0.5",
+    "@types/node": "^24.10.1",
+    "chai": "^6.2.1",
+    "hardhat": "^2.22.0",
+    "jest": "^30.2.0",
+    "mocha": "^11.7.5",
+    "nodemon": "^3.1.11"
+  }
+}
