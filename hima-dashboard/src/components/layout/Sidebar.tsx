@@ -22,9 +22,11 @@ import { useState, useEffect } from "react";
 
 interface SidebarProps {
     role: "admin" | "lp" | "user";
+    isOpen?: boolean;
+    onClose?: () => void;
 }
 
-export default function Sidebar({ role }: SidebarProps) {
+export default function Sidebar({ role, isOpen, onClose }: SidebarProps) {
     const pathname = usePathname();
     const [pendingCount, setPendingCount] = useState(0);
 
@@ -78,40 +80,47 @@ export default function Sidebar({ role }: SidebarProps) {
     const navItems = role === "admin" ? adminItems : role === "lp" ? lpItems : userItems;
 
     return (
-        <aside className={styles.sidebar}>
-            <div className={styles.logoContainer}>
-                <Shield size={24} className="text-white" fill="white" />
-                <span className={styles.logoText}>Hima</span>
-            </div>
-
-            <nav className={styles.nav}>
-                {navItems.map((item) => {
-                    const Icon = item.icon;
-                    const isActive = pathname === item.href;
-                    return (
-                        <Link
-                            key={item.href}
-                            href={item.href}
-                            className={`${styles.navItem} ${isActive ? styles.active : ""}`}
-                        >
-                            <Icon size={18} />
-                            {item.name}
-                            {/* @ts-ignore */}
-                            {item.badge && <span className={styles.badge}>{item.badge}</span>}
-                        </Link>
-                    );
-                })}
-            </nav>
-
-            <div className={styles.promoCard}>
-                <div className={styles.promoContent}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.5rem' }}>
-                        <Bolt size={16} fill="#fbbf24" className={styles.boltIcon} />
-                        <h3 className={styles.promoTitle}>Activate Super</h3>
-                    </div>
-                    <p className={styles.promoText}>Unlock all features on Hima</p>
+        <>
+            {/* Mobile Overlay */}
+            <div
+                className={`${styles.overlay} ${isOpen ? styles.showOverlay : ""}`}
+                onClick={onClose}
+            />
+            <aside className={`${styles.sidebar} ${isOpen ? styles.open : ""}`}>
+                <div className={styles.logoContainer}>
+                    <Shield size={24} className="text-white" fill="white" />
+                    <span className={styles.logoText}>Hima</span>
                 </div>
-            </div>
-        </aside>
+
+                <nav className={styles.nav}>
+                    {navItems.map((item) => {
+                        const Icon = item.icon;
+                        const isActive = pathname === item.href;
+                        return (
+                            <Link
+                                key={item.href}
+                                href={item.href}
+                                className={`${styles.navItem} ${isActive ? styles.active : ""}`}
+                            >
+                                <Icon size={18} />
+                                {item.name}
+                                {/* @ts-ignore */}
+                                {item.badge && <span className={styles.badge}>{item.badge}</span>}
+                            </Link>
+                        );
+                    })}
+                </nav>
+
+                <div className={styles.promoCard}>
+                    <div className={styles.promoContent}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.5rem' }}>
+                            <Bolt size={16} fill="#fbbf24" className={styles.boltIcon} />
+                            <h3 className={styles.promoTitle}>Activate Super</h3>
+                        </div>
+                        <p className={styles.promoText}>Unlock all features on Hima</p>
+                    </div>
+                </div>
+            </aside>
+        </>
     );
 }

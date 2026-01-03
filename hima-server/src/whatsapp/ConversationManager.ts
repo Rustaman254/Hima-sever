@@ -50,6 +50,8 @@ export class ConversationManager {
             await logActivity("REGISTRATION", `New user starting registration from ${phoneNumber}`, user._id.toString());
         }
 
+        if (!user) throw new Error("User creation failed"); // Should not happen
+
         const cleanMessage = message.trim().toLowerCase();
         const isGreeting = ["hi", "hello", "hey", "start", "jambo"].includes(cleanMessage);
 
@@ -242,6 +244,10 @@ export class ConversationManager {
                 }
 
                 const selectedProd = availableProducts[productIndex];
+
+                if (!selectedProd) {
+                    return { body: MESSAGES.INVALID_INPUT };
+                }
                 user.selectedProductId = selectedProd._id.toString();
                 user.coverageType = selectedProd.tier as any;
                 user.conversationState = CONVERSATION_STATES.SHOWING_QUOTE;
@@ -280,6 +286,7 @@ export class ConversationManager {
                 return await this.generateAndShowQuote(user, coverage);
 
             case CONVERSATION_STATES.SHOWING_QUOTE:
+                if (!user) return { body: MESSAGES.ERROR };
                 user.conversationState =
                     CONVERSATION_STATES.ASKING_QUOTE_ACCEPTANCE;
                 await user.save();
@@ -438,7 +445,7 @@ export class ConversationManager {
 Ready to proceed?`;
     }
 
-    private async initiatePayment(user: any, quote: any): Promise<string> {
+    private async initiatePayment(user: any, quote: any): Promise<{ body: string, cta?: { label: string, url: string } }> {
         try {
             const paymentLink = await new PaymentProcessor({
                 rpcUrl: process.env.RPC_URL || "",
@@ -504,6 +511,22 @@ Ready to proceed?`;
             console.error("Error handling payment completion:", error);
             return { body: MESSAGES.ERROR };
         }
+    }
+
+    async handleMediaMessage(
+        phoneNumber: string,
+        mediaType: "image" | "video" | "document",
+        mediaBuffer: Buffer,
+        mimeType: string
+    ): Promise<{ body: string }> {
+        // Logic to handle media upload (e.g. upload to S3/Cloudinary and get URL)
+        // For now, we'll just simulate it
+        console.log(`Received ${mediaType} from ${phoneNumber}`);
+
+        // Use a simulated URL for now
+        const simulatedUrl = `https://api.hima.check/uploads/${Date.now()}_${mediaType}`;
+
+        return this.processLogic(phoneNumber, "", simulatedUrl);
     }
 }
 

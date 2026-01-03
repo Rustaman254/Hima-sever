@@ -6,6 +6,12 @@ export const metadata: Metadata = {
   description: 'Admin and Liquidity Provider Dashboard for Hima',
 };
 
+export const viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 1,
+};
+
 import { Toaster } from 'sonner';
 
 export default function RootLayout({

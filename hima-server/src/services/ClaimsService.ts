@@ -1,4 +1,4 @@
-import { Claim, IClaim } from "../models/Claim.ts";
+import { Claim, type IClaim } from "../models/Claim.ts";
 import { Policy } from "../models/Policy.ts";
 import { Payment } from "../models/Payment.ts";
 import MantleService from "./MantleService.ts";
@@ -31,7 +31,7 @@ class ClaimsService {
                 throw new Error("Policy is not active");
             }
 
-            if (new Date() > policy.endTime) {
+            if (policy.endTime && new Date() > policy.endTime) {
                 throw new Error("Policy has expired");
             }
 
@@ -53,9 +53,9 @@ class ClaimsService {
                 try {
                     const claimDataHash = `claim-${claim._id}-${Date.now()}`;
                     const { claimId, txHash } = await MantleService.submitClaim(
-                        parseInt(policy.onChainPolicyId),
+                        parseInt(policy.onChainPolicyId!),
                         policy.userId, // Phone number from user
-                        policy.sumAssuredKES,
+                        policy.sumAssuredKES || 0,
                         claimDataHash
                     );
 
@@ -100,7 +100,7 @@ class ClaimsService {
                 throw new Error("Policy not found");
             }
 
-            const finalPayoutAmount = payoutAmountKES || policy.sumAssuredKES;
+            const finalPayoutAmount = payoutAmountKES || policy.sumAssuredKES || 0;
 
             // Update claim status
             claim.status = "approved";
@@ -113,7 +113,7 @@ class ClaimsService {
             if (claim.onChainClaimId) {
                 try {
                     await MantleService.approveClaim(
-                        parseInt(claim.onChainClaimId)
+                        parseInt(claim.onChainClaimId!)
                     );
                 } catch (blockchainError: any) {
                     console.error("❌ Blockchain error:", blockchainError.message);
@@ -130,7 +130,7 @@ class ClaimsService {
                     const payoutResponse = await MpesaService.initiateB2CPayout(
                         phoneNumber,
                         finalPayoutAmount,
-                        `Claim payout for policy ${policy.policyNumber}`
+                        `Claim payout for policy ${policy.policyNumber || "Unknown"}`
                     );
 
                     // Create payment record
@@ -191,7 +191,7 @@ class ClaimsService {
             if (claim.onChainClaimId) {
                 try {
                     await MantleService.rejectClaim(
-                        parseInt(claim.onChainClaimId),
+                        parseInt(claim.onChainClaimId!),
                         rejectionReason
                     );
                 } catch (blockchainError: any) {
@@ -228,15 +228,15 @@ class ClaimsService {
             if (claim.onChainClaimId) {
                 try {
                     await MantleService.markClaimPaid(
-                        parseInt(claim.onChainClaimId)
+                        parseInt(claim.onChainClaimId!)
                     );
 
                     // Record claim payout in RiskPool
                     const policy = await Policy.findById(claim.policyId);
                     if (policy && policy.onChainPolicyId && claim.payoutAmountKES) {
                         await MantleService.recordClaimPayout(
-                            parseInt(policy.onChainPolicyId),
-                            parseInt(claim.onChainClaimId),
+                            parseInt(policy.onChainPolicyId!),
+                            parseInt(claim.onChainClaimId!),
                             claim.payoutAmountKES
                         );
                     }
@@ -254,7 +254,7 @@ class ClaimsService {
                 if (policy.onChainPolicyId) {
                     try {
                         await MantleService.updatePolicyStatus(
-                            parseInt(policy.onChainPolicyId),
+                            parseInt(policy.onChainPolicyId!),
                             "claimed"
                         );
                     } catch (error) {

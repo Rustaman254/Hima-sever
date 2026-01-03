@@ -76,8 +76,9 @@ router.post("/", async (req: Request, res: Response) => {
                 messageText
             );
 
+
             // Send response back to user
-            await whatsappClient.sendTextMessage(phoneNumber, response);
+            await whatsappClient.sendTextMessage(phoneNumber, response.body);
         } else if (message.type === "image" && message.image) {
             // Handle image upload (for KYC documents)
             const phoneNumber = message.from;
@@ -93,8 +94,9 @@ router.post("/", async (req: Request, res: Response) => {
                 message.image.mime_type
             );
 
+
             // Send response
-            await whatsappClient.sendTextMessage(phoneNumber, response);
+            await whatsappClient.sendTextMessage(phoneNumber, response.body);
         }
 
         // Always return 200 to acknowledge receipt

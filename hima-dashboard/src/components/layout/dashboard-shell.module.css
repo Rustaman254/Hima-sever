@@ -8,8 +8,16 @@
     background-color: hsl(var(--background));
     min-height: 100vh;
     padding: 2rem;
-    margin-left: 260px;
     overflow-x: hidden;
+    margin-left: 260px;
+    transition: margin-left 0.3s;
+}
+
+@media (max-width: 768px) {
+    .mainContent {
+        margin-left: 0;
+        padding: 1rem;
+    }
 }
 
 .header {

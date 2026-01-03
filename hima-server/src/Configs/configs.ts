@@ -16,13 +16,13 @@ function getConfig() {
     const twilioWhatsAppNumber = process.env.TWILIO_WHATSAPP_NUMBER || ""; // Format: whatsapp:+14155238886
 
     // ============================================
-    // WHATSAPP BUSINESS API (COMMENTED - KEPT FOR REFERENCE)
+    // WHATSAPP BUSINESS API
     // ============================================
-    // const whatsappAccessToken = process.env.WHATSAPP_ACCESS_TOKEN || "";
-    // const whatsappPhoneNumberId = process.env.WHATSAPP_PHONE_NUMBER_ID || "";
-    // const whatsappBusinessAccountId = process.env.WHATSAPP_BUSINESS_ACCOUNT_ID || "";
-    // const whatsappWebhookVerifyToken = process.env.WHATSAPP_WEBHOOK_VERIFY_TOKEN || "hima_webhook_verify_token";
-    // const whatsappAppSecret = process.env.WHATSAPP_APP_SECRET || "";
+    const whatsappAccessToken = process.env.WHATSAPP_ACCESS_TOKEN || "";
+    const whatsappPhoneNumberId = process.env.WHATSAPP_PHONE_NUMBER_ID || "";
+    const whatsappBusinessAccountId = process.env.WHATSAPP_BUSINESS_ACCOUNT_ID || "";
+    const whatsappWebhookVerifyToken = process.env.WHATSAPP_WEBHOOK_VERIFY_TOKEN || "hima_webhook_verify_token";
+    const whatsappAppSecret = process.env.WHATSAPP_APP_SECRET || "";
 
     // Blockchain config - Mantle Testnet
     const rpcUrl = process.env.RPC_URL || "https://rpc.testnet.mantle.xyz";
@@ -51,12 +51,12 @@ function getConfig() {
         twilioAuthToken,
         twilioWhatsAppNumber,
 
-        // WhatsApp Business API (Commented)
-        // whatsappAccessToken,
-        // whatsappPhoneNumberId,
-        // whatsappBusinessAccountId,
-        // whatsappWebhookVerifyToken,
-        // whatsappAppSecret,
+        // WhatsApp Business API
+        whatsappAccessToken,
+        whatsappPhoneNumberId,
+        whatsappBusinessAccountId,
+        whatsappWebhookVerifyToken,
+        whatsappAppSecret,
 
         blockchain: {
             rpcUrl,

@@ -24,8 +24,11 @@ export function encryptData(text: string): string {
  */
 export function decryptData(encryptedText: string): string {
     const parts = encryptedText.split(":");
-    const iv = Buffer.from(parts[0], "hex");
-    const encrypted = parts[1];
+    if (parts.length < 2) {
+        throw new Error("Invalid encrypted text format");
+    }
+    const iv = Buffer.from(parts[0] as string, "hex");
+    const encrypted = parts[1] as string;
 
     const decipher = crypto.createDecipheriv(ALGORITHM, ENCRYPTION_KEY, iv);
 

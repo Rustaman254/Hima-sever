@@ -73,3 +73,22 @@
         grid-template-columns: repeat(3, 1fr);
     }
 }
+
+.statsGrid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
+    margin-bottom: 2.5rem;
+}
+
+@media (max-width: 768px) {
+    .statsGrid {
+        grid-template-columns: 1fr;
+        /* Stack stats on mobile */
+    }
+
+    .poolsGrid {
+        grid-template-columns: 1fr;
+        /* Stack pools on mobile */
+    }
+}

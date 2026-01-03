@@ -30,6 +30,8 @@ export default function DashboardShell({
         }
     }, [pathname, router]);
 
+    const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+
     if (isChecking) {
         return (
             <div style={{ height: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#020617' }}>
@@ -48,9 +50,9 @@ export default function DashboardShell({
     return (
         <div className={styles.layout}>
             <Toaster position="top-right" theme="dark" />
-            <Sidebar role={role as any} />
+            <Sidebar role={role as any} isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} />
             <main className={styles.mainContent}>
-                <Header role={role} />
+                <Header role={role} onMenuClick={() => setIsSidebarOpen(true)} />
                 {children}
             </main>
         </div>

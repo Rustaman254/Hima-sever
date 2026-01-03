@@ -93,15 +93,15 @@ class MantleService {
 
             console.log(`📝 Creating policy on-chain: ${policyId}`);
 
-            const tx = await this.policyRegistry.createPolicy(
+            const tx = await (this.policyRegistry as any).createPolicy(
                 policyId,
                 riderHash,
                 coverageTypeEnum,
                 tierEnum,
                 startTimestamp,
                 endTimestamp,
-                sumAssuredKES,
-                premiumKES
+                ethers.toBigInt(sumAssuredKES),
+                ethers.toBigInt(premiumKES)
             );
 
             const receipt = await tx.wait();
@@ -140,7 +140,7 @@ class MantleService {
                             ? 2
                             : 3;
 
-            const tx = await this.policyRegistry.setPolicyStatus(
+            const tx = await (this.policyRegistry as any).setPolicyStatus(
                 policyIndex,
                 statusEnum
             );
@@ -159,7 +159,7 @@ class MantleService {
      */
     async getPolicy(policyIndex: number): Promise<any> {
         try {
-            const policy = await this.policyRegistry.getPolicy(policyIndex);
+            const policy = await (this.policyRegistry as any).getPolicy(policyIndex);
             return policy;
         } catch (error: any) {
             console.error("❌ Error getting policy:", error.message);
@@ -172,7 +172,7 @@ class MantleService {
      */
     async isPolicyActive(policyIndex: number): Promise<boolean> {
         try {
-            return await this.policyRegistry.isPolicyActive(policyIndex);
+            return await (this.policyRegistry as any).isPolicyActive(policyIndex);
         } catch (error: any) {
             console.error("❌ Error checking policy status:", error.message);
             return false;
@@ -184,7 +184,7 @@ class MantleService {
      */
     async recordPremium(policyId: number, amountKES: number): Promise<string> {
         try {
-            const tx = await this.riskPool.recordPremium(policyId, amountKES);
+            const tx = await (this.riskPool as any).recordPremium(policyId, amountKES);
             const receipt = await tx.wait();
 
             console.log(`✅ Premium recorded: ${receipt.hash}`);
@@ -210,7 +210,7 @@ class MantleService {
             // Convert claim data hash to bytes32
             const dataHash = ethers.keccak256(ethers.toUtf8Bytes(claimDataHash));
 
-            const tx = await this.claimRegistry.submitClaim(
+            const tx = await (this.claimRegistry as any).submitClaim(
                 policyId,
                 riderHash,
                 claimAmountKES,
@@ -241,7 +241,7 @@ class MantleService {
      */
     async approveClaim(claimId: number): Promise<string> {
         try {
-            const tx = await this.claimRegistry.approveClaim(claimId);
+            const tx = await (this.claimRegistry as any).approveClaim(claimId);
             const receipt = await tx.wait();
 
             console.log(`✅ Claim approved on-chain: ${receipt.hash}`);
@@ -257,7 +257,7 @@ class MantleService {
      */
     async rejectClaim(claimId: number, reason: string): Promise<string> {
         try {
-            const tx = await this.claimRegistry.rejectClaim(claimId, reason);
+            const tx = await (this.claimRegistry as any).rejectClaim(claimId, reason);
             const receipt = await tx.wait();
 
             console.log(`✅ Claim rejected on-chain: ${receipt.hash}`);
@@ -273,7 +273,7 @@ class MantleService {
      */
     async markClaimPaid(claimId: number): Promise<string> {
         try {
-            const tx = await this.claimRegistry.markClaimPaid(claimId);
+            const tx = await (this.claimRegistry as any).markClaimPaid(claimId);
             const receipt = await tx.wait();
 
             console.log(`✅ Claim marked as paid: ${receipt.hash}`);
@@ -293,7 +293,7 @@ class MantleService {
         amountKES: number
     ): Promise<string> {
         try {
-            const tx = await this.riskPool.recordClaimPayout(
+            const tx = await (this.riskPool as any).recordClaimPayout(
                 policyId,
                 claimId,
                 amountKES
@@ -313,7 +313,7 @@ class MantleService {
      */
     async getPoolStats(): Promise<any> {
         try {
-            return await this.riskPool.getPoolStats();
+            return await (this.riskPool as any).getPoolStats();
         } catch (error: any) {
             console.error("❌ Error getting pool stats:", error.message);
             throw new Error("Failed to get pool stats");
@@ -325,9 +325,9 @@ class MantleService {
      */
     async getContractStats(): Promise<any> {
         try {
-            const policyStats = await this.policyRegistry.getStats();
-            const claimStats = await this.claimRegistry.getStats();
-            const poolStats = await this.riskPool.getPoolStats();
+            const policyStats = await (this.policyRegistry as any).getStats();
+            const claimStats = await (this.claimRegistry as any).getStats();
+            const poolStats = await (this.riskPool as any).getPoolStats();
 
             return {
                 policies: {
@@ -344,8 +344,8 @@ class MantleService {
                     paid: Number(claimStats[4]),
                 },
                 pool: {
-                    totalCapital: ethers.formatUnits(poolStats[0], 6),
-                    totalPoolTokens: ethers.formatUnits(poolStats[1], 18),
+                    totalCapital: ethers.formatUnits(poolStats[0].toString(), 6),
+                    totalPoolTokens: ethers.formatUnits(poolStats[1].toString(), 18),
                     premiumsRecorded: Number(poolStats[2]),
                     claimsRecorded: Number(poolStats[3]),
                     netPremiums: Number(poolStats[4]),

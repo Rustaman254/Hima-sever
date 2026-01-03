@@ -59,7 +59,7 @@ export default function AdminOverview() {
             <div className={styles.mainColumn}>
 
                 {/* Stats Summary Grid */}
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1rem', marginBottom: '2.5rem' }}>
+                <div className={styles.statsGrid}>
                     <div style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.05)', borderRadius: '1.5rem', padding: '1.25rem' }}>
                         <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.75rem' }}>
                             <span style={{ color: '#94a3b8', fontSize: '0.75rem' }}>Total Users</span>
@@ -216,7 +216,7 @@ export default function AdminOverview() {
 
             {/* Right Column - Status Card */}
             <div className={styles.rightColumn}>
-                <div style={{ background: 'hsl(var(--card))', border: '1px solid rgba(255,255,255,0.05)', borderRadius: '2rem', padding: '2rem', minHeight: '400px', display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+                <div style={{ background: 'hsl(var(--card))', border: '1px solid rgba(255,255,255,0.05)', borderRadius: '2rem', padding: '1.5rem', minHeight: '400px', display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
                         <div style={{ padding: '0.5rem', background: '#3b82f622', color: '#3b82f6', borderRadius: '0.75rem' }}><FileCheck size={20} /></div>
                         <h3 style={{ fontSize: '1.125rem', fontWeight: 700, color: 'white' }}>KYC Quick Link</h3>

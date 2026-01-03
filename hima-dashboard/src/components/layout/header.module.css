@@ -6,6 +6,32 @@
     padding-top: 0.5rem;
 }
 
+.menuBtn {
+    display: none;
+    background: transparent;
+    border: none;
+    color: white;
+    cursor: pointer;
+    padding: 0.5rem;
+    margin-right: 0.5rem;
+    align-items: center;
+    justify-content: center;
+}
+
+@media (max-width: 768px) {
+    .menuBtn {
+        display: flex;
+    }
+
+    .searchBar {
+        display: none;
+    }
+
+    .leftSection {
+        gap: 0.5rem;
+    }
+}
+
 .leftSection {
     display: flex;
     align-items: center;

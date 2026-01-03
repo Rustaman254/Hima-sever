@@ -84,8 +84,8 @@ export async function getUSDCBalance(address: string): Promise<string> {
             provider
         );
 
-        const balance = await usdcContract.balanceOf(address);
-        const decimals = await usdcContract.decimals();
+        const balance = await (usdcContract as any).balanceOf(address);
+        const decimals = await (usdcContract as any).decimals();
 
         return ethers.formatUnits(balance, decimals);
     } catch (error) {

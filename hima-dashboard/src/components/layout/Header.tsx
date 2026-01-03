@@ -1,6 +1,6 @@
 "use client";
 
-import { Bell, Search, Settings, ChevronDown, LogOut, User as UserIcon } from "lucide-react";
+import { Bell, Search, Settings, ChevronDown, LogOut, User as UserIcon, Menu } from "lucide-react";
 // @ts-ignore
 import styles from "./header.module.css";
 import { useState, useRef, useEffect } from "react";
@@ -8,7 +8,7 @@ import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import * as auth from "@/lib/auth";
 
-export default function Header({ role }: { role: string }) {
+export default function Header({ role, onMenuClick }: { role: string, onMenuClick?: () => void }) {
     const [isProfileOpen, setIsProfileOpen] = useState(false);
     const dropdownRef = useRef<HTMLDivElement>(null);
     const router = useRouter();
@@ -34,6 +34,9 @@ export default function Header({ role }: { role: string }) {
 
     return (
         <header className={styles.header}>
+            <button className={styles.menuBtn} onClick={onMenuClick}>
+                <Menu size={24} />
+            </button>
             <div className={styles.leftSection}>
                 {/* User Profile Pill */}
                 <div ref={dropdownRef} style={{ position: 'relative' }}>
