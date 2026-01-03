@@ -1,0 +1,159 @@
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2.5rem;
+    padding-top: 0.5rem;
+}
+
+.leftSection {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+.profilePill {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    background-color: hsl(var(--card));
+    padding: 0.375rem 0.75rem 0.375rem 0.375rem;
+    border-radius: 9999px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.profilePill:hover {
+    background-color: hsl(var(--card-hover));
+}
+
+.avatar {
+    width: 2rem;
+    height: 2rem;
+    border-radius: 50%;
+    overflow: hidden;
+    background: #333;
+}
+
+.avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.userInfo {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.1;
+}
+
+.userName {
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: white;
+}
+
+.userBadge {
+    font-size: 0.625rem;
+    font-weight: 700;
+    color: #64748b;
+}
+
+.depositBtn {
+    background: #a78bfa;
+    color: #1e1b4b;
+    font-weight: 600;
+    font-size: 0.875rem;
+    padding: 0.5rem 1.25rem;
+    border-radius: 9999px;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: transform 0.2s;
+}
+
+.depositBtn:hover {
+    filter: brightness(1.1);
+    transform: translateY(-1px);
+}
+
+.lockIcon {
+    font-size: 0.75rem;
+}
+
+.rightSection {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.iconBtn {
+    width: 2.5rem;
+    height: 2.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background-color: hsl(var(--card));
+    /* Dark card bg */
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    color: #9CA3AF;
+    cursor: pointer;
+    position: relative;
+    transition: all 0.2s;
+}
+
+.iconBtn:hover {
+    color: white;
+    background-color: hsl(var(--card-hover));
+}
+
+.notificationDot {
+    position: absolute;
+    top: -2px;
+    right: -2px;
+    background: #8b5cf6;
+    color: white;
+    font-size: 0.6rem;
+    width: 1rem;
+    height: 1rem;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid hsl(var(--background));
+}
+
+.searchBar {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background-color: hsl(var(--card));
+    padding: 0.5rem 1rem;
+    border-radius: 9999px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    width: 240px;
+}
+
+.searchBar input {
+    background: transparent;
+    border: none;
+    color: white;
+    font-size: 0.875rem;
+    width: 100%;
+}
+
+.searchBar input:focus {
+    outline: none;
+}
+
+.shortcutKey {
+    background: rgba(255, 255, 255, 0.1);
+    color: #9CA3AF;
+    font-size: 0.75rem;
+    padding: 0.125rem 0.375rem;
+    border-radius: 4px;
+}

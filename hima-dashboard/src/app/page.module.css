@@ -1,0 +1,144 @@
+.container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  position: relative;
+  overflow: hidden;
+  /* background: radial-gradient(circle at center, rgb(30, 41, 59), rgb(15, 23, 42)); */
+  background: linear-gradient(135deg, hsl(var(--background)), hsl(222, 47%, 5%));
+}
+
+.blob {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(100px);
+  z-index: 0;
+  opacity: 0.2;
+}
+
+.blobBlue {
+  top: -10%;
+  left: -10%;
+  width: 50vw;
+  height: 50vw;
+  background-color: hsl(var(--primary));
+}
+
+.blobPurple {
+  bottom: -10%;
+  right: -10%;
+  width: 50vw;
+  height: 50vw;
+  background-color: hsl(var(--secondary));
+}
+
+.loginCard {
+  width: 100%;
+  max-width: 450px;
+  position: relative;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.header {
+  text-align: center;
+}
+
+.title {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  background: linear-gradient(to right, #60a5fa, #c084fc);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.subtitle {
+  color: hsl(var(--muted-foreground));
+}
+
+.roleSelector {
+  display: flex;
+  gap: 1rem;
+  background: rgba(30, 41, 59, 0.5);
+  padding: 0.25rem;
+  border-radius: var(--radius);
+}
+
+.roleBtn {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.75rem;
+  border-radius: var(--radius);
+  border: none;
+  cursor: pointer;
+  background: transparent;
+  color: hsl(var(--muted-foreground));
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.roleBtn:hover {
+  color: hsl(var(--foreground));
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.roleBtn.active {
+  color: white;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.roleBtn.admin.active {
+  background-color: hsl(var(--primary));
+}
+
+.roleBtn.lp.active {
+  background-color: hsl(var(--secondary));
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.formGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.label {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: hsl(var(--muted-foreground));
+}
+
+.submitBtn {
+  margin-top: 1rem;
+  height: 3rem;
+  font-size: 1rem;
+}
+
+.footer {
+  text-align: center;
+  font-size: 0.875rem;
+  color: hsl(var(--muted-foreground));
+  margin-top: 1rem;
+}
+
+.link {
+  color: hsl(var(--primary));
+  text-decoration: none;
+}
+
+.link:hover {
+  text-decoration: underline;
+}

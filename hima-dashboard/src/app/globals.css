@@ -1,0 +1,205 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap');
+
+:root {
+  /* Stakent Theme Colors */
+  --background: 210 20% 5%;
+  /* #0B0E11 - Almost Black */
+  --foreground: 0 0% 100%;
+  /* White */
+
+  --card: 220 25% 11%;
+  /* #151A23 - Dark Blue/Grey */
+  --card-hover: 220 25% 14%;
+  --card-foreground: 210 40% 98%;
+
+  /* Accents */
+  --primary: 262 83% 65%;
+  /* Purple */
+  --primary-foreground: 0 0% 100%;
+
+  --secondary: 217 91% 60%;
+  /* Blue */
+  --secondary-foreground: 0 0% 100%;
+
+  /* Gradients */
+  --gradient-portfolio: linear-gradient(135deg, #1e1b4b 0%, #4c1d95 50%, #2e1065 100%);
+  --gradient-text: linear-gradient(to right, #a78bfa, #60a5fa);
+
+  /* Status */
+  --success: 142 71% 45%;
+  /* #16a34a */
+  --danger: 0 84% 60%;
+  /* #ef4444 */
+
+  /* Borders */
+  --border: 217 19% 20%;
+
+  --radius: 1.25rem;
+  /* More rounded like reference */
+}
+
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+body {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  background-color: hsl(var(--background));
+  color: hsl(var(--foreground));
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Utilities */
+.glass {
+  background: rgba(21, 26, 35, 0.7);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.glass-purple {
+  background: linear-gradient(135deg, rgba(30, 27, 75, 0.9) 0%, rgba(76, 29, 149, 0.8) 100%);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.75rem 1.5rem;
+  border-radius: 9999px;
+  /* Pill shape */
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  border: 1px solid transparent;
+  font-size: 0.875rem;
+  letter-spacing: 0.025em;
+}
+
+.btn-primary {
+  background: linear-gradient(to right, #a78bfa, #8b5cf6);
+  color: white;
+  box-shadow: 0 4px 6px -1px rgba(139, 92, 246, 0.3);
+}
+
+.btn-primary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 10px 15px -3px rgba(139, 92, 246, 0.4);
+}
+
+.btn-glass {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(4px);
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.btn-glass:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.nav-pill {
+  padding: 0.5rem 1rem;
+  border-radius: 9999px;
+  background-color: hsl(var(--card));
+  color: hsl(var(--foreground));
+  border: 1px solid hsl(var(--border));
+  font-size: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.nav-pill:hover,
+.nav-pill.active {
+  background-color: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.card-container {
+  background-color: hsl(var(--card));
+  border-radius: var(--radius);
+  border: 1px solid rgba(255, 255, 255, 0.03);
+}
+
+.text-gradient {
+  background: var(--gradient-text);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* Standardized Inputs */
+.hima-input {
+  width: 100%;
+  background: rgba(15, 23, 42, 0.5) !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  border-radius: 1rem !important;
+  padding: 0.875rem 1.25rem !important;
+  color: white !important;
+  font-size: 0.875rem !important;
+  transition: all 0.2s !important;
+  outline: none !important;
+}
+
+.hima-input:focus {
+  border-color: rgba(139, 92, 246, 0.5) !important;
+  background: rgba(15, 23, 42, 0.8) !important;
+  box-shadow: 0 0 0 4px rgba(139, 92, 246, 0.1) !important;
+}
+
+.hima-label {
+  display: block;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: #E2E8F0;
+  margin-bottom: 0.625rem;
+}
+
+/* react-international-phone overrides */
+.react-international-phone-input-container {
+  width: 100% !important;
+}
+
+.react-international-phone-input {
+  width: 100% !important;
+  height: auto !important;
+  background: rgba(15, 23, 42, 0.5) !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  border-radius: 0 1rem 1rem 0 !important;
+  color: white !important;
+  padding: 0.875rem 1.25rem !important;
+  font-size: 0.875rem !important;
+}
+
+.react-international-phone-country-selector-button {
+  background: rgba(15, 23, 42, 0.5) !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  border-right: none !important;
+  border-radius: 1rem 0 0 1rem !important;
+  padding: 0.875rem 0.75rem !important;
+  height: auto !important;
+}
+
+.react-international-phone-country-selector-dropdown {
+  background: #151A23 !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  border-radius: 1rem !important;
+  padding: 0.5rem !important;
+  box-shadow: 0 15px 30px -5px rgba(0, 0, 0, 0.5) !important;
+}
+
+.react-international-phone-country-selector-list-item {
+  color: #9CA3AF !important;
+}
+
+.react-international-phone-country-selector-list-item:hover,
+.react-international-phone-country-selector-list-item--selected {
+  background: rgba(139, 92, 246, 0.2) !important;
+  color: white !important;
+}

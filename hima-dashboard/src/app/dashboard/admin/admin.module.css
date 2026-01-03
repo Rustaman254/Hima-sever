@@ -1,0 +1,75 @@
+.layoutGrid {
+    display: grid;
+    grid-template-columns: 1fr 340px;
+    /* Main content vs Right sidebar */
+    gap: 2rem;
+}
+
+.mainColumn {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.sectionHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.sectionTitle {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: white;
+    letter-spacing: -0.02em;
+}
+
+.filterTabs {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.filterTab {
+    background: rgba(255, 255, 255, 0.05);
+    color: #9CA3AF;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    padding: 0.5rem 1rem;
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.filterTab:hover,
+.filterTabActive {
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+}
+
+.poolsGrid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+}
+
+.rightColumn {
+    display: flex;
+    flex-direction: column;
+}
+
+@media (max-width: 1200px) {
+    .poolsGrid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 1024px) {
+    .layoutGrid {
+        grid-template-columns: 1fr;
+    }
+
+    .poolsGrid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
