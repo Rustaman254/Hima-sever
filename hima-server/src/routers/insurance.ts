@@ -1,20 +1,20 @@
 import express from "express";
 import type { Request, Response, Router } from "express";
-import { User } from "../models/User.ts";
-import { InsuranceQuote } from "../models/InsuranceQuote.ts";
-import { Policy } from "../models/Policy.ts";
-import { Transaction } from "../models/Transaction.ts";
-import { Claim } from "../models/Claim.ts";
-import QuoteCalculator from "../whatsapp/QuoteCalculator.ts";
-import config from "../Configs/configs.ts";
-import { authenticateJWT } from "../libs/authMiddleware.ts";
-import type { AuthRequest } from "../libs/authMiddleware.ts";
-import { decryptData } from "../libs/encryption.ts";
+import { User } from "../models/User.js";
+import { InsuranceQuote } from "../models/InsuranceQuote.js";
+import { Policy } from "../models/Policy.js";
+import { Transaction } from "../models/Transaction.js";
+import { Claim } from "../models/Claim.js";
+import QuoteCalculator from "../whatsapp/QuoteCalculator.js";
+import config from "../Configs/configs.js";
+import { authenticateJWT } from "../libs/authMiddleware.js";
+import type { AuthRequest } from "../libs/authMiddleware.js";
+import { decryptData } from "../libs/encryption.js";
 import jwt from "jsonwebtoken";
-import { MESSAGES } from "../whatsapp/constants.ts";
-import { logActivity } from "../libs/activityLogger.ts";
-import { ActivityLog } from "../models/ActivityLog.ts";
-import { InsuranceProduct } from "../models/InsuranceProduct.ts";
+import { MESSAGES } from "../whatsapp/constants.js";
+import { logActivity } from "../libs/activityLogger.js";
+import { ActivityLog } from "../models/ActivityLog.js";
+import { InsuranceProduct } from "../models/InsuranceProduct.js";
 
 const router: Router = express.Router();
 
@@ -458,7 +458,7 @@ router.patch("/admin/users/:phoneNumber/kyc", async (req: Request, res: Response
 
         // Send WhatsApp Notification
         try {
-            const WhatsAppClientFactory = (await import("../whatsapp/WhatsAppClientFactory.ts")).default;
+            const WhatsAppClientFactory = (await import("../whatsapp/WhatsAppClientFactory.js")).default;
             const whatsappClient = await WhatsAppClientFactory.getClient();
 
             if (status === 'verified') {

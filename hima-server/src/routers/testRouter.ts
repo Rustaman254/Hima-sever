@@ -1,6 +1,6 @@
 import express from "express";
 import type { Request, Response, Router } from "express";
-import WhatsAppClientFactory from "../whatsapp/WhatsAppClientFactory.ts";
+import WhatsAppClientFactory from "../whatsapp/WhatsAppClientFactory.js";
 
 const router: Router = express.Router();
 

@@ -1,5 +1,5 @@
 import { ethers } from "ethers";
-import config from "../Configs/configs.ts";
+import config from "../Configs/configs.js";
 
 // Import contract ABIs (will be generated after compilation)
 import PolicyRegistryABI from "../../artifacts/contracts/PolicyRegistry.sol/PolicyRegistry.json" with { type: "json" };

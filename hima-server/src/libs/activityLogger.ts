@@ -1,4 +1,4 @@
-import { ActivityLog } from "../models/ActivityLog.ts";
+import { ActivityLog } from "../models/ActivityLog.js";
 import { EventEmitter } from "events";
 
 export const logEmitter = new EventEmitter();
@@ -12,7 +12,7 @@ export async function logActivity(
     recipient?: string
 ) {
     try {
-        const { ActivityLog } = await import("../models/ActivityLog.ts");
+        const { ActivityLog } = await import("../models/ActivityLog.js");
         const log: any = await ActivityLog.create({
             type,
             message,

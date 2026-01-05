@@ -3,19 +3,19 @@ import express from "express";
 import dotenv from "dotenv";
 import mongoose from "mongoose";
 import cors from "cors";
-import config from "./Configs/configs.ts";
+import config from "./Configs/configs.js";
 
 // ============================================
 // WHATSAPP INTEGRATIONS (BOTH ACTIVE)
 // ============================================
-import webhookRouter from "./routers/webhookRouter.ts";
-import settingsRouter from "./routers/settingsRouter.ts";
-import logsRouter from "./routers/logsRouter.ts";
-import userRouter from "./routers/userRouter.ts";
+import webhookRouter from "./routers/webhookRouter.js";
+import settingsRouter from "./routers/settingsRouter.js";
+import logsRouter from "./routers/logsRouter.js";
+import userRouter from "./routers/userRouter.js";
 
-import insuranceRouter from "./routers/insurance.ts";
-import authRouter from "./routers/authRouter.ts";
-import testRouter from "./routers/testRouter.ts";
+import insuranceRouter from "./routers/insurance.js";
+import authRouter from "./routers/authRouter.js";
+import testRouter from "./routers/testRouter.js";
 
 dotenv.config();
 
@@ -29,7 +29,7 @@ app.use(express.urlencoded({ extended: true }));
 
 // Health check endpoint
 app.get("/health", async (req, res) => {
-    const WhatsAppClientFactory = (await import("./whatsapp/WhatsAppClientFactory.ts")).default;
+    const WhatsAppClientFactory = (await import("./whatsapp/WhatsAppClientFactory.js")).default;
     const currentProvider = WhatsAppClientFactory.getCurrentProvider() || "meta";
 
     res.json({
@@ -63,7 +63,7 @@ const startServer = async () => {
         }
 
         // Log configuration
-        const WhatsAppClientFactory = (await import("./whatsapp/WhatsAppClientFactory.ts")).default;
+        const WhatsAppClientFactory = (await import("./whatsapp/WhatsAppClientFactory.js")).default;
         await WhatsAppClientFactory.getClient(); // Ensure initialized
         const currentProvider = WhatsAppClientFactory.getCurrentProvider() || "unknown";
 

@@ -2,7 +2,7 @@
 import pkg from "whatsapp-web.js";
 const { Client, LocalAuth } = pkg as any;
 import qrcode from "qrcode-terminal";
-import ConversationManager from "./ConversationManager.ts";
+import ConversationManager from "./ConversationManager.js";
 
 export class WhatsAppBot {
     private client: any;

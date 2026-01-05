@@ -1,9 +1,9 @@
 import express from "express";
 import type { Request, Response, Router } from "express";
-import { User } from "../models/User.ts";
+import { User } from "../models/User.js";
 import jwt from "jsonwebtoken";
-import config from "../Configs/configs.ts";
-import WhatsAppClientFactory from "../whatsapp/WhatsAppClientFactory.ts";
+import config from "../Configs/configs.js";
+import WhatsAppClientFactory from "../whatsapp/WhatsAppClientFactory.js";
 
 const router: Router = express.Router();
 

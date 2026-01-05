@@ -1,6 +1,6 @@
 import { ethers } from "ethers";
-import config from "../Configs/configs.ts";
-import { encryptData, decryptData } from "./encryption.ts";
+import config from "../Configs/configs.js";
+import { encryptData, decryptData } from "./encryption.js";
 
 export interface WalletInfo {
     address: string;
@@ -33,7 +33,7 @@ export function getWalletFromEncrypted(encryptedPrivateKey: string): ethers.Wall
  */
 export async function getWalletForUser(phoneNumber: string): Promise<ethers.Wallet | null> {
     try {
-        const { User } = await import("../models/User.ts");
+        const { User } = await import("../models/User.js");
         const user = await User.findOne({ phoneNumber });
 
         if (!user || !user.walletPrivateKey) {

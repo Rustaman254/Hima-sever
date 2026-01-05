@@ -1,7 +1,7 @@
 import express from "express";
 import type { Request, Response, Router } from "express";
 import mongoose from "mongoose";
-import { User } from "../models/User.ts";
+import { User } from "../models/User.js";
 
 const router: Router = express.Router();
 
@@ -86,9 +86,9 @@ router.post("/:id/message", async (req: Request, res: Response) => {
         }
 
         // Get active WhatsApp client
-        const WhatsAppClientFactory = (await import("../whatsapp/WhatsAppClientFactory.ts")).default;
+        const WhatsAppClientFactory = (await import("../whatsapp/WhatsAppClientFactory.js")).default;
         const client = await WhatsAppClientFactory.getClient();
-        const activityLogger = (await import("../libs/activityLogger.ts")).logActivity;
+        const activityLogger = (await import("../libs/activityLogger.js")).logActivity;
 
         let response;
         if (type === "buttons" && Array.isArray(buttons) && buttons.length > 0) {
@@ -140,9 +140,9 @@ router.post("/broadcast", async (req: Request, res: Response) => {
 
         const users = await User.find({ status: { $ne: 'blocked' } }); // Don't message blocked users? Or maybe we should? Let's exclude blocked for safety.
 
-        const WhatsAppClientFactory = (await import("../whatsapp/WhatsAppClientFactory.ts")).default;
+        const WhatsAppClientFactory = (await import("../whatsapp/WhatsAppClientFactory.js")).default;
         const client = await WhatsAppClientFactory.getClient();
-        const activityLogger = (await import("../libs/activityLogger.ts")).logActivity;
+        const activityLogger = (await import("../libs/activityLogger.js")).logActivity;
 
         let sentCount = 0;
         let failedCount = 0;
@@ -184,7 +184,7 @@ router.post("/broadcast", async (req: Request, res: Response) => {
  */
 router.get("/messages/history", async (req: Request, res: Response) => {
     try {
-        const { ActivityLog } = await import("../models/ActivityLog.ts");
+        const { ActivityLog } = await import("../models/ActivityLog.js");
 
         // Fetch logs related to communications
         const logs = await ActivityLog.find({
@@ -217,7 +217,7 @@ router.get("/messages/history", async (req: Request, res: Response) => {
  */
 router.get("/chats", async (req: Request, res: Response) => {
     try {
-        const { ActivityLog } = await import("../models/ActivityLog.ts");
+        const { ActivityLog } = await import("../models/ActivityLog.js");
 
         // Find latest message for each user
         const chats = await ActivityLog.aggregate([
@@ -268,7 +268,7 @@ router.get("/chats", async (req: Request, res: Response) => {
 router.get("/chats/:userId/messages", async (req: Request, res: Response) => {
     try {
         const { userId } = req.params;
-        const { ActivityLog } = await import("../models/ActivityLog.ts");
+        const { ActivityLog } = await import("../models/ActivityLog.js");
 
         const messages = await (ActivityLog as any).find({ userId })
             .sort({ createdAt: 1 });
@@ -286,7 +286,7 @@ router.get("/chats/:userId/messages", async (req: Request, res: Response) => {
 router.post("/chats/:userId/read", async (req: Request, res: Response) => {
     try {
         const { userId } = req.params;
-        const { ActivityLog } = await import("../models/ActivityLog.ts");
+        const { ActivityLog } = await import("../models/ActivityLog.js");
 
         await (ActivityLog as any).updateMany(
             { userId, sender: "USER", isRead: false },
@@ -305,7 +305,7 @@ router.post("/chats/:userId/read", async (req: Request, res: Response) => {
  */
 router.get("/chats/unread-total", async (req: Request, res: Response) => {
     try {
-        const { ActivityLog } = await import("../models/ActivityLog.ts");
+        const { ActivityLog } = await import("../models/ActivityLog.js");
         const count = await ActivityLog.countDocuments({ sender: "USER", isRead: false });
         res.json({ success: true, count });
     } catch (error: any) {

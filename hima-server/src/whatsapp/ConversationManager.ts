@@ -1,13 +1,13 @@
-import { User } from "../models/User.ts";
-import { InsuranceQuote } from "../models/InsuranceQuote.ts";
-import { Policy } from "../models/Policy.ts";
-import { Claim } from "../models/Claim.ts";
-import { InsuranceProduct } from "../models/InsuranceProduct.ts";
-import { CONVERSATION_STATES, COVERAGE_TYPES, MESSAGES } from "./constants.ts";
-import QuoteCalculator from "./QuoteCalculator.ts";
-import PaymentProcessor from "./PaymentProcessor.ts";
-import walletManager from "../libs/walletManager.ts";
-import { logActivity } from "../libs/activityLogger.ts";
+import { User } from "../models/User.js";
+import { InsuranceQuote } from "../models/InsuranceQuote.js";
+import { Policy } from "../models/Policy.js";
+import { Claim } from "../models/Claim.js";
+import { InsuranceProduct } from "../models/InsuranceProduct.js";
+import { CONVERSATION_STATES, COVERAGE_TYPES, MESSAGES } from "./constants.js";
+import QuoteCalculator from "./QuoteCalculator.js";
+import PaymentProcessor from "./PaymentProcessor.js";
+import walletManager from "../libs/walletManager.js";
+import { logActivity } from "../libs/activityLogger.js";
 
 export class ConversationManager {
     private quoteCalculator = QuoteCalculator;

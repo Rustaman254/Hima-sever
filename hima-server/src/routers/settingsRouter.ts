@@ -1,7 +1,7 @@
 import express from "express";
 import type { Request, Response, Router } from "express";
-import config from "../Configs/configs.ts";
-import SystemSettings from "../models/SystemSettings.ts";
+import config from "../Configs/configs.js";
+import SystemSettings from "../models/SystemSettings.js";
 
 const router: Router = express.Router();
 
@@ -40,7 +40,7 @@ router.put("/", async (req: Request, res: Response) => {
         const updatedSettings = await SystemSettings.updateSettings(provider, newConfig);
 
         // Force refresh the WhatsApp Client
-        const WhatsAppClientFactory = (await import("../whatsapp/WhatsAppClientFactory.ts")).default;
+        const WhatsAppClientFactory = (await import("../whatsapp/WhatsAppClientFactory.js")).default;
         await WhatsAppClientFactory.refreshClient();
 
         res.json({ success: true, settings: updatedSettings });

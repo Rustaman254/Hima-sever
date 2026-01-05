@@ -1,9 +1,9 @@
-import { Policy } from "../models/Policy.ts";
-import type { IPolicy } from "../models/Policy.ts";
-import { User } from "../models/User.ts";
-import { Payment } from "../models/Payment.ts";
-import MantleService from "./MantleService.ts";
-import MpesaService from "./MpesaService.ts";
+import { Policy } from "../models/Policy.js";
+import type { IPolicy } from "../models/Policy.js";
+import { User } from "../models/User.js";
+import { Payment } from "../models/Payment.js";
+import MantleService from "./MantleService.js";
+import MpesaService from "./MpesaService.js";
 
 /**
  * Policy Service

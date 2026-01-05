@@ -1,9 +1,9 @@
 import express from "express";
 import type { Request, Response, Router } from "express";
-import conversationManager from "../whatsapp/ConversationManager.ts";
-import WhatsAppClientFactory from "../whatsapp/WhatsAppClientFactory.ts";
-import { logActivity } from "../libs/activityLogger.ts";
-import config from "../Configs/configs.ts";
+import conversationManager from "../whatsapp/ConversationManager.js";
+import WhatsAppClientFactory from "../whatsapp/WhatsAppClientFactory.js";
+import { logActivity } from "../libs/activityLogger.js";
+import config from "../Configs/configs.js";
 
 const router: Router = express.Router();
 console.log("⚡ [ROUTER] Webhook Router Loaded");
@@ -65,7 +65,7 @@ router.post("/", async (req: Request, res: Response) => {
         console.log("=".repeat(50) + "\n");
 
         // Resolve user to link activity
-        const { User } = await import("../models/User.ts");
+        const { User } = await import("../models/User.js");
         const user = await User.findOne({ phoneNumber: message.from });
 
         await logActivity(

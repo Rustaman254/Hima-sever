@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
-import { InsuranceProduct } from "../models/InsuranceProduct.ts";
-import config from "../Configs/configs.ts";
+import { InsuranceProduct } from "../models/InsuranceProduct.js";
+import config from "../Configs/configs.js";
 
 const products = [
     {

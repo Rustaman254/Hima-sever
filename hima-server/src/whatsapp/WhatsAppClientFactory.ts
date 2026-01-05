@@ -1,7 +1,7 @@
-import type { IWhatsAppClient } from "./IWhatsAppClient.ts";
-import WhatsAppBusinessClient from "./WhatsAppBusinessClient.ts";
-import SystemSettings from "../models/SystemSettings.ts";
-import config from "../Configs/configs.ts";
+import type { IWhatsAppClient } from "./IWhatsAppClient.js";
+import WhatsAppBusinessClient from "./WhatsAppBusinessClient.js";
+import SystemSettings from "../models/SystemSettings.js";
+import config from "../Configs/configs.js";
 
 /**
  * Factory class for creating WhatsApp client instances

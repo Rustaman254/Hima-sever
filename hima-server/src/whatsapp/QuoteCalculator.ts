@@ -1,6 +1,6 @@
-import { User } from "../models/User.ts";
-import { InsuranceQuote } from "../models/InsuranceQuote.ts";
-import { CONVERSATION_STATES, COVERAGE_TYPES, MESSAGES } from "./constants.ts";
+import { User } from "../models/User.js";
+import { InsuranceQuote } from "../models/InsuranceQuote.js";
+import { CONVERSATION_STATES, COVERAGE_TYPES, MESSAGES } from "./constants.js";
 
 export class QuoteCalculator {
     private BASE_RATES = {

@@ -1,6 +1,6 @@
 import axios from "axios";
 import crypto from "crypto";
-import type { IWhatsAppClient, ParsedWhatsAppMessage, WhatsAppMessageResponse } from "./IWhatsAppClient.ts";
+import type { IWhatsAppClient, ParsedWhatsAppMessage, WhatsAppMessageResponse } from "./IWhatsAppClient.js";
 
 export interface WhatsAppMessage {
     from: string;
