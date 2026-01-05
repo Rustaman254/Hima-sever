@@ -99,12 +99,11 @@ export class WhatsAppBot {
 }
 */
 
-// SWITCHED TO TWILIO
-// This implementation is kept only for reference if whatsapp-web.js is ever needed again.
-// Primary interaction is now handled via TwilioWebhookRouter and TwilioWhatsAppClient.
+// SWITCHED TO META WHATSAPP (WEBHOOK MODE)
+// Primary interaction is now handled via the Meta /webhook endpoint.
 
 export class WhatsAppBot {
-    async start() { console.log("Hima Bot: Using Twilio Provider (Webhook Mode)"); }
+    async start() { console.log("Hima Bot: Using Meta WhatsApp Provider (Webhook Mode)"); }
     async stop() { }
     isConnected() { return true; }
 }

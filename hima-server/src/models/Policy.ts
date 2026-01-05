@@ -32,6 +32,8 @@ export interface IPolicy extends Document {
 
     // Blockchain tracking
     onChainTxHash?: string;
+    transactionHash?: string; // Alias for onChainTxHash
+    activationTxHash?: string;
     onChainPolicyId?: string;
     blockchainNetwork?: string;
 
@@ -105,6 +107,8 @@ const PolicySchema = new Schema<IPolicy>(
             required: true,
         },
         onChainTxHash: String,
+        transactionHash: String,
+        activationTxHash: String,
         onChainPolicyId: String,
         blockchainNetwork: String,
         offChainMetadata: {

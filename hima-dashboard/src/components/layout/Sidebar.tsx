@@ -13,7 +13,8 @@ import {
     Settings,
     Bolt,
     FileText,
-    LifeBuoy
+    LifeBuoy,
+    MessageSquare
 } from "lucide-react";
 // @ts-ignore
 import styles from "./sidebar.module.css";
@@ -52,11 +53,13 @@ export default function Sidebar({ role, isOpen, onClose }: SidebarProps) {
 
     const adminItems = [
         { name: "Dashboard", href: `/dashboard/admin`, icon: LayoutDashboard, badge: pendingCount > 0 ? pendingCount.toString() : undefined },
+        { name: "Messages", href: `/dashboard/admin/messages`, icon: MessageSquare },
         { name: "Insurance Pools", href: `/dashboard/admin/pools`, icon: Layers },
         { name: "Providers", href: `/dashboard/admin/providers`, icon: Users },
         { name: "Active Policies", href: `/dashboard/admin/active`, icon: Zap },
         { name: "System Logs", href: `/dashboard/admin/logs`, icon: Activity },
-        { name: "Settings", href: `/dashboard/settings`, icon: Settings },
+        { name: "WhatsApp Settings", href: `/dashboard/admin/whatsapp`, icon: MessageSquare },
+        { name: "Settings", href: `/dashboard/admin/settings`, icon: Settings },
     ];
 
     const lpItems = [
@@ -65,7 +68,7 @@ export default function Sidebar({ role, isOpen, onClose }: SidebarProps) {
         { name: "Staking Providers", href: `/dashboard/lp/providers`, icon: Users },
         { name: "Liquid Staking", href: `/dashboard/lp/active`, icon: Zap, badge: "Beta" },
         { name: "Calculator", href: `/dashboard/lp/calculator`, icon: Calculator },
-        { name: "Settings", href: `/dashboard/settings`, icon: Settings },
+        { name: "Settings", href: `/dashboard/lp/settings`, icon: Settings },
     ];
 
     const userItems = [
@@ -74,7 +77,7 @@ export default function Sidebar({ role, isOpen, onClose }: SidebarProps) {
         { name: "Purchase Coverage", href: `/dashboard/user/purchase`, icon: Layers },
         { name: "Claims", href: `/dashboard/user/claims`, icon: FileText },
         { name: "Support", href: `/dashboard/user/support`, icon: LifeBuoy },
-        { name: "Settings", href: `/dashboard/settings`, icon: Settings },
+        { name: "Settings", href: `/dashboard/user/settings`, icon: Settings },
     ];
 
     const navItems = role === "admin" ? adminItems : role === "lp" ? lpItems : userItems;

@@ -1,0 +1,26 @@
+
+> hima-server@1.0.0 dev
+> nodemon src/app.ts
+
+[33m[nodemon] 3.1.11[39m
+[33m[nodemon] to restart at any time, enter `rs`[39m
+[33m[nodemon] watching path(s): *.*[39m
+[33m[nodemon] watching extensions: ts,json[39m
+[32m[nodemon] starting `ts-node src/app.ts`[39m
+[dotenv@17.2.3] injecting env (35) from .env -- tip: 🔐 prevent committing .env to code: https://dotenvx.com/precommit
+✅ Twilio WhatsApp Client initialized
+[dotenv@17.2.3] injecting env (0) from .env -- tip: ⚙️  write to custom object with { processEnv: myObject }
+✅ Connected to MongoDB
+📡 Switching WhatsApp provider to: meta (Selection source: Database)
+✅ Creating Meta WhatsApp Business API client
+🔧 Configuration:
+   - WhatsApp Provider: meta
+   - Twilio Number: whatsapp:+14155238886
+   - Meta Phone ID: 852829371256540
+   - Network: Mantle Testnet (Chain ID: 5001)
+   - RPC URL: https://rpc.sepolia.mantle.xyz
+🚀 Server started on port 8100
+📱 Hima Insurance WhatsApp Bot is ready
+🔗 Twilio Webhook URL: http://localhost:8100/twilio-webhook
+🔗 Meta Webhook URL: https://unmeet-meghan-displeasedly.ngrok-free.dev/webhook
+💡 Configure webhooks in your respective platforms

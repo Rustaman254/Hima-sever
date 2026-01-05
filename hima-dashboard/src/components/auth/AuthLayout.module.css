@@ -1,0 +1,80 @@
+.container {
+    display: flex;
+    width: 100vw;
+    height: 100vh;
+    background-color: #050505;
+    /* Deep black/gray */
+    color: white;
+    overflow: hidden;
+}
+
+.visualSide {
+    flex: 1;
+    padding: 2rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #000;
+
+    @media (max-width: 1024px) {
+        display: none;
+    }
+}
+
+.gridContainer {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(3, 1fr);
+    gap: 1.5rem;
+    width: 100%;
+    max-width: 800px;
+    aspect-ratio: 1;
+}
+
+.tile {
+    background: #1f1f1f;
+    border-radius: 2rem;
+    width: 100%;
+    height: 100%;
+    transition: transform 0.3s ease;
+}
+
+.tile:hover {
+    transform: scale(1.02);
+}
+
+.formSide {
+    flex: 0.8;
+    padding: 4rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    position: relative;
+    background: #050505;
+}
+
+.topBar {
+    position: absolute;
+    top: 2rem;
+    right: 2rem;
+}
+
+.adminLink {
+    background: none;
+    border: none;
+    color: #6b7280;
+    font-size: 0.875rem;
+    cursor: pointer;
+    transition: color 0.2s;
+    text-decoration: underline;
+}
+
+.adminLink:hover {
+    color: white;
+}
+
+.formContent {
+    width: 100%;
+    max-width: 400px;
+    margin: 0 auto;
+}

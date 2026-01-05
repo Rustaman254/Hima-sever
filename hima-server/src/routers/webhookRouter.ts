@@ -1,111 +1,167 @@
-import express, { type Request, type Response, Router } from "express";
-import WhatsAppBusinessClient from "../whatsapp/WhatsAppBusinessClient.ts";
-import ConversationManager from "../whatsapp/ConversationManager.ts";
+import express from "express";
+import type { Request, Response, Router } from "express";
+import conversationManager from "../whatsapp/ConversationManager.ts";
+import WhatsAppClientFactory from "../whatsapp/WhatsAppClientFactory.ts";
+import { logActivity } from "../libs/activityLogger.ts";
 import config from "../Configs/configs.ts";
 
 const router: Router = express.Router();
-
-// Initialize WhatsApp client
-const whatsappClient = new WhatsAppBusinessClient(
-    config.whatsappAccessToken || "",
-    config.whatsappPhoneNumberId || ""
-);
+console.log("⚡ [ROUTER] Webhook Router Loaded");
 
 /**
- * GET /webhook - Webhook verification endpoint
- * Meta will call this to verify your webhook URL
+ * GET /api/webhooks/whatsapp
+ * Meta verification handler (Hub Verification)
  */
 router.get("/", (req: Request, res: Response) => {
     const mode = req.query["hub.mode"];
     const token = req.query["hub.verify_token"];
     const challenge = req.query["hub.challenge"];
 
-    // Check if mode and token are correct
-    if (mode === "subscribe" && token === config.whatsappWebhookVerifyToken) {
-        console.log("✅ Webhook verified successfully");
-        res.status(200).send(challenge);
-    } else {
-        console.error("❌ Webhook verification failed");
-        res.sendStatus(403);
+    // Use token from config
+    const verifyToken = config.whatsappWebhookVerifyToken || "hima_webhook_verify_token";
+
+    if (mode && token) {
+        if (mode === "subscribe" && token === verifyToken) {
+            console.log("✅ Webhook verified successfully!");
+            return res.status(200).send(challenge);
+        }
+        console.warn("❌ Webhook verification failed. Invalid token.");
+        return res.sendStatus(403);
     }
+    return res.sendStatus(400);
 });
 
 /**
- * POST /webhook - Receive incoming messages
- * Meta sends incoming messages to this endpoint
+ * POST /api/webhooks/whatsapp
+ * This is the endpoint that WhatsApp/Meta calls when a user sends a message.
  */
 router.post("/", async (req: Request, res: Response) => {
     try {
-        // Verify webhook signature for security
-        const signature = req.headers["x-hub-signature-256"] as string;
-        if (signature && config.whatsappAppSecret) {
-            const isValid = whatsappClient.verifyWebhookSignature(
-                signature,
-                JSON.stringify(req.body),
-                config.whatsappAppSecret
-            );
+        console.log("\n" + "=".repeat(50));
+        console.log("📥 [WEBHOOK] NEW INCOMING REQUEST");
+        console.log("⏰ Time:", new Date().toISOString());
+        console.log("📦 Raw Payload:", JSON.stringify(req.body, null, 2));
+        console.log("=".repeat(50));
 
-            if (!isValid) {
-                console.error("❌ Invalid webhook signature");
-                return res.sendStatus(403);
-            }
-        }
+        // Log raw webhook payload for debugging
+        await logActivity("WEBHOOK", "Incoming Webhook Payload", undefined, req.body);
+
+        // Get the active WhatsApp client
+        const whatsappClient = await WhatsAppClientFactory.getClient();
 
         // Parse the incoming message
         const message = whatsappClient.parseWebhookMessage(req.body);
 
         if (!message) {
-            // Not a message event, could be status update
+            console.log("ℹ️ [WEBHOOK] Request received but no message found (likely a status update or verification)");
+            console.log("=".repeat(50) + "\n");
             return res.sendStatus(200);
         }
 
-        console.log(`📱 Received message from ${message.from}: ${message.text?.body || message.type}`);
+        console.log(`📱 [WEBHOOK] Message Parsed:`);
+        console.log(`   - From: ${message.from}`);
+        console.log(`   - Type: ${message.type}`);
+        console.log(`   - Body: ${message.body || "N/A"}`);
+        console.log("=".repeat(50) + "\n");
 
-        // Mark message as read
-        await whatsappClient.markMessageAsRead(message.id);
+        // Resolve user to link activity
+        const { User } = await import("../models/User.ts");
+        const user = await User.findOne({ phoneNumber: message.from });
 
-        // Handle different message types
-        if (message.type === "text" && message.text) {
-            // Get user phone number
+        await logActivity(
+            "WEBHOOK",
+            message.body || `Media received: ${message.type}`,
+            user?._id.toString(),
+            { from: message.from, type: message.type },
+            "USER"
+        );
+
+        // Handle different message types (text or interactive responses)
+        if ((message.type === "text" || message.type === "interactive") && message.body) {
             const phoneNumber = message.from;
-            const messageText = message.text.body;
+            const messageText = message.body;
 
             // Process message through conversation manager
-            const response = await ConversationManager.handleUserMessage(
+            console.log(`💬 [WEBHOOK] Processing message from ${phoneNumber}`);
+            const responses = await conversationManager.handleUserMessage(
                 phoneNumber,
                 messageText
             );
 
+            // Send each response back to user
+            for (const response of responses) {
+                console.log(`📨 [WEBHOOK] Sending response:`, {
+                    bodyPreview: response.body.substring(0, 100)
+                });
+                try {
+                    await sendWhatsAppResponse(whatsappClient, phoneNumber, response);
+                } catch (sendError: any) {
+                    console.error(`❌ [WEBHOOK] Failed to send response to ${phoneNumber}`);
+                    const errorCode = sendError.response?.data?.error?.code;
 
-            // Send response back to user
-            await whatsappClient.sendTextMessage(phoneNumber, response.body);
-        } else if (message.type === "image" && message.image) {
-            // Handle image upload (for KYC documents)
+                    if (errorCode === 131030) {
+                        console.error(`🚫 [WEBHOOK] SANDBOX RESTRICTION: ${phoneNumber} is not in the allowed list`);
+                        console.error(`    → This message cannot be delivered until ${phoneNumber} is added to Meta sandbox`);
+                        console.error(`    → See WHATSAPP_SETUP.md for instructions`);
+                    } else {
+                        console.error(`    → Error:`, sendError.message);
+                    }
+
+                    // Log the failed message for debugging but continue processing
+                    await logActivity(
+                        "WEBHOOK_ERROR",
+                        `Failed to send message to ${phoneNumber}: ${sendError.message}`,
+                        user?._id.toString(),
+                        { errorCode, phoneNumber, response: response.body.substring(0, 100) }
+                    );
+                }
+            }
+        } else if (message.type === "image" && message.mediaUrl) {
             const phoneNumber = message.from;
 
-            // Download the image
-            const imageBuffer = await whatsappClient.downloadMedia(message.image.id);
-
-            // Process image through conversation manager (for KYC)
-            const response = await ConversationManager.handleMediaMessage(
+            // Handle media using conversation manager
+            const response = await conversationManager.handleMediaMessage(
                 phoneNumber,
                 "image",
-                imageBuffer,
-                message.image.mime_type
+                Buffer.from([]), // Buffer is usually downloaded inside CM if needed
+                "image/jpeg"
             );
 
-
-            // Send response
-            await whatsappClient.sendTextMessage(phoneNumber, response.body);
+            await sendWhatsAppResponse(whatsappClient, phoneNumber, response);
         }
 
-        // Always return 200 to acknowledge receipt
         res.sendStatus(200);
     } catch (error) {
-        console.error("❌ Error processing webhook:", error);
-        // Still return 200 to prevent Meta from retrying
-        res.sendStatus(200);
+        console.error("Webhook Error:", error);
+        res.sendStatus(500);
     }
 });
+
+/**
+ * Helper to send different types of WhatsApp responses
+ */
+async function sendWhatsAppResponse(client: any, to: string, response: any) {
+    if (response.list) {
+        await client.sendListMessage(to, response.body, response.list.buttonText, response.list.sections);
+    } else if (response.buttons && response.buttons.length > 0) {
+        if (response.buttons.length <= 3) {
+            await client.sendButtonMessage(to, response.body, response.buttons);
+        } else {
+            const sections = [{
+                title: "Available Options",
+                rows: response.buttons.map((btn: string, idx: number) => ({
+                    id: `opt_${idx}`,
+                    title: btn.substring(0, 24),
+                    description: `Select ${btn}`
+                }))
+            }];
+            await client.sendListMessage(to, response.body, "Select Option", sections);
+        }
+    } else if (response.cta) {
+        await client.sendCTAMessage(to, response.body, response.cta.label, response.cta.url);
+    } else {
+        await client.sendTextMessage(to, response.body);
+    }
+}
 
 export default router;

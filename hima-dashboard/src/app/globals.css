@@ -135,22 +135,28 @@ body {
 }
 
 /* Standardized Inputs */
+input,
+select,
+textarea,
 .hima-input {
   width: 100%;
-  background: rgba(15, 23, 42, 0.5) !important;
-  border: 1px solid rgba(255, 255, 255, 0.08) !important;
-  border-radius: 1rem !important;
-  padding: 0.875rem 1.25rem !important;
+  background: rgba(255, 255, 255, 0.05) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  border-radius: 0.5rem !important;
+  /* As per request */
+  padding: 0.75rem !important;
   color: white !important;
   font-size: 0.875rem !important;
   transition: all 0.2s !important;
   outline: none !important;
 }
 
+input:focus,
+select:focus,
+textarea:focus,
 .hima-input:focus {
   border-color: rgba(139, 92, 246, 0.5) !important;
-  background: rgba(15, 23, 42, 0.8) !important;
-  box-shadow: 0 0 0 4px rgba(139, 92, 246, 0.1) !important;
+  background: rgba(255, 255, 255, 0.08) !important;
 }
 
 .hima-label {
@@ -161,45 +167,81 @@ body {
   margin-bottom: 0.625rem;
 }
 
-/* react-international-phone overrides */
-.react-international-phone-input-container {
-  width: 100% !important;
+/* react-international-phone Customization */
+/* Hide the flag in the main selector button */
+.react-international-phone-country-selector-button__button-content img {
+  display: none !important;
 }
 
+/* Ensure dial code is visible if we want it there, but customization might be prop-based. 
+   If not, we'll deal with Props in the component. 
+   BUT the request says "254 should be where the flag is".
+   This means the country selector should SHOW the dial code. 
+   I will ensure the styles match the Admin Input exactly.
+*/
+
+.react-international-phone-input-container {
+  width: 100% !important;
+  height: auto !important;
+}
+
+/* The Country Dropdown Button (Left side) */
+.react-international-phone-country-selector-button {
+  background: rgba(255, 255, 255, 0.05) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  border-right: none !important;
+  /* Connected to input */
+  border-radius: 0.5rem 0 0 0.5rem !important;
+  padding: 0 0.75rem !important;
+  height: auto !important;
+  min-height: 46px;
+  /* Match padding calc roughly */
+}
+
+/* The Phone Number Input (Right side) */
 .react-international-phone-input {
   width: 100% !important;
   height: auto !important;
-  background: rgba(15, 23, 42, 0.5) !important;
-  border: 1px solid rgba(255, 255, 255, 0.08) !important;
-  border-radius: 0 1rem 1rem 0 !important;
+  min-height: 46px;
+  background: rgba(255, 255, 255, 0.05) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  border-radius: 0 0.5rem 0.5rem 0 !important;
   color: white !important;
-  padding: 0.875rem 1.25rem !important;
+  padding: 0.75rem !important;
   font-size: 0.875rem !important;
 }
 
-.react-international-phone-country-selector-button {
-  background: rgba(15, 23, 42, 0.5) !important;
-  border: 1px solid rgba(255, 255, 255, 0.08) !important;
-  border-right: none !important;
-  border-radius: 1rem 0 0 1rem !important;
-  padding: 0.875rem 0.75rem !important;
-  height: auto !important;
+.react-international-phone-input:focus {
+  border-color: rgba(139, 92, 246, 0.5) !important;
 }
 
+/* Dropdown Menu */
 .react-international-phone-country-selector-dropdown {
   background: #151A23 !important;
   border: 1px solid rgba(255, 255, 255, 0.1) !important;
-  border-radius: 1rem !important;
+  border-radius: 0.5rem !important;
   padding: 0.5rem !important;
   box-shadow: 0 15px 30px -5px rgba(0, 0, 0, 0.5) !important;
+  z-index: 9999 !important;
 }
 
 .react-international-phone-country-selector-list-item {
   color: #9CA3AF !important;
+  border-radius: 4px;
 }
 
 .react-international-phone-country-selector-list-item:hover,
 .react-international-phone-country-selector-list-item--selected {
   background: rgba(139, 92, 246, 0.2) !important;
   color: white !important;
+}
+
+/* Ensure Button text (dial code) is white */
+.react-international-phone-country-selector-button__dropdown-arrow {
+  color: rgba(255, 255, 255, 0.5) !important;
+}
+
+.react-international-phone-country-selector-button__button-content {
+  color: white !important;
+  font-size: 0.875rem !important;
 }

@@ -3,15 +3,9 @@ import type { Request, Response, Router } from "express";
 import { User } from "../models/User.ts";
 import jwt from "jsonwebtoken";
 import config from "../Configs/configs.ts";
-import TwilioWhatsAppClient from "../whatsapp/TwilioWhatsAppClient.ts";
+import WhatsAppClientFactory from "../whatsapp/WhatsAppClientFactory.ts";
 
 const router: Router = express.Router();
-
-const twilioClient = new TwilioWhatsAppClient(
-    config.twilioAccountSid || "",
-    config.twilioAuthToken || "",
-    config.twilioWhatsAppNumber || ""
-);
 
 /**
  * POST /api/auth/whatsapp/login
@@ -45,9 +39,43 @@ router.post("/whatsapp/login", async (req: Request, res: Response) => {
         await user.save();
 
         // Send via WhatsApp
-        const messageBody = `🔐 Your Hima Insurance login code is: *${code}*\n\nIt expires in 10 minutes. Do not share this code with anyone.`;
+        const whatsappClient = await WhatsAppClientFactory.getClient();
 
-        await twilioClient.sendTextMessage(cleanedPhone, messageBody);
+        console.log(`📤 [AUTH] Sending login code to ${cleanedPhone}`);
+
+        // Meta WhatsApp requires approved templates
+        // Template name: hima_login_code (must be created in Meta Business Manager)
+        try {
+            await whatsappClient.sendTemplateMessage(
+                cleanedPhone,
+                "hima_login_code", // Template name
+                "en_US", // Language code
+                [
+                    {
+                        type: "body",
+                        parameters: [{ type: "text", text: code }]
+                    },
+                    {
+                        type: "button",
+                        sub_type: "copy_code",
+                        index: 0,
+                        parameters: [{ type: "text", text: code }]
+                    }
+                ]
+            );
+            console.log(`✅ [AUTH] Template message sent successfully`);
+        } catch (templateError: any) {
+            console.warn(`⚠️ [AUTH] Template failed, trying fallback...`);
+
+            const messageBody = `Your Hima Insurance login code is: *${code}*\n\nIt expires in 10 minutes. Do not share this code with anyone.`;
+            try {
+                // Try interactive button message
+                await whatsappClient.sendButtonMessage(cleanedPhone, messageBody, ["Copy Code"]);
+            } catch (buttonError) {
+                // absolute fallback to text
+                await whatsappClient.sendTextMessage(cleanedPhone, messageBody);
+            }
+        }
 
         res.json({ success: true, message: "Login code sent via WhatsApp" });
     } catch (error) {

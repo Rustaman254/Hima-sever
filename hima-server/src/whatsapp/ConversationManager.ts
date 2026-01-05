@@ -16,23 +16,25 @@ export class ConversationManager {
         phoneNumber: string,
         message: string,
         mediaUrl?: string
-    ): Promise<{ body: string, buttons?: string[], cta?: { label: string, url: string }, media?: string }> {
+    ): Promise<any> {
         const result = await this.processLogic(phoneNumber, message, mediaUrl);
+        const results = Array.isArray(result) ? result : [result];
 
-        // If user is registered and we don't already have buttons/CTA, add the main menu
+        // If user is registered and we don't already have buttons/CTA, add the main menu to the LAST result
         const user = await User.findOne({ phoneNumber });
-        if (user && user.registrationComplete && !result.buttons && !result.cta) {
-            result.buttons = MESSAGES.MAIN_MENU_OPTIONS;
+        const lastResult = results[results.length - 1];
+        if (user && user.registrationComplete && !lastResult.buttons && !lastResult.cta && !lastResult.list) {
+            lastResult.buttons = MESSAGES.MAIN_MENU_OPTIONS;
         }
 
-        return result;
+        return results;
     }
 
     private async processLogic(
         phoneNumber: string,
         message: string,
         mediaUrl?: string
-    ): Promise<{ body: string, buttons?: string[], cta?: { label: string, url: string }, media?: string }> {
+    ): Promise<any | any[]> {
         // Get or create user
         let user = await User.findOne({ phoneNumber });
 
@@ -58,19 +60,16 @@ export class ConversationManager {
         // AGGRESSIVE GREETING CATCH
         if (isGreeting) {
             await logActivity("SYSTEM", `User ${phoneNumber} sent greeting: ${cleanMessage}`, user._id.toString());
-            if (!user.registrationComplete) {
-                if (user.conversationState === CONVERSATION_STATES.INITIAL || user.conversationState === CONVERSATION_STATES.GREETING) {
-                    user.conversationState = CONVERSATION_STATES.INITIAL;
-                    await user.save();
-                    return {
-                        body: MESSAGES.WELCOME,
-                        buttons: ["Register Now"]
-                    };
-                }
+
+            if (user.registrationComplete) {
+                return {
+                    body: MESSAGES.GREETING_REGISTERED(user.firstName || "Rider"),
+                    buttons: MESSAGES.MAIN_MENU_OPTIONS
+                };
             } else {
                 return {
-                    body: MESSAGES.MAIN_MENU(user.firstName || "Rider"),
-                    buttons: MESSAGES.MAIN_MENU_OPTIONS
+                    body: `Jambo! ${MESSAGES.WELCOME}`,
+                    buttons: ["Register Now"]
                 };
             }
         }
@@ -83,24 +82,50 @@ export class ConversationManager {
         }
 
         // GLOBAL CTA INTERCEPTOR (If user clicks a button)
-        if (user.registrationComplete) {
-            const msg = cleanMessage.toLowerCase();
-            if (msg.includes("buy insurance")) {
-                user.conversationState = CONVERSATION_STATES.ASKING_MOTORCYCLE_MAKE;
+        const msg = cleanMessage.toLowerCase();
+
+        if (msg.includes("buy insurance")) {
+            if (!user.registrationComplete) {
+                user.conversationState = CONVERSATION_STATES.GREETING; // Starting registration
                 await user.save();
-                return { body: MESSAGES.ASKING_MOTORCYCLE_MAKE };
+                return [
+                    { body: "🚀 Let's get you protected! First, we need to complete your quick registration." },
+                    { body: MESSAGES.ASKING_FIRST_NAME }
+                ];
             }
-            if (msg.includes("file a claim")) {
-                await logActivity("SYSTEM", `User ${phoneNumber} initiating claim flow`, user._id.toString());
-                user.conversationState = CONVERSATION_STATES.ASKING_CLAIM_DESCRIPTION;
-                await user.save();
-                return { body: MESSAGES.ASKING_CLAIM_DESCRIPTION };
-            }
-            if (msg.includes("my profile")) {
+            user.conversationState = CONVERSATION_STATES.ASKING_MOTORCYCLE_MAKE;
+            await user.save();
+            return { body: MESSAGES.ASKING_MOTORCYCLE_MAKE };
+        }
+
+        if (msg.includes("file a claim") || msg.includes("file claim")) {
+            if (!user.registrationComplete) {
                 return {
-                    body: `Here is your profile link, ${user.firstName}:`,
-                    cta: { label: "Open Profile", url: `http://localhost:3000/dashboard/user/profile?phone=${phoneNumber}` }
+                    body: "⚠️ You need to be registered and have an active policy to file a claim.",
+                    buttons: ["Register Now", "Main Menu"]
                 };
+            }
+            await logActivity("SYSTEM", `User ${phoneNumber} initiating claim flow`, user._id.toString());
+            user.conversationState = CONVERSATION_STATES.ASKING_CLAIM_DESCRIPTION;
+            await user.save();
+            return { body: MESSAGES.ASKING_CLAIM_DESCRIPTION };
+        }
+
+        if (msg.includes("my profile")) {
+            return {
+                body: `Here is your profile link, ${user.firstName || "Rider"}:`,
+                cta: { label: "Open Profile", url: `http://localhost:3000/dashboard/user/profile?phone=${phoneNumber}` }
+            };
+        }
+
+        // GLOBAL COPY CODE HANDLER (For interactive buttons)
+        if (cleanMessage === "copy code") {
+            const u = await User.findOne({ phoneNumber });
+            if (u && u.lastLoginCode) {
+                return [
+                    { body: u.lastLoginCode },
+                    { body: "✅ Code copied! You can now paste it in the login screen." }
+                ];
             }
         }
 
@@ -109,16 +134,17 @@ export class ConversationManager {
             case CONVERSATION_STATES.INITIAL:
                 user.conversationState = CONVERSATION_STATES.GREETING;
                 await user.save();
-                return { body: MESSAGES.WELCOME };
-
+                return {
+                    body: MESSAGES.WELCOME,
+                    buttons: ["Register Now"]
+                };
 
             case CONVERSATION_STATES.GREETING:
                 if (message.trim().length === 0) {
                     return { body: MESSAGES.ERROR };
                 }
                 user.firstName = message.trim();
-                user.conversationState =
-                    CONVERSATION_STATES.ASKING_NATIONAL_ID;
+                user.conversationState = CONVERSATION_STATES.ASKING_NATIONAL_ID;
                 await user.save();
                 return { body: MESSAGES.ASKING_NATIONAL_ID };
 
@@ -145,9 +171,8 @@ export class ConversationManager {
                     };
                 }
 
-                // Fallback for simulation/text
                 if (message.trim().length > 0) {
-                    user.idPhotoUrl = "simulated_url_" + Date.now(); // Simulate storage
+                    user.idPhotoUrl = "simulated_url_" + Date.now();
                     user.kycStatus = "pending";
                     user.conversationState = CONVERSATION_STATES.WAITING_FOR_APPROVAL;
                     await user.save();
@@ -163,8 +188,8 @@ export class ConversationManager {
             case CONVERSATION_STATES.WAITING_FOR_APPROVAL:
                 if (user.kycStatus === "verified") {
                     return {
-                        body: MESSAGES.KYC_APPROVED(user.firstName || "Rider"),
-                        buttons: MESSAGES.MAIN_MENU_OPTIONS
+                        body: `${MESSAGES.KYC_APPROVED(user.firstName || "Rider")}\n\nWould you like to get covered now?`,
+                        buttons: ["Buy Insurance", "Main Menu"]
                     };
                 } else if (user.kycStatus === "rejected") {
                     return { body: MESSAGES.ACCOUNT_REJECTED };
@@ -180,8 +205,7 @@ export class ConversationManager {
                     return { body: MESSAGES.ERROR };
                 }
                 user.motorcycleMake = message.trim();
-                user.conversationState =
-                    CONVERSATION_STATES.ASKING_MOTORCYCLE_MODEL;
+                user.conversationState = CONVERSATION_STATES.ASKING_MOTORCYCLE_MODEL;
                 await user.save();
                 return { body: MESSAGES.ASKING_MOTORCYCLE_MODEL };
 
@@ -190,8 +214,7 @@ export class ConversationManager {
                     return { body: MESSAGES.ERROR };
                 }
                 user.motorcycleModel = message.trim();
-                user.conversationState =
-                    CONVERSATION_STATES.ASKING_MOTORCYCLE_YEAR;
+                user.conversationState = CONVERSATION_STATES.ASKING_MOTORCYCLE_YEAR;
                 await user.save();
                 return { body: MESSAGES.ASKING_MOTORCYCLE_YEAR };
 
@@ -201,8 +224,7 @@ export class ConversationManager {
                     return { body: `Please enter a valid year between 1900 and ${new Date().getFullYear()}` };
                 }
                 user.motorcycleYear = year;
-                user.conversationState =
-                    CONVERSATION_STATES.ASKING_REGISTRATION;
+                user.conversationState = CONVERSATION_STATES.ASKING_REGISTRATION;
                 await user.save();
                 return { body: MESSAGES.ASKING_REGISTRATION };
 
@@ -211,8 +233,7 @@ export class ConversationManager {
                     return { body: MESSAGES.ERROR };
                 }
                 user.registrationNumber = message.trim();
-                user.conversationState =
-                    CONVERSATION_STATES.ASKING_MOTORCYCLE_VALUE;
+                user.conversationState = CONVERSATION_STATES.ASKING_MOTORCYCLE_VALUE;
                 await user.save();
                 return { body: MESSAGES.ASKING_MOTORCYCLE_VALUE };
 
@@ -222,17 +243,25 @@ export class ConversationManager {
                     return { body: "Please enter a valid motorcycle value in numbers (e.g., 50000)" };
                 }
                 user.motorcycleValue = value;
-                user.conversationState =
-                    CONVERSATION_STATES.ASKING_INSURANCE_PRODUCT;
+                user.conversationState = CONVERSATION_STATES.ASKING_INSURANCE_PRODUCT;
                 await user.save();
 
-                // Fetch dynamic products
                 const products = await InsuranceProduct.find({ isActive: true });
-                const productList = products.map((p, i) => `${i + 1}️⃣ ${p.name} - ${p.description} (KES ${p.premiumAmountKES})`).join("\n\n");
-
                 return {
-                    body: MESSAGES.SELECT_PRODUCT.replace("{products}", productList),
-                    buttons: products.map((_, i) => (i + 1).toString())
+                    body: "Please select an insurance plan from the list below:",
+                    list: {
+                        buttonText: "View Plans",
+                        sections: [
+                            {
+                                title: "Available Plans",
+                                rows: products.map((p, i) => ({
+                                    id: (i + 1).toString(),
+                                    title: p.name.substring(0, 24),
+                                    description: `KES ${p.premiumAmountKES} - ${p.description}`.substring(0, 72)
+                                }))
+                            }
+                        ]
+                    }
                 };
 
             case CONVERSATION_STATES.ASKING_INSURANCE_PRODUCT:
@@ -244,103 +273,55 @@ export class ConversationManager {
                 }
 
                 const selectedProd = availableProducts[productIndex];
+                if (!selectedProd) return { body: MESSAGES.INVALID_INPUT };
 
-                if (!selectedProd) {
-                    return { body: MESSAGES.INVALID_INPUT };
-                }
                 user.selectedProductId = selectedProd._id.toString();
                 user.coverageType = selectedProd.tier as any;
                 user.conversationState = CONVERSATION_STATES.SHOWING_QUOTE;
                 await user.save();
 
                 await logActivity("QUOTE_GENERATED", `Quote generated for user ${phoneNumber} using ${selectedProd.name}`, user._id.toString());
-
-                // Calculate quote using dynamic price if needed, but for now we follow old logic
                 return await this.generateAndShowQuote(user, selectedProd.tier);
-                const coverageChoice = message.trim();
-                let coverage: string;
-
-                switch (coverageChoice) {
-                    case "1":
-                        coverage = COVERAGE_TYPES.BASIC;
-                        break;
-                    case "2":
-                        coverage = COVERAGE_TYPES.COMPREHENSIVE;
-                        break;
-                    case "3":
-                        coverage = COVERAGE_TYPES.PREMIUM;
-                        break;
-                    default:
-                        // Support both number and text for buttons
-                        const text = coverageChoice.toLowerCase();
-                        if (text.includes("basic")) coverage = COVERAGE_TYPES.BASIC;
-                        else if (text.includes("comprehensive")) coverage = COVERAGE_TYPES.COMPREHENSIVE;
-                        else if (text.includes("premium")) coverage = COVERAGE_TYPES.PREMIUM;
-                        else return { body: MESSAGES.INVALID_INPUT };
-                }
-
-                user.conversationState = CONVERSATION_STATES.SHOWING_QUOTE;
-                await user.save();
-
-                // Calculate quote
-                return await this.generateAndShowQuote(user, coverage);
 
             case CONVERSATION_STATES.SHOWING_QUOTE:
-                if (!user) return { body: MESSAGES.ERROR };
-                user.conversationState =
-                    CONVERSATION_STATES.ASKING_QUOTE_ACCEPTANCE;
+                user.conversationState = CONVERSATION_STATES.ASKING_QUOTE_ACCEPTANCE;
                 await user.save();
-                const quote = await InsuranceQuote.findOne({
-                    userId: user._id.toString(),
-                } as any).sort({ createdAt: -1 });
-                if (
-                    quote &&
-                    new Date() < quote.validUntil &&
-                    !quote.isAccepted
-                ) {
+                const quote = await InsuranceQuote.findOne({ userId: user._id.toString() }).sort({ createdAt: -1 });
+                if (quote && new Date() < quote.validUntil && !quote.isAccepted) {
                     return {
                         body: `${this.formatQuoteDetails(quote)}`,
-                        buttons: ["✅ YES", "❌ NO"]
+                        buttons: ["YES", "NO"]
                     };
                 }
                 return { body: MESSAGES.ERROR };
 
             case CONVERSATION_STATES.ASKING_QUOTE_ACCEPTANCE:
                 const response = message.trim().toUpperCase();
-                if (response === "YES" || response === "✅") {
-                    const quote = await InsuranceQuote.findOne({
-                        userId: user._id.toString(),
-                    } as any).sort({ createdAt: -1 });
+                if (response === "YES" || response === "1") {
+                    const activeQuote = await InsuranceQuote.findOne({ userId: user._id.toString() }).sort({ createdAt: -1 });
+                    if (!activeQuote) return { body: MESSAGES.ERROR };
 
-                    if (!quote) {
-                        return { body: MESSAGES.ERROR };
-                    }
+                    activeQuote.isAccepted = true;
+                    await activeQuote.save();
 
-                    quote.isAccepted = true;
-                    await quote.save();
-
-                    user.conversationState =
-                        CONVERSATION_STATES.PROCESSING_PAYMENT;
-                    user.quotedPrice = quote.totalPrice;
+                    user.conversationState = CONVERSATION_STATES.PROCESSING_PAYMENT;
+                    user.quotedPrice = activeQuote.totalPrice;
                     await user.save();
 
-                    await logActivity("PAYMENT_RECEIVED", `User ${phoneNumber} initiating payment for KES ${quote.totalPrice.toFixed(2)}`, user._id.toString(), { quoteId: quote._id });
-
-                    return await this.initiatePayment(user, quote);
-                } else if (response === "NO" || response === "❌") {
-                    user.conversationState =
-                        CONVERSATION_STATES.ASKING_COVERAGE_TYPE;
+                    await logActivity("PAYMENT_RECEIVED", `User ${phoneNumber} initiating payment for KES ${activeQuote.totalPrice.toFixed(2)}`, user._id.toString(), { quoteId: activeQuote._id });
+                    return await this.initiatePayment(user, activeQuote);
+                } else if (response === "NO" || response === "2") {
+                    user.conversationState = CONVERSATION_STATES.ASKING_COVERAGE_TYPE;
                     await user.save();
                     return {
                         body: `Let's find a better option for you.\n\n${MESSAGES.ASKING_COVERAGE}`,
-                        buttons: ["Basic", "Comprehensive", "Premium"]
+                        buttons: ["1", "2", "3"]
                     };
                 } else {
-                    return { body: MESSAGES.INVALID_INPUT, buttons: ["✅ YES", "❌ NO"] };
+                    return { body: MESSAGES.INVALID_INPUT, buttons: ["YES", "NO"] };
                 }
 
             case CONVERSATION_STATES.PROCESSING_PAYMENT:
-                // Payment processed
                 user.conversationState = CONVERSATION_STATES.PAYMENT_COMPLETE;
                 await user.save();
                 return await this.handlePaymentCompletion(user);
@@ -352,11 +333,10 @@ export class ConversationManager {
                 };
 
             case CONVERSATION_STATES.ASKING_CLAIM_DESCRIPTION:
-                // Create a basic claim record (linking to their first policy for now or just generic)
-                const policy = await Policy.findOne({ userId: user._id.toString() }).sort({ createdAt: -1 });
+                const activePolicy = await Policy.findOne({ userId: user._id.toString() }).sort({ createdAt: -1 });
                 const newClaim = new Claim({
                     userId: user._id.toString(),
-                    policyId: policy ? policy._id.toString() : "GENERIC",
+                    policyId: activePolicy ? activePolicy._id.toString() : "GENERIC",
                     incidentDescription: message,
                     incidentTime: new Date(),
                     incidentLocation: "Unknown",
@@ -369,14 +349,12 @@ export class ConversationManager {
                 return { body: MESSAGES.ASKING_CLAIM_PHOTO };
 
             case CONVERSATION_STATES.ASKING_CLAIM_PHOTO:
-                // Save photo to the last claim
                 const lastClaim = await Claim.findOne({ userId: user._id.toString() }).sort({ createdAt: -1 });
                 if (lastClaim) {
                     if (mediaUrl) {
                         lastClaim.mediaUrls.push(mediaUrl);
                         await lastClaim.save();
                     } else if (message.trim().length > 0) {
-                        // Simulate media if text provided
                         lastClaim.mediaUrls.push("simulated_claim_photo_" + Date.now());
                         await lastClaim.save();
                     }
@@ -395,17 +373,9 @@ export class ConversationManager {
         }
     }
 
-    private async generateAndShowQuote(
-        user: any,
-        coverageType: string
-    ): Promise<{ body: string, buttons?: string[] }> {
+    private async generateAndShowQuote(user: any, coverageType: string): Promise<{ body: string, buttons?: string[] }> {
         try {
-            if (
-                !user.motorcycleMake ||
-                !user.motorcycleModel ||
-                !user.motorcycleYear ||
-                !user.motorcycleValue
-            ) {
+            if (!user.motorcycleMake || !user.motorcycleModel || !user.motorcycleYear || !user.motorcycleValue) {
                 return { body: MESSAGES.ERROR };
             }
 
@@ -418,15 +388,12 @@ export class ConversationManager {
                 coverageType
             );
 
-            const formattedPrice = this.quoteCalculator.formatPrice(
-                quote.totalPrice
-            );
-            const coverageName =
-                coverageType.charAt(0).toUpperCase() + coverageType.slice(1);
+            const formattedPrice = this.quoteCalculator.formatPrice(quote.totalPrice);
+            const coverageName = coverageType.charAt(0).toUpperCase() + coverageType.slice(1);
 
             return {
                 body: `${MESSAGES.QUOTE_READY(user.firstName || "Customer", user.motorcycleMake, user.motorcycleModel, coverageName, formattedPrice)}`,
-                buttons: ["✅ YES", "❌ NO"]
+                buttons: ["YES", "NO"]
             };
         } catch (error) {
             console.error("Error generating quote:", error);
@@ -436,11 +403,11 @@ export class ConversationManager {
 
     private formatQuoteDetails(quote: any): string {
         return `
-📋 Quote Details:
-• Motorcycle: ${quote.motorcycleMake} ${quote.motorcycleModel} (${quote.motorcycleYear})
-• Coverage Type: ${quote.coverageType.toUpperCase()}
-• Monthly Premium: $${quote.totalPrice.toFixed(2)}
-• Valid Until: ${quote.validUntil.toLocaleDateString()}
+Quote Details:
+- Motorcycle: ${quote.motorcycleMake} ${quote.motorcycleModel} (${quote.motorcycleYear})
+- Coverage Type: ${quote.coverageType.toUpperCase()}
+- Monthly Premium: KES ${quote.totalPrice.toFixed(2)}
+- Valid Until: ${quote.validUntil.toLocaleDateString()}
 
 Ready to proceed?`;
     }
@@ -456,7 +423,7 @@ Ready to proceed?`;
             }).generatePaymentLink(quote.totalPrice, `HIMA_${Date.now()}`);
 
             return {
-                body: `${MESSAGES.PAYMENT_INSTRUCTIONS(quote.totalPrice.toFixed(2))}\n\n🔒 Your payment is secure and encrypted.`,
+                body: `${MESSAGES.PAYMENT_INSTRUCTIONS(quote.totalPrice.toFixed(2))}\n\nYour payment is secure and encrypted.`,
                 cta: { label: "Pay Now", url: paymentLink }
             };
         } catch (error) {
@@ -468,14 +435,9 @@ Ready to proceed?`;
     private async handlePaymentCompletion(user: any): Promise<{ body: string, cta?: { label: string, url: string } }> {
         try {
             const policyNumber = `HIMA${Date.now()}`;
-            const quote = await InsuranceQuote.findOne({
-                userId: user._id,
-                isAccepted: true,
-            }).sort({ createdAt: -1 });
+            const quote = await InsuranceQuote.findOne({ userId: user._id, isAccepted: true }).sort({ createdAt: -1 });
 
-            if (!quote) {
-                return { body: MESSAGES.ERROR };
-            }
+            if (!quote) return { body: MESSAGES.ERROR };
 
             const policy = new Policy({
                 userId: user._id.toString(),
@@ -505,27 +467,18 @@ Ready to proceed?`;
 
             return {
                 body: MESSAGES.PAYMENT_CONFIRMATION(policyNumber, quote.coverageType),
-                cta: { label: "View Active Policy", url: `http://localhost:3000/dashboard/user/profile?phone=${user.phoneNumber}` }
-            };
+                buttons: ["File a Claim", "My Profile"],
+                cta: { label: "View Policy", url: `http://localhost:3000/dashboard/user/profile?phone=${user.phoneNumber}` }
+            } as any;
         } catch (error) {
             console.error("Error handling payment completion:", error);
             return { body: MESSAGES.ERROR };
         }
     }
 
-    async handleMediaMessage(
-        phoneNumber: string,
-        mediaType: "image" | "video" | "document",
-        mediaBuffer: Buffer,
-        mimeType: string
-    ): Promise<{ body: string }> {
-        // Logic to handle media upload (e.g. upload to S3/Cloudinary and get URL)
-        // For now, we'll just simulate it
+    async handleMediaMessage(phoneNumber: string, mediaType: "image" | "video" | "document", mediaBuffer: Buffer, mimeType: string): Promise<{ body: string }> {
         console.log(`Received ${mediaType} from ${phoneNumber}`);
-
-        // Use a simulated URL for now
         const simulatedUrl = `https://api.hima.check/uploads/${Date.now()}_${mediaType}`;
-
         return this.processLogic(phoneNumber, "", simulatedUrl);
     }
 }

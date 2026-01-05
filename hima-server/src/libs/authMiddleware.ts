@@ -17,12 +17,12 @@ export const authenticateJWT = (req: AuthRequest, res: Response, next: NextFunct
     if (authHeader) {
         const token = authHeader.split(' ')[1];
 
-        jwt.verify(token, config.jwtSecret, (err: any, user: any) => {
+        (jwt.verify as any)(token, config.jwtSecret as string, (err: any, user: any) => {
             if (err) {
                 return res.status(403).json({ error: "Invalid or expired token" });
             }
 
-            req.user = user;
+            req.user = user as { id: string; phoneNumber: string; role: string; };
             next();
         });
     } else {

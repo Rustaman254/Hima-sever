@@ -2,62 +2,134 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { Shield, MessageCircle, UserPlus, Info } from "lucide-react";
 // @ts-ignore
 import styles from "../auth.module.css";
-import { Toaster, toast } from 'sonner';
+import { toast } from 'sonner';
+import CustomPhoneInput from "@/components/auth/CustomPhoneInput";
+import AuthLayout from "@/components/auth/AuthLayout";
+import OtpInput from "@/components/auth/OtpInput";
+import * as auth from "@/lib/auth";
 
 export default function RegisterPage() {
     const router = useRouter();
+    const [isLoading, setIsLoading] = useState(false);
+    const [phoneNumber, setPhoneNumber] = useState("");
+    const [isOtpSent, setIsOtpSent] = useState(false);
+
+    // --- WhatsApp Code Request ---
+    const handleRequestCode = async (e: React.FormEvent) => {
+        e.preventDefault();
+        if (!phoneNumber) return toast.error("Enter your phone number");
+
+        setIsLoading(true);
+        toast.loading("Sending secure code via WhatsApp...");
+
+        try {
+            const res = await fetch("http://localhost:8100/api/auth/whatsapp/login", {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ phoneNumber })
+            });
+            const data = await res.json();
+
+            if (data.success) {
+                toast.dismiss();
+                toast.success("Code sent! Check your WhatsApp");
+                setIsOtpSent(true);
+            } else {
+                toast.dismiss();
+                toast.error(data.error || "Failed to send code");
+            }
+        } catch (error) {
+            toast.dismiss();
+            toast.error("Auth server offline");
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
+    // --- Verify Code ---
+    const handleVerifyCode = async (otp: string) => {
+        setIsLoading(true);
+        toast.loading("Verifying code...");
+
+        try {
+            const res = await fetch("http://localhost:8100/api/auth/whatsapp/verify", {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ phoneNumber, code: otp })
+            });
+            const data = await res.json();
+
+            if (data.success) {
+                auth.setToken(data.token);
+                auth.setUser(data.user);
+
+                toast.dismiss();
+                toast.success("Registration successful!");
+                const userRole = data.user?.role || 'user';
+                router.push(`/dashboard/${userRole}`);
+            } else {
+                toast.dismiss();
+                toast.error(data.error || "Invalid code");
+            }
+        } catch (error) {
+            toast.dismiss();
+            toast.error("Auth server offline");
+        } finally {
+            setIsLoading(false);
+        }
+    };
 
     return (
-        <div className={styles.authContainer}>
-            <div className={styles.backgroundGlow} style={{ top: '60%', right: '70%', background: 'radial-gradient(circle, rgba(16, 185, 129, 0.1) 0%, transparent 70%)' }} />
+        <AuthLayout isAdminMode={false} onAdminToggle={() => router.push('/')}>
+            <h2 style={{ fontSize: '2rem', fontWeight: 600, marginBottom: '0.5rem' }}>
+                {isOtpSent ? "Verify Code" : "Sign Up"}
+            </h2>
+            <p style={{ color: '#9ca3af', marginBottom: '2rem' }}>
+                {isOtpSent
+                    ? `Enter the 6-digit code sent to ${phoneNumber}`
+                    : "Create an account to get started."}
+            </p>
 
-            <div className={styles.authCard}>
-                <div className={styles.logoArea}>
-                    <div className={styles.logoIcon}>
-                        <UserPlus size={28} color="white" />
+            {!isOtpSent ? (
+                <form onSubmit={handleRequestCode}>
+                    <div style={{ marginBottom: '2rem' }}>
+                        <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.875rem' }}>Phone Number</label>
+                        <CustomPhoneInput
+                            value={phoneNumber}
+                            onChange={(phone) => setPhoneNumber(phone)}
+                        />
                     </div>
-                    <h1 className={styles.title}>Join Hima</h1>
-                    <p className={styles.subtitle}>Getting started is easy</p>
+
+                    <button type="submit" disabled={isLoading} style={{ width: '100%', padding: '1rem', background: 'white', color: 'black', borderRadius: '9999px', fontWeight: 600, border: 'none', cursor: 'pointer' }}>
+                        {isLoading ? "Sending..." : "Sign Up"}
+                    </button>
+
+                    <div style={{ marginTop: '2rem', display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                        <div style={{ flex: 1, height: '1px', background: 'rgba(255,255,255,0.1)' }}></div>
+                        <span style={{ color: '#6b7280', fontSize: '0.875rem' }}>Or</span>
+                        <div style={{ flex: 1, height: '1px', background: 'rgba(255,255,255,0.1)' }}></div>
+                    </div>
+
+                    <div style={{ marginTop: '1.5rem', textAlign: 'center' }}>
+                        <a href="/" style={{ color: 'white', textDecoration: 'none', fontSize: '0.9rem' }}>
+                            Already have an account? <span style={{ marginLeft: '4px', textDecoration: 'underline' }}>Log In</span>
+                        </a>
+                    </div>
+                </form>
+            ) : (
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
+                    <OtpInput length={6} onComplete={handleVerifyCode} disabled={isLoading} />
+
+                    <button
+                        onClick={() => setIsOtpSent(false)}
+                        style={{ background: 'none', border: 'none', color: '#9ca3af', textDecoration: 'underline', cursor: 'pointer' }}
+                    >
+                        Change Phone Number
+                    </button>
                 </div>
-
-                <div style={{ background: 'rgba(255, 255, 255, 0.03)', borderRadius: '1.5rem', padding: '1.5rem', marginBottom: '2rem', border: '1px solid rgba(255, 255, 255, 0.05)' }}>
-                    <h3 style={{ color: 'white', fontWeight: 700, fontSize: '1rem', marginBottom: '0.75rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                        <Info size={18} color="#8b5cf6" /> Why WhatsApp?
-                    </h3>
-                    <p style={{ color: '#9CA3AF', fontSize: '0.8125rem', lineHeight: 1.6 }}>
-                        Hima uses WhatsApp for secure identity verification and instant insurance payouts. Your number is your account ID.
-                    </p>
-                </div>
-
-                <a
-                    href="https://wa.me/14155238886?text=join%20hima"
-                    target="_blank"
-                    className={styles.submitBtn}
-                    style={{ textDecoration: 'none', background: '#25D366' }}
-                    onClick={() => toast.success("Opening WhatsApp...")}
-                >
-                    <MessageCircle size={22} fill="white" color="#25D366" />
-                    Sign Up on WhatsApp
-                </a>
-
-                <div className={styles.divider}>
-                    <span>Or if you already have an account</span>
-                </div>
-
-                <p className={styles.footerText}>
-                    <a href="/" className={styles.footerLink} style={{ margin: 0 }}>Back to Login</a>
-                </p>
-
-                <div style={{ marginTop: '2rem', textAlign: 'center' }}>
-                    <p style={{ fontSize: '0.7rem', color: '#4B5563' }}>
-                        By joining, you agree to our Terms of Service and Privacy Policy.
-                        <br />© 2026 Hima Insurance.
-                    </p>
-                </div>
-            </div>
-        </div>
+            )}
+        </AuthLayout>
     );
 }

@@ -3,11 +3,11 @@
 import { useState } from "react";
 import { Shield, Key, Eye, EyeOff, Copy, AlertTriangle } from "lucide-react";
 // @ts-ignore
-import styles from "../../admin/admin.module.css";
+import styles from "../../app/dashboard/admin/admin.module.css";
 import { toast, Toaster } from "sonner";
 import * as auth from "@/lib/auth";
 
-export default function SettingsPage() {
+export default function SettingsView() {
     const [showKey, setShowKey] = useState(false);
     const [privateKey, setPrivateKey] = useState("");
     const [isLoading, setIsLoading] = useState(false);
@@ -40,8 +40,6 @@ export default function SettingsPage() {
 
     return (
         <div style={{ width: '100%', display: 'flex', flexDirection: 'column', gap: '2rem' }}>
-            <Toaster position="top-right" theme="dark" />
-
             <div style={{ background: 'hsl(var(--card))', border: '1px solid rgba(255,255,255,0.05)', borderRadius: '2rem', padding: '2rem' }}>
                 <h1 style={{ fontSize: '1.5rem', fontWeight: 800, marginBottom: '0.5rem' }}>Account Settings</h1>
                 <p style={{ color: '#94a3b8', fontSize: '0.875rem', marginBottom: '2rem' }}>Manage your Hima profile and secure wallet.</p>
@@ -71,7 +69,7 @@ export default function SettingsPage() {
                             </div>
 
                             <div style={{ marginTop: '2rem' }}>
-                                {!isRevealed ? (
+                                !{isRevealed ? (
                                     <button
                                         onClick={handleRevealKey}
                                         disabled={isLoading}

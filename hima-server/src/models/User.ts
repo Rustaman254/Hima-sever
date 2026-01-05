@@ -6,6 +6,7 @@ export interface IUser extends Document {
     lastName?: string;
     email?: string;
     role: "user" | "admin" | "lp";
+    status: "active" | "blocked";
 
     // KYC Information (encrypted)
     kycStatus?: "pending" | "verified" | "rejected";
@@ -83,6 +84,11 @@ const UserSchema = new Schema<IUser>(
             type: String,
             enum: ["user", "admin", "lp"],
             default: "user",
+        },
+        status: {
+            type: String,
+            enum: ["active", "blocked"],
+            default: "active",
         },
 
         // KYC fields

@@ -11,7 +11,6 @@ import { authenticateJWT } from "../libs/authMiddleware.ts";
 import type { AuthRequest } from "../libs/authMiddleware.ts";
 import { decryptData } from "../libs/encryption.ts";
 import jwt from "jsonwebtoken";
-import TwilioWhatsAppClient from "../whatsapp/TwilioWhatsAppClient.ts";
 import { MESSAGES } from "../whatsapp/constants.ts";
 import { logActivity } from "../libs/activityLogger.ts";
 import { ActivityLog } from "../models/ActivityLog.ts";
@@ -19,12 +18,7 @@ import { InsuranceProduct } from "../models/InsuranceProduct.ts";
 
 const router: Router = express.Router();
 
-// Initialize Twilio WhatsApp client
-const twilioClient = new TwilioWhatsAppClient(
-    config.twilioAccountSid || "",
-    config.twilioAuthToken || "",
-    config.twilioWhatsAppNumber || ""
-);
+// WhatsApp client is now retrieved from WhatsAppClientFactory where needed
 
 /**
  * @route   POST /api/insurance/quotes
@@ -255,13 +249,13 @@ router.get("/users/:phoneNumber", async (req: Request, res: Response) => {
     try {
         const { phoneNumber } = req.params;
 
-        const user = await User.findOne({ phoneNumber: phoneNumber || "" } as any);
+        const user = await User.findOne({ phoneNumber: phoneNumber as string });
         if (!user) {
             return res.status(404).json({ error: "User not found" });
         }
 
-        const policies = await Policy.find({ userId: user._id.toString() } as any);
-        const claims = await Claim.find({ userId: user._id.toString() } as any);
+        const policies = await Policy.find({ userId: user._id.toString() });
+        const claims = await Claim.find({ userId: user._id.toString() });
 
         res.json({
             success: true,
@@ -449,7 +443,7 @@ router.patch("/admin/users/:phoneNumber/kyc", async (req: Request, res: Response
             return res.status(400).json({ error: "Invalid status. Use 'verified' or 'rejected'" });
         }
 
-        const user = await User.findOne({ phoneNumber });
+        const user = await User.findOne({ phoneNumber: phoneNumber as string });
         if (!user) {
             return res.status(404).json({ error: "User not found" });
         }
@@ -464,11 +458,14 @@ router.patch("/admin/users/:phoneNumber/kyc", async (req: Request, res: Response
 
         // Send WhatsApp Notification
         try {
+            const WhatsAppClientFactory = (await import("../whatsapp/WhatsAppClientFactory.ts")).default;
+            const whatsappClient = await WhatsAppClientFactory.getClient();
+
             if (status === 'verified') {
                 await logActivity("KYC_APPROVED", `Admin approved KYC for ${phoneNumber}`, user._id.toString());
                 const message = MESSAGES.KYC_APPROVED(user.firstName || "Rider");
                 // Send as button message to allow immediate choice
-                await twilioClient.sendButtonMessage(
+                await whatsappClient.sendButtonMessage(
                     user.phoneNumber,
                     message,
                     ["Buy Insurance", "File a Claim"]
@@ -476,7 +473,7 @@ router.patch("/admin/users/:phoneNumber/kyc", async (req: Request, res: Response
             } else {
                 await logActivity("KYC_REJECTED", `Admin rejected KYC for ${phoneNumber}`, user._id.toString());
                 const message = MESSAGES.KYC_REJECTED(user.firstName || "Rider");
-                await twilioClient.sendTextMessage(user.phoneNumber, message);
+                await whatsappClient.sendTextMessage(user.phoneNumber, message);
             }
         } catch (waError) {
             console.error("Failed to send KYC notification WhatsApp:", waError);

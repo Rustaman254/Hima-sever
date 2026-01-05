@@ -54,7 +54,7 @@ class MpesaService {
             // Token expires in 3599 seconds, cache for 3500 seconds
             this.tokenExpiry = Date.now() + 3500 * 1000;
 
-            return this.accessToken;
+            return this.accessToken as string;
         } catch (error: any) {
             console.error("❌ M-Pesa auth error:", error.response?.data || error.message);
             throw new Error("Failed to get M-Pesa access token");

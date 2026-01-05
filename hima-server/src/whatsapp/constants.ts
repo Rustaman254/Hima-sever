@@ -50,111 +50,132 @@ export const COVERAGE_DETAILS = {
 };
 
 export const MESSAGES = {
-    WELCOME: `Welcome to Hima Connect! 👋
+    WELCOME: `✨ Welcome to Hima - The Future of Smart Insurance! 🛡️
 
-I'm your motorcycle insurance assistant. I'm here to help you get affordable insurance for your motorcycle in just a few minutes.
+We're reimagining motorcycle protection with blockchain security and instant payouts.
 
-A secure Hima EVM wallet has been created for you. You can see your address in your profile after registration.`,
+🚀 Since this is your first time here, we've automatically secured a blockchain wallet for you. You can manage your digital assets and view your policies anytime in your profile.
 
-    REGISTRATION_INVITE: `To get started, please register your profile. It only takes a minute!`,
+Are you ready to start your registration and join the elite group of protected riders?`,
 
-    ASKING_FIRST_NAME: `Let's get started! What's your first name?`,
+    GREETING_REGISTERED: (name: string) => `Welcome back, ${name}! 🏍️\n\nReady to get covered or manage your policies?`,
 
-    ASKING_LAST_NAME: `Nice to meet you! What's your last name?`,
+    WELCOME_TEMPLATE: {
+        name: "welcome_new_user",
+        language: "en",
+        body: `Welcome to Hima Insurance Platform!
 
-    ASKING_NATIONAL_ID: `Thanks! We need to verify your identity. What is your National ID number?`,
+We're excited to have you join our community of protected riders.
 
-    ASKING_ID_PHOTO: `Great! Please upload a clear photo of your National ID.`,
+Your secure blockchain wallet has been created automatically. You can view your wallet address and manage your policies through your profile.
 
-    WAITING_FOR_APPROVAL: (name: string, id: string, phone: string, walletAddr: string) => `✅ Profile Updated!
+To get started, please complete your registration by providing a few details.`,
+    },
 
-👤 Profile Information:
-• Name: ${name}
-• ID: ${id}
-• Wallet: ${walletAddr}
-• KYC Status: Under Review
+    REGISTRATION_INVITE: `🌟 To unlock your full potential on Hima, please complete your profile registration. It's fast and secure!`,
 
-We'll notify you here as soon as your account is verified!`,
+    ASKING_FIRST_NAME: `Excellent! Let's start with your profile. 👤
 
-    ACCOUNT_REJECTED: `We're sorry, but your account registration was rejected. Please contact support for more information.`,
+What is your first name?`,
 
-    KYC_APPROVED: (name: string) => `🎉 Great news, ${name}! 
-Your Hima account has been officially verified! 
+    ASKING_LAST_NAME: `Great to meet you! And what is your last name?`,
 
-You can now proceed to protect your motorcycle or manage your account.`,
+    ASKING_NATIONAL_ID: `🛡️ Security is our priority. We need to verify your identity to comply with local regulations.
 
-    KYC_REJECTED: (name: string) => `Hello ${name}, we've reviewed your KYC documents and unfortunately we couldn't verify your identity at this time. 
+What is your National ID number?`,
 
-Please re-upload a clearer photo of your National ID to proceed.`,
+    ASKING_ID_PHOTO: `📸 Perfect! Now, please upload a clear photo of your National ID. 
 
-    ASKING_MOTORCYCLE_MAKE: `Thanks! Now, what's the make of your motorcycle? (e.g., Honda, Yamaha, Bajaj)`,
+Make sure all details are visible and there's no glare.`,
 
-    ASKING_MOTORCYCLE_MODEL: `Great! What's the model? (e.g., CB125R, YZF-R3, CT100)`,
+    WAITING_FOR_APPROVAL: (name: string, id: string, phone: string, walletAddr: string) => `✅ Profile Updated Successfully!
+
+Profile Summary:
+👤 Name: ${name}
+🆔 ID: ${id}
+🔗 Wallet: ${walletAddr}
+📊 KYC Status: ⏳ Under Review
+
+We're reviewing your documents and will notify you as soon as your account is verified. You can explore your profile in the meantime!`,
+
+    ACCOUNT_REJECTED: `❌ We're sorry, but your account registration couldn't be approved at this time. 
+
+Please reach out to our dedicated support team for assistance.`,
+
+    KYC_APPROVED: (name: string) => `🎉 Great news, ${name}!
+
+Your Hima account has been officially verified! 🏆
+
+You're now ready to join the future of insurance. What would you like to do next?`,
+
+    KYC_REJECTED: (name: string) => `⚠️ Hello ${name}, we've reviewed your KYC documents and unfortunately, some details are unclear.
+
+Please re-upload a clear, high-resolution photo of your National ID to proceed with verification.`,
+
+
+    ASKING_MOTORCYCLE_MAKE: `Thanks! Now, what's the make of your motorcycle?
+
+Examples: Honda, Yamaha, Bajaj, Suzuki`,
+
+    ASKING_MOTORCYCLE_MODEL: `Great! What's the model?
+
+Examples: CB125R, YZF-R3, CT100, GS150`,
 
     ASKING_MOTORCYCLE_YEAR: `What year was it manufactured?`,
 
     ASKING_REGISTRATION: `What's your vehicle registration number?`,
 
-    ASKING_MOTORCYCLE_VALUE: `What's the current market value of your motorcycle in your local currency?`,
+    ASKING_MOTORCYCLE_VALUE: `What's the current market value of your motorcycle in KES?
 
-    SELECT_PRODUCT: `📋 Choose your insurance plan:
+Please enter numbers only (e.g., 50000)`,
 
-{products}
-
-Just reply with the number (e.g., 1, 2, or 3)`,
+    SELECT_PRODUCT: `Choose your insurance plan from the options below:`,
 
     ASKING_COVERAGE: `Perfect! Now, what type of coverage would you prefer?
 
-1️⃣ Basic Coverage - Third-party liability protection
-2️⃣ Comprehensive Coverage - Theft, fire, accidents, and third-party
-3️⃣ Premium Coverage - Full protection with 24/7 roadside assistance`,
+1. Basic Coverage - Third-party liability protection
+2. Comprehensive Coverage - Theft, fire, accidents, and third-party
+3. Premium Coverage - Full protection with 24/7 roadside assistance`,
 
-    CALCULATING_QUOTE: `Let me calculate your personalized quote...`,
+    CALCULATING_QUOTE: `🔄 Calculating your personalized smart-insurance quote...`,
 
     QUOTE_READY: (firstName: string, make: string, model: string, coverage: string, price: string) => `
-Great news, ${firstName}! 🎉
+💎 Exclusive Quote for ${firstName}!
 
-Here's your personalized quote for your ${model} ${make}:
+We've found a great rate for your ${make} ${model}:
 
 📋 Coverage: ${coverage}
-💰 Price: ${price}/month
+💰 Monthly Premium: ${price}
 
-This price is locked for 24 hours. Would you like to proceed with this insurance?`,
+This offer is valid for 24 hours. Ready to activate your protection?`,
 
     COVERAGE_DETAILS: (type: string) => {
         const details = COVERAGE_DETAILS[type as keyof typeof COVERAGE_DETAILS];
         return `
-📋 ${details.name}
+📌 ${details.name}
 
-Coverage includes: ${details.coverage}
-Description: ${details.description}`;
+🛡️ Includes: ${details.coverage}
+📝 Description: ${details.description}`;
     },
 
     PAYMENT_INSTRUCTIONS: (amount: string) => `
-Excellent choice! Let's proceed with your insurance. 
+💸 Complete Your Activation
 
-💳 Payment Details:
-Amount: ${amount}
+Amount Due: KES ${amount}
 
-Please click the link below to complete your payment securely:
+Please click the secure link below to finalize your payment and activate your coverage immediately. 🚀`,
 
-[PAYMENT LINK]
+    PAYMENT_CONFIRMATION: (policyNumber: string, coverage: string) => `🎊 Payment Confirmed!
 
-Once you complete the payment, your insurance will be activated immediately.`,
+Congratulations! Your Hima Smart Insurance is now active. 🥳
 
-    PAYMENT_CONFIRMATION: (policyNumber: string, coverage: string) => `
-✅ Payment Successful!
+📜 Policy Details:
+- Number: ${policyNumber}
+- Type: ${coverage}
+- Status: ✅ Active
 
-Your insurance is now active! 🎉
+Riders, you're now part of a safer future. Safe travels! 🏍️⚡`,
 
-📋 Policy Details:
-Policy Number: ${policyNumber}
-Coverage: ${coverage}
-Status: Active
-
-You can now ride with peace of mind. Your policy details have been sent to your email.
-
-Is there anything else I can help you with?`,
 
     ERROR: `I didn't quite understand that. Could you please try again?`,
 
@@ -162,13 +183,16 @@ Is there anything else I can help you with?`,
 
     MAIN_MENU: (name: string) => `How can I help you today, ${name}?`,
 
-    MAIN_MENU_OPTIONS: ["Buy Insurance", "File a Claim", "My Profile"],
+    MAIN_MENU_OPTIONS: ["Buy Insurance", "File Claim", "My Profile"],
 
-    ASKING_CLAIM_DESCRIPTION: `We're sorry to hear that. Please describe the incident in a few words. (e.g., "Minor collision at Haile Selassie Ave")`,
+    ASKING_CLAIM_DESCRIPTION: `We're sorry to hear that. Please describe the incident in a few words.
+
+Example: "Minor collision at Haile Selassie Ave"`,
 
     ASKING_CLAIM_PHOTO: `Please upload a photo of the damage or the police report if available.`,
 
-    CLAIM_SUBMITTED: `✅ Claim Received!
+    CLAIM_SUBMITTED: `Claim Received!
+
 We have received your claim request. Our team will review it and get back to you within 24 hours.
 
 You can track your claim status in your dashboard.`,

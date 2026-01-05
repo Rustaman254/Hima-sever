@@ -9,18 +9,15 @@ import { toast } from "sonner";
 import * as auth from "@/lib/auth";
 
 export default function UserProfile() {
-    const searchParams = useSearchParams();
-    const phoneParam = searchParams.get("phone");
-
     const [userData, setUserData] = useState<any>(null);
     const [loading, setLoading] = useState(true);
     const [walletAddress, setWalletAddress] = useState<string>("");
 
     useEffect(() => {
         const fetchProfile = async () => {
-            // Use the phone parameter if present, otherwise use the authenticated user's phone
+            // Strictly use the authenticated session user
             const sessionUser = auth.getUser();
-            const phone = phoneParam || (sessionUser ? sessionUser.phoneNumber : null);
+            const phone = sessionUser ? sessionUser.phoneNumber : null;
 
             if (!phone) {
                 setLoading(false);
@@ -45,7 +42,7 @@ export default function UserProfile() {
         };
 
         fetchProfile();
-    }, [phoneParam]);
+    }, []);
 
     if (loading) {
         return (

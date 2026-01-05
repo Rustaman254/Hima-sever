@@ -1,4 +1,5 @@
-import { Policy, IPolicy } from "../models/Policy.ts";
+import { Policy } from "../models/Policy.ts";
+import type { IPolicy } from "../models/Policy.ts";
 import { User } from "../models/User.ts";
 import { Payment } from "../models/Payment.ts";
 import MantleService from "./MantleService.ts";
@@ -21,7 +22,7 @@ class PolicyService {
                     : coverageType === "weekly"
                         ? "WEEKLY"
                         : "MONTHLY";
-        const date = new Date().toISOString().split("T")[0].replace(/-/g, "");
+        const date = (new Date().toISOString().split("T")[0] || "").replace(/-/g, "");
         const random = Math.floor(Math.random() * 1000)
             .toString()
             .padStart(3, "0");

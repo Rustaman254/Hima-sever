@@ -5,14 +5,14 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Mantle](https://img.shields.io/badge/Blockchain-Mantle-blue)](https://mantle.xyz)
 [![WhatsApp](https://img.shields.io/badge/Chat-WhatsApp-25D366)](https://www.whatsapp.com/)
-[![Twilio](https://img.shields.io/badge/Provider-Twilio-F22F46)](https://www.twilio.com/)
+
+---
 
 ## 📋 Table of Contents
 
 - [Overview](#overview)
 - [Features](#features)
 - [Architecture](#architecture)
-- [Phase 3: Dashboard Integration](#phase-3-dashboard-integration)
 - [Tech Stack](#tech-stack)
 - [Installation](#installation)
 - [Configuration](#configuration)
@@ -24,40 +24,43 @@
 
 ## 🎯 Overview
 
-Hima is a revolutionary insurance platform that allows users to purchase motorcycle insurance entirely through WhatsApp (via Twilio), with payments and policies integrated with the Mantle blockchain and M-Pesa.
+Hima is a revolutionary insurance platform that allows users to purchase motorcycle insurance entirely through WhatsApp using the Meta WhatsApp Business API, with payments and policies integrated with the Mantle blockchain and M-Pesa.
 
 ---
 
-## 🛠 Phase 4: Connectivity & Resilience
-- **CORS Enabled**: The server now uses the `cors` package to allow the Hima Dashboard (localhost:3000) to securely access the API endpoints on localhost:8100.
-- **Fail-Safe Twilio**: The server is now resilient to missing or invalid Twilio credentials. If the `TWILIO_ACCOUNT_SID` is not valid, the server will log a warning and fallback to **Simulation Mode** for messaging, rather than crashing.
-
 ## ⚙️ Configuration
 
-### Environment Variables (.env)
+### WhatsApp Connectivity
+Hima exclusively uses the **Meta WhatsApp Business API**.
 
-Hima uses **Twilio** for messaging and **M-Pesa** for local payments. Create a `.env` file with:
-
+#### Environment Variables (.env)
 ```env
-# TWILIO
-TWILIO_ACCOUNT_SID=AC...
-TWILIO_AUTH_TOKEN=your_token
-TWILIO_WHATSAPP_NUMBER=whatsapp:+14155238886
+# META WHATSAPP BUSINESS API
+WHATSAPP_ACCESS_TOKEN=EAAMu0yPDPZCc...
+WHATSAPP_PHONE_NUMBER_ID=879843564631752
+WHATSAPP_BUSINESS_ACCOUNT_ID=879843564631752
+WHATSAPP_WEBHOOK_VERIFY_TOKEN=hima_webhook_verify_token
 
-# M-PESA
-MPESA_ENVIRONMENT=sandbox
-MPESA_CONSUMER_KEY=...
-MPESA_CONSUMER_SECRET=...
-MPESA_SHORTCODE=174379
-
-# ADMIN
-ADMIN_EMAIL=admin@hima.com
-ADMIN_PASSWORD=hima_admin_2026
-
-# MANTLE
-RPC_URL=https://mantle-sepolia.drpc.org
+# BLOCKCHAIN (Mantle Testnet)
+RPC_URL=https://rpc.testnet.mantle.xyz
 CHAIN_ID=5001
+INSURANCE_CONTRACT_ADDRESS=0x...
+PRIVATE_KEY=your_wallet_private_key
 ```
+
+### 📱 WhatsApp Features
+The platform leverages native Meta WhatsApp interactive components:
+- **Interactive Buttons**: Native (Up to 3) for quick actions.
+- **List Messages**: Native (Up to 10 options) for product selection.
+- **CTA Link Buttons**: Native CTA URL for external links.
+- **Media Handling**: Full support for ID photos and documents.
+
+### 🔗 Webhook Setup
+To receive messages, configure your Meta Developer portal webhook to point to your server:
+- **Meta Webhook**: `https://your-domain.com/webhook`
+
+> [!TIP]
+> Use **ngrok** for local testing: `ngrok http 8100`. Update the Meta Developer portal with the temporary ngrok URL.
 
 ---
 

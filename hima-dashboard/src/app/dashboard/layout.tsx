@@ -1,9 +1,18 @@
 import DashboardShell from "@/components/layout/DashboardShell";
+import { LogsProvider } from "@/context/LogsContext";
+import WhatsAppChat from "@/components/chat/WhatsAppChat";
 
 export default function DashboardLayout({
     children,
 }: {
     children: React.ReactNode;
 }) {
-    return <DashboardShell>{children}</DashboardShell>;
+    return (
+        <LogsProvider>
+            <DashboardShell>
+                {children}
+                <WhatsAppChat />
+            </DashboardShell>
+        </LogsProvider>
+    );
 }

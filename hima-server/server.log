@@ -1,0 +1,904 @@
+nohup: ignoring input
+
+> hima-server@1.0.0 dev /home/masterchiefff/Documents/Hima/hima-server
+> nodemon src/app.ts
+
+[33m[nodemon] 3.1.11[39m
+[33m[nodemon] to restart at any time, enter `rs`[39m
+[33m[nodemon] watching path(s): *.*[39m
+[33m[nodemon] watching extensions: ts,json[39m
+[32m[nodemon] starting `ts-node src/app.ts`[39m
+node:events:497
+      throw er; // Unhandled 'error' event
+      ^
+
+Error: EBADF: bad file descriptor, read
+Emitted 'error' event on ReadStream instance at:
+    at emitErrorNT (node:internal/streams/destroy:170:8)
+    at errorOrDestroy (node:internal/streams/destroy:239:7)
+    at node:internal/fs/streams:275:9
+    at FSReqCallback.wrapper [as oncomplete] (node:fs:671:5) {
+  errno: -9,
+  code: 'EBADF',
+  syscall: 'read'
+}
+
+Node.js v22.19.0
+ ELIFECYCLE  Command failed with exit code 1.
+[dotenv@17.2.3] injecting env (35) from .env -- tip: 🔐 prevent committing .env to code: https://dotenvx.com/precommit
+⚡ [ROUTER] Webhook Router Loaded
+[dotenv@17.2.3] injecting env (0) from .env -- tip: 🔄 add secrets lifecycle management: https://dotenvx.com/ops
+✅ Connected to MongoDB
+📡 Initializing Meta WhatsApp provider
+🔧 Configuration:
+   - WhatsApp Provider: meta
+   - Meta Phone ID: 852829371256540
+   - Network: Mantle Testnet (Chain ID: 5001)
+   - RPC URL: https://rpc.sepolia.mantle.xyz
+🚀 Server started on port 8100
+📱 Hima Insurance WhatsApp Bot is ready
+🔗 Meta Webhook URL: https://unmeet-meghan-displeasedly.ngrok-free.dev/webhook
+💡 Configure webhooks in your respective platforms
+📥 [WEBHOOK] Received POST request
+[ACTIVITY LOG] WEBHOOK: Incoming Webhook Payload
+📱 Received message from 254712345678: hi
+[ACTIVITY LOG] WEBHOOK: hi
+💬 [WEBHOOK] Processing message from 254712345678
+[ACTIVITY LOG] SYSTEM: User 254712345678 sent greeting: hi
+📨 [WEBHOOK] Sending response: {
+  bodyPreview: 'Jambo! ✨ Welcome to Hima - The Future of Smart Insurance! 🛡️\n' +
+    '\n' +
+    "We're reimagining motorcycle protecti"
+}
+📤 [META] Sending button message to 254712345678
+🔘 [META] Buttons: Register Now
+❌ [META] Error sending button message: {
+  error: {
+    message: '(#131030) Recipient phone number not in allowed list',
+    type: 'OAuthException',
+    code: 131030,
+    error_data: {
+      messaging_product: 'whatsapp',
+      details: 'Recipient phone number not in allowed list: Add recipient phone number to recipient list and try again.'
+    },
+    fbtrace_id: 'Adk_M9SmG3J2FaDBrhpzZGz'
+  }
+}
+⚠️  [META] Falling back to text message
+📤 [META] Attempting to send message to 254712345678
+📝 [META] Message preview: Jambo! ✨ Welcome to Hima - The Future of Smart Insurance! 🛡️
+
+We're reimagining motorcycle protecti...
+🔗 [META] API Endpoint: https://graph.facebook.com/v22.0/852829371256540/messages
+❌ [META] Failed to send message to 254712345678
+❌ [META] Error status: 400
+❌ [META] Error details: {
+  "error": {
+    "message": "(#131030) Recipient phone number not in allowed list",
+    "type": "OAuthException",
+    "code": 131030,
+    "error_data": {
+      "messaging_product": "whatsapp",
+      "details": "Recipient phone number not in allowed list: Add recipient phone number to recipient list and try again."
+    },
+    "fbtrace_id": "AxwQ0t_5CqTliN5DBi0tnUh"
+  }
+}
+❌ [META] Error message: Request failed with status code 400
+Webhook Error: AxiosError: Request failed with status code 400
+    at settle (file:///home/masterchiefff/Documents/Hima/hima-server/node_modules/.pnpm/axios@1.13.2/node_modules/axios/lib/core/settle.js:19:12)
+    at BrotliDecompress.handleStreamEnd (file:///home/masterchiefff/Documents/Hima/hima-server/node_modules/.pnpm/axios@1.13.2/node_modules/axios/lib/adapters/http.js:793:11)
+    at BrotliDecompress.emit (node:events:519:28)
+    at BrotliDecompress.emit (node:domain:489:12)
+    at endReadableNT (node:internal/streams/readable:1698:12)
+    at processTicksAndRejections (node:internal/process/task_queues:90:21)
+    at Axios.request (file:///home/masterchiefff/Documents/Hima/hima-server/node_modules/.pnpm/axios@1.13.2/node_modules/axios/lib/core/Axios.js:45:41)
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async WhatsAppBusinessClient.sendTextMessage (file:///home/masterchiefff/Documents/Hima/hima-server/src/whatsapp/WhatsAppBusinessClient.ts:41:30)
+    at async sendWhatsAppResponse (file:///home/masterchiefff/Documents/Hima/hima-server/src/routers/webhookRouter.ts:117:13)
+    at async file:///home/masterchiefff/Documents/Hima/hima-server/src/routers/webhookRouter.ts:86:17 {
+  code: 'ERR_BAD_REQUEST',
+  config: {
+    transitional: {
+      silentJSONParsing: true,
+      forcedJSONParsing: true,
+      clarifyTimeoutError: false
+    },
+    adapter: [ 'xhr', 'http', 'fetch' ],
+    transformRequest: [ [Function: transformRequest] ],
+    transformResponse: [ [Function: transformResponse] ],
+    timeout: 0,
+    xsrfCookieName: 'XSRF-TOKEN',
+    xsrfHeaderName: 'X-XSRF-TOKEN',
+    maxContentLength: -1,
+    maxBodyLength: -1,
+    env: { FormData: [Function], Blob: [class Blob] },
+    validateStatus: [Function: validateStatus],
+    headers: Object [AxiosHeaders] {
+      Accept: 'application/json, text/plain, */*',
+      'Content-Type': 'application/json',
+      Authorization: 'Bearer EAAMu0yPDPZCcBQfssraectoKieL4vAyOuBoCYwZBTChZBZBvXlYcZCIBLTy24mz2pYzGT0FJVMod6EcSqT1xSUGZCVK1GrMDBEUCC5k8HU6EweXZB6RRDlMAdOn768mRvKMuuAavuVTl3jN8ZCVNm68o3iY5TS7OKuSEJMkEqtMKeUo7GEF645Axb8026efnCDWV4HR6THfXI3qwWZCcYjl8L6HlVBuosep0XDbYifvFYNiOuCxXccTyxWZBNCayOxAlpby9qkSOf0BrZBMQdYcRpVGrFGQ1ZC3VXZC87keudEwZDZD',
+      'User-Agent': 'axios/1.13.2',
+      'Content-Length': '584',
+      'Accept-Encoding': 'gzip, compress, deflate, br'
+    },
+    method: 'post',
+    url: 'https://graph.facebook.com/v22.0/852829371256540/messages',
+    data: `{"messaging_product":"whatsapp","recipient_type":"individual","to":"254712345678","type":"text","text":{"preview_url":false,"body":"Jambo! ✨ Welcome to Hima - The Future of Smart Insurance! 🛡️\\n\\nWe're reimagining motorcycle protection with blockchain security and instant payouts.\\n\\n🚀 Since this is your first time here, we've automatically secured a blockchain wallet for you. You can manage your digital assets and view your policies anytime in your profile.\\n\\nAre you ready to start your registration and join the elite group of protected riders?\\n\\n1. Register Now"}}`,
+    allowAbsoluteUrls: true
+  },
+  request: <ref *1> ClientRequest {
+    _events: [Object: null prototype] {
+      abort: [Function (anonymous)],
+      aborted: [Function (anonymous)],
+      connect: [Function (anonymous)],
+      error: [Function (anonymous)],
+      socket: [Function (anonymous)],
+      timeout: [Function (anonymous)],
+      finish: [Function: requestOnFinish]
+    },
+    _eventsCount: 7,
+    _maxListeners: undefined,
+    outputData: [],
+    outputSize: 0,
+    writable: true,
+    destroyed: true,
+    _last: false,
+    chunkedEncoding: false,
+    shouldKeepAlive: true,
+    maxRequestsOnConnectionReached: false,
+    _defaultKeepAlive: true,
+    useChunkedEncodingByDefault: true,
+    sendDate: false,
+    _removedConnection: false,
+    _removedContLen: false,
+    _removedTE: false,
+    strictContentLength: false,
+    _contentLength: 584,
+    _hasBody: true,
+    _trailer: '',
+    finished: true,
+    _headerSent: true,
+    _closed: true,
+    _header: 'POST /v22.0/852829371256540/messages HTTP/1.1\r\n' +
+      'Accept: application/json, text/plain, */*\r\n' +
+      'Content-Type: application/json\r\n' +
+      'Authorization: Bearer EAAMu0yPDPZCcBQfssraectoKieL4vAyOuBoCYwZBTChZBZBvXlYcZCIBLTy24mz2pYzGT0FJVMod6EcSqT1xSUGZCVK1GrMDBEUCC5k8HU6EweXZB6RRDlMAdOn768mRvKMuuAavuVTl3jN8ZCVNm68o3iY5TS7OKuSEJMkEqtMKeUo7GEF645Axb8026efnCDWV4HR6THfXI3qwWZCcYjl8L6HlVBuosep0XDbYifvFYNiOuCxXccTyxWZBNCayOxAlpby9qkSOf0BrZBMQdYcRpVGrFGQ1ZC3VXZC87keudEwZDZD\r\n' +
+      'User-Agent: axios/1.13.2\r\n' +
+      'Content-Length: 584\r\n' +
+      'Accept-Encoding: gzip, compress, deflate, br\r\n' +
+      'Host: graph.facebook.com\r\n' +
+      'Connection: keep-alive\r\n' +
+      '\r\n',
+    _keepAliveTimeout: 0,
+    _onPendingData: [Function: nop],
+    agent: Agent {
+      _events: [Object: null prototype],
+      _eventsCount: 2,
+      _maxListeners: undefined,
+      defaultPort: 443,
+      protocol: 'https:',
+      options: [Object: null prototype],
+      requests: [Object: null prototype] {},
+      sockets: [Object: null prototype] {},
+      freeSockets: [Object: null prototype],
+      keepAliveMsecs: 1000,
+      keepAlive: true,
+      maxSockets: Infinity,
+      maxFreeSockets: 256,
+      scheduling: 'lifo',
+      maxTotalSockets: Infinity,
+      totalSocketCount: 1,
+      maxCachedSessions: 100,
+      _sessionCache: [Object],
+      [Symbol(shapeMode)]: false,
+      [Symbol(kCapture)]: false
+    },
+    socketPath: undefined,
+    method: 'POST',
+    maxHeaderSize: undefined,
+    insecureHTTPParser: undefined,
+    joinDuplicateHeaders: undefined,
+    path: '/v22.0/852829371256540/messages',
+    _ended: true,
+    res: IncomingMessage {
+      _events: [Object],
+      _readableState: [ReadableState],
+      _maxListeners: undefined,
+      socket: null,
+      httpVersionMajor: 1,
+      httpVersionMinor: 1,
+      httpVersion: '1.1',
+      complete: true,
+      rawHeaders: [Array],
+      rawTrailers: [],
+      joinDuplicateHeaders: undefined,
+      aborted: false,
+      upgrade: false,
+      url: '',
+      method: null,
+      statusCode: 400,
+      statusMessage: 'Bad Request',
+      client: [TLSSocket],
+      _consuming: false,
+      _dumped: false,
+      req: [Circular *1],
+      _eventsCount: 4,
+      responseUrl: 'https://graph.facebook.com/v22.0/852829371256540/messages',
+      redirects: [],
+      [Symbol(shapeMode)]: true,
+      [Symbol(kCapture)]: false,
+      [Symbol(kHeaders)]: [Object],
+      [Symbol(kHeadersCount)]: 54,
+      [Symbol(kTrailers)]: null,
+      [Symbol(kTrailersCount)]: 0
+    },
+    aborted: false,
+    timeoutCb: null,
+    upgradeOrConnect: false,
+    parser: null,
+    maxHeadersCount: null,
+    reusedSocket: true,
+    host: 'graph.facebook.com',
+    protocol: 'https:',
+    _redirectable: Writable {
+      _events: [Object],
+      _writableState: [WritableState],
+      _maxListeners: undefined,
+      _options: [Object],
+      _ended: true,
+      _ending: true,
+      _redirectCount: 0,
+      _redirects: [],
+      _requestBodyLength: 584,
+      _requestBodyBuffers: [],
+      _eventsCount: 3,
+      _onNativeResponse: [Function (anonymous)],
+      _currentRequest: [Circular *1],
+      _currentUrl: 'https://graph.facebook.com/v22.0/852829371256540/messages',
+      _timeout: null,
+      [Symbol(shapeMode)]: true,
+      [Symbol(kCapture)]: false
+    },
+    [Symbol(shapeMode)]: false,
+    [Symbol(kCapture)]: false,
+    [Symbol(kBytesWritten)]: 0,
+    [Symbol(kNeedDrain)]: false,
+    [Symbol(corked)]: 0,
+    [Symbol(kChunkedBuffer)]: [],
+    [Symbol(kChunkedLength)]: 0,
+    [Symbol(kSocket)]: TLSSocket {
+      _tlsOptions: [Object],
+      _secureEstablished: true,
+      _securePending: false,
+      _newSessionPending: false,
+      _controlReleased: true,
+      secureConnecting: false,
+      _SNICallback: null,
+      servername: 'graph.facebook.com',
+      alpnProtocol: false,
+      authorized: true,
+      authorizationError: null,
+      encrypted: true,
+      _events: [Object: null prototype],
+      _eventsCount: 9,
+      connecting: false,
+      _hadError: false,
+      _parent: null,
+      _host: 'graph.facebook.com',
+      _closeAfterHandlingError: false,
+      _readableState: [ReadableState],
+      _writableState: [WritableState],
+      allowHalfOpen: false,
+      _maxListeners: undefined,
+      _sockname: null,
+      _pendingData: null,
+      _pendingEncoding: '',
+      server: undefined,
+      _server: null,
+      ssl: [TLSWrap],
+      _requestCert: true,
+      _rejectUnauthorized: true,
+      timeout: 5000,
+      parser: null,
+      _httpMessage: null,
+      autoSelectFamilyAttemptedAddresses: [Array],
+      [Symbol(alpncallback)]: null,
+      [Symbol(res)]: [TLSWrap],
+      [Symbol(verified)]: true,
+      [Symbol(pendingSession)]: null,
+      [Symbol(async_id_symbol)]: -1,
+      [Symbol(kHandle)]: [TLSWrap],
+      [Symbol(lastWriteQueueSize)]: 0,
+      [Symbol(timeout)]: Timeout {
+        _idleTimeout: 5000,
+        _idlePrev: [TimersList],
+        _idleNext: [TimersList],
+        _idleStart: 24580,
+        _onTimeout: [Function: bound ],
+        _timerArgs: undefined,
+        _repeat: null,
+        _destroyed: false,
+        [Symbol(refed)]: false,
+        [Symbol(kHasPrimitive)]: false,
+        [Symbol(asyncId)]: 1314,
+        [Symbol(triggerId)]: 1312,
+        [Symbol(kAsyncContextFrame)]: undefined
+      },
+      [Symbol(kBuffer)]: null,
+      [Symbol(kBufferCb)]: null,
+      [Symbol(kBufferGen)]: null,
+      [Symbol(shapeMode)]: true,
+      [Symbol(kCapture)]: false,
+      [Symbol(kSetNoDelay)]: false,
+      [Symbol(kSetKeepAlive)]: true,
+      [Symbol(kSetKeepAliveInitialDelay)]: 1,
+      [Symbol(kBytesRead)]: 0,
+      [Symbol(kBytesWritten)]: 0,
+      [Symbol(connect-options)]: [Object]
+    },
+    [Symbol(kOutHeaders)]: [Object: null prototype] {
+      accept: [Array],
+      'content-type': [Array],
+      authorization: [Array],
+      'user-agent': [Array],
+      'content-length': [Array],
+      'accept-encoding': [Array],
+      host: [Array]
+    },
+    [Symbol(errored)]: null,
+    [Symbol(kHighWaterMark)]: 65536,
+    [Symbol(kRejectNonStandardBodyWrites)]: false,
+    [Symbol(kUniqueHeaders)]: null
+  },
+  response: {
+    status: 400,
+    statusText: 'Bad Request',
+    headers: Object [AxiosHeaders] {
+      'debug-link': 'https://www.meta.com/debug/?mid=c9506d75f8a0bd5f3f8148f654c4f51e',
+      'error-mid': 'c9506d75f8a0bd5f3f8148f654c4f51e',
+      vary: 'Origin, Accept-Encoding',
+      'x-fb-aed': '700',
+      'x-ad-api-version-warning': 'The call has been auto-upgraded to v24.0 as v22.0 will be deprecated.',
+      'x-business-use-case-usage': '{"879843564631752":[{"type":"whatsapp","call_count":1,"total_cputime":1,"total_time":1,"estimated_time_to_regain_access":0}]}',
+      'content-type': 'application/json',
+      'www-authenticate': 'OAuth "Facebook Platform" "invalid_request" "(#131030) Recipient phone number not in allowed list"',
+      'access-control-allow-origin': '*',
+      'facebook-api-version': 'v24.0',
+      'strict-transport-security': 'max-age=15552000; preload',
+      pragma: 'no-cache',
+      'cache-control': 'no-store',
+      expires: 'Sat, 01 Jan 2000 00:00:00 GMT',
+      'x-fb-request-id': 'AxwQ0t_5CqTliN5DBi0tnUh',
+      'x-fb-trace-id': 'E8IGmZZkJpR',
+      'x-fb-rev': '1031617374',
+      'x-fb-debug': 'UsXHOM/amRPVKi923vUGG36qndrDipy5u5yWJAQ+2AkXOc9QKKIMWouFiVqCFrx42dOGGtPFVZczGQmrwlosEw==',
+      'x-fb-server-load': '5',
+      date: 'Mon, 05 Jan 2026 02:24:48 GMT',
+      'proxy-status': 'http_request_error; e_fb_vipaddr="AcO3P7dI7KT0OQRERG6DblwE0dF8Dho8onOmggTPqhI6HH2qpsn5B_x-9EY34jH44E4dE-Y66zAYLkGRDx-q0VBA8QeNP0hDZA"; e_clientaddr="AcN-xC8wj1JdaNJ0u2Q2ALQEkZixKPDrjOMuzB9Vz8Z61tHhK_lwd2kejbfn6zf-sylYv_mfVsWx-wbmwQsP_vuKcJLhdistJEYwQW9OkGJNY4WCNw"; e_upip="AcNF4nF3BG-omKoPtfwjEdofm8U4bl3VqAs0_HfnVLQ9xaYcy8TN5Xc_-LcoDFBLJchX80ZaHRMgfLR5RDnnAuS7VfDgvDKZUpt-ymlPxRA"; e_fb_zone="AcP6VqXzO-9jx8S5WNpf6UoAb385HPaNVU1zcUwt25vMZ2x7l9LK90Jt02GSCdKH"; e_fb_twtaskhandle="AcMi3skn7mkG0s1-nji6E2ozVAI27YzB9McKFl9fYw9rBeYEIUmJiLIfbmC8ONfpHEhS7ZBCouw_1wVGp8yRQHd5mG74vuZfhIwxxkkRAQPGPo8"; e_proxy="AcPLpHY2fPahQoiP6CbKEjCY77RZGL0gIhV6S_4z3vdrfguK8UmF6mTu8txXK1EWku6nNgn2nHbtsxkl_PQ", http_request_error; e_fb_vipaddr="AcNuUwkCQIROAzfrFoSE12k1f1N51asOQwgZdj8M07PwspmvPDr6OX3JbFISBBdk6iqxHcN13kE"; e_clientaddr="AcPZsO7YjfEerYDcMDPqNlzOgJUiPAPVhPU-F2O-ENAiiAUkbeT6-_lx1d6AVCqaxIQVr4olI8w0-wUYlg"; e_upip="AcMoqFf3P0veunTbtH4fxx_N8MoBcywBL8p-AX9S0qmji1a2vzpqD3bhLt-fuuOQXfizAC2YA85cjEFsKA7OIcgOgl5GqOEpHg"; e_fb_zone="AcNczJyV_wfT6Zcvcmhj3F5j2kqHyKazDkF84G8BTB7eBJ9JHxJnvHQTpSqQiA"; e_fb_twtaskhandle="AcPIB1r1oExnTHe10PL7B6i5kCwjMvF7GlFQS0Zt-67dFrNLP7xZfBeQDnMUsBSbjTlFC3NplOQVLxRTEeZJVLZmgIRMThTt8M4"; e_proxy="AcMmEGOFxNS9JkCdn3_HobStLTLlZrWLdRDjkuAhskeBl53JzS6cHD8WZIoHv2B_00L0gxI6OHCHuKw"',
+      'x-fb-connection-quality': 'EXCELLENT; q=0.9, rtt=13, rtx=0, c=10, mss=1380, tbw=6288, tp=-1, tpl=-1, uplat=379, ullat=0',
+      'alt-svc': 'h3=":443"; ma=86400',
+      connection: 'keep-alive',
+      'content-length': '196'
+    },
+    config: {
+      transitional: [Object],
+      adapter: [Array],
+      transformRequest: [Array],
+      transformResponse: [Array],
+      timeout: 0,
+      xsrfCookieName: 'XSRF-TOKEN',
+      xsrfHeaderName: 'X-XSRF-TOKEN',
+      maxContentLength: -1,
+      maxBodyLength: -1,
+      env: [Object],
+      validateStatus: [Function: validateStatus],
+      headers: [Object [AxiosHeaders]],
+      method: 'post',
+      url: 'https://graph.facebook.com/v22.0/852829371256540/messages',
+      data: `{"messaging_product":"whatsapp","recipient_type":"individual","to":"254712345678","type":"text","text":{"preview_url":false,"body":"Jambo! ✨ Welcome to Hima - The Future of Smart Insurance! 🛡️\\n\\nWe're reimagining motorcycle protection with blockchain security and instant payouts.\\n\\n🚀 Since this is your first time here, we've automatically secured a blockchain wallet for you. You can manage your digital assets and view your policies anytime in your profile.\\n\\nAre you ready to start your registration and join the elite group of protected riders?\\n\\n1. Register Now"}}`,
+      allowAbsoluteUrls: true
+    },
+    request: <ref *1> ClientRequest {
+      _events: [Object: null prototype],
+      _eventsCount: 7,
+      _maxListeners: undefined,
+      outputData: [],
+      outputSize: 0,
+      writable: true,
+      destroyed: true,
+      _last: false,
+      chunkedEncoding: false,
+      shouldKeepAlive: true,
+      maxRequestsOnConnectionReached: false,
+      _defaultKeepAlive: true,
+      useChunkedEncodingByDefault: true,
+      sendDate: false,
+      _removedConnection: false,
+      _removedContLen: false,
+      _removedTE: false,
+      strictContentLength: false,
+      _contentLength: 584,
+      _hasBody: true,
+      _trailer: '',
+      finished: true,
+      _headerSent: true,
+      _closed: true,
+      _header: 'POST /v22.0/852829371256540/messages HTTP/1.1\r\n' +
+        'Accept: application/json, text/plain, */*\r\n' +
+        'Content-Type: application/json\r\n' +
+        'Authorization: Bearer EAAMu0yPDPZCcBQfssraectoKieL4vAyOuBoCYwZBTChZBZBvXlYcZCIBLTy24mz2pYzGT0FJVMod6EcSqT1xSUGZCVK1GrMDBEUCC5k8HU6EweXZB6RRDlMAdOn768mRvKMuuAavuVTl3jN8ZCVNm68o3iY5TS7OKuSEJMkEqtMKeUo7GEF645Axb8026efnCDWV4HR6THfXI3qwWZCcYjl8L6HlVBuosep0XDbYifvFYNiOuCxXccTyxWZBNCayOxAlpby9qkSOf0BrZBMQdYcRpVGrFGQ1ZC3VXZC87keudEwZDZD\r\n' +
+        'User-Agent: axios/1.13.2\r\n' +
+        'Content-Length: 584\r\n' +
+        'Accept-Encoding: gzip, compress, deflate, br\r\n' +
+        'Host: graph.facebook.com\r\n' +
+        'Connection: keep-alive\r\n' +
+        '\r\n',
+      _keepAliveTimeout: 0,
+      _onPendingData: [Function: nop],
+      agent: [Agent],
+      socketPath: undefined,
+      method: 'POST',
+      maxHeaderSize: undefined,
+      insecureHTTPParser: undefined,
+      joinDuplicateHeaders: undefined,
+      path: '/v22.0/852829371256540/messages',
+      _ended: true,
+      res: [IncomingMessage],
+      aborted: false,
+      timeoutCb: null,
+      upgradeOrConnect: false,
+      parser: null,
+      maxHeadersCount: null,
+      reusedSocket: true,
+      host: 'graph.facebook.com',
+      protocol: 'https:',
+      _redirectable: [Writable],
+      [Symbol(shapeMode)]: false,
+      [Symbol(kCapture)]: false,
+      [Symbol(kBytesWritten)]: 0,
+      [Symbol(kNeedDrain)]: false,
+      [Symbol(corked)]: 0,
+      [Symbol(kChunkedBuffer)]: [],
+      [Symbol(kChunkedLength)]: 0,
+      [Symbol(kSocket)]: [TLSSocket],
+      [Symbol(kOutHeaders)]: [Object: null prototype],
+      [Symbol(errored)]: null,
+      [Symbol(kHighWaterMark)]: 65536,
+      [Symbol(kRejectNonStandardBodyWrites)]: false,
+      [Symbol(kUniqueHeaders)]: null
+    },
+    data: { error: [Object] }
+  },
+  status: 400
+}
+❌ Webhook verification failed. Invalid token.
+✅ Webhook verified successfully!
+📥 [WEBHOOK] Received POST request
+[ACTIVITY LOG] WEBHOOK: Incoming Webhook Payload
+📱 Received message from 254700000000: hi
+[ACTIVITY LOG] WEBHOOK: hi
+💬 [WEBHOOK] Processing message from 254700000000
+[ACTIVITY LOG] REGISTRATION: New user starting registration from 254700000000
+[ACTIVITY LOG] SYSTEM: User 254700000000 sent greeting: hi
+📨 [WEBHOOK] Sending response: {
+  bodyPreview: 'Jambo! ✨ Welcome to Hima - The Future of Smart Insurance! 🛡️\n' +
+    '\n' +
+    "We're reimagining motorcycle protecti"
+}
+📤 [META] Sending button message to 254700000000
+🔘 [META] Buttons: Register Now
+❌ [META] Error sending button message: {
+  error: {
+    message: 'Error validating access token: Session has expired on Sunday, 04-Jan-26 19:00:00 PST. The current time is Sunday, 04-Jan-26 19:33:22 PST.',
+    type: 'OAuthException',
+    code: 190,
+    error_subcode: 463,
+    fbtrace_id: 'At9s1IMU0A2d4In6O9OxNe4'
+  }
+}
+⚠️  [META] Falling back to text message
+📤 [META] Attempting to send message to 254700000000
+📝 [META] Message preview: Jambo! ✨ Welcome to Hima - The Future of Smart Insurance! 🛡️
+
+We're reimagining motorcycle protecti...
+🔗 [META] API Endpoint: https://graph.facebook.com/v22.0/852829371256540/messages
+❌ [META] Failed to send message to 254700000000
+❌ [META] Error status: 401
+❌ [META] Error details: {
+  "error": {
+    "message": "Error validating access token: Session has expired on Sunday, 04-Jan-26 19:00:00 PST. The current time is Sunday, 04-Jan-26 19:33:22 PST.",
+    "type": "OAuthException",
+    "code": 190,
+    "error_subcode": 463,
+    "fbtrace_id": "A9hcDF3q_fZjk0E7ywicmQN"
+  }
+}
+❌ [META] Error message: Request failed with status code 401
+🔐 [META] Authentication failed - check WHATSAPP_ACCESS_TOKEN
+Webhook Error: AxiosError: Request failed with status code 401
+    at settle (file:///home/masterchiefff/Documents/Hima/hima-server/node_modules/.pnpm/axios@1.13.2/node_modules/axios/lib/core/settle.js:19:12)
+    at BrotliDecompress.handleStreamEnd (file:///home/masterchiefff/Documents/Hima/hima-server/node_modules/.pnpm/axios@1.13.2/node_modules/axios/lib/adapters/http.js:793:11)
+    at BrotliDecompress.emit (node:events:519:28)
+    at BrotliDecompress.emit (node:domain:489:12)
+    at endReadableNT (node:internal/streams/readable:1698:12)
+    at processTicksAndRejections (node:internal/process/task_queues:90:21)
+    at Axios.request (file:///home/masterchiefff/Documents/Hima/hima-server/node_modules/.pnpm/axios@1.13.2/node_modules/axios/lib/core/Axios.js:45:41)
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async WhatsAppBusinessClient.sendTextMessage (file:///home/masterchiefff/Documents/Hima/hima-server/src/whatsapp/WhatsAppBusinessClient.ts:41:30)
+    at async sendWhatsAppResponse (file:///home/masterchiefff/Documents/Hima/hima-server/src/routers/webhookRouter.ts:117:13)
+    at async file:///home/masterchiefff/Documents/Hima/hima-server/src/routers/webhookRouter.ts:86:17 {
+  code: 'ERR_BAD_REQUEST',
+  config: {
+    transitional: {
+      silentJSONParsing: true,
+      forcedJSONParsing: true,
+      clarifyTimeoutError: false
+    },
+    adapter: [ 'xhr', 'http', 'fetch' ],
+    transformRequest: [ [Function: transformRequest] ],
+    transformResponse: [ [Function: transformResponse] ],
+    timeout: 0,
+    xsrfCookieName: 'XSRF-TOKEN',
+    xsrfHeaderName: 'X-XSRF-TOKEN',
+    maxContentLength: -1,
+    maxBodyLength: -1,
+    env: { FormData: [Function], Blob: [class Blob] },
+    validateStatus: [Function: validateStatus],
+    headers: Object [AxiosHeaders] {
+      Accept: 'application/json, text/plain, */*',
+      'Content-Type': 'application/json',
+      Authorization: 'Bearer EAAMu0yPDPZCcBQfssraectoKieL4vAyOuBoCYwZBTChZBZBvXlYcZCIBLTy24mz2pYzGT0FJVMod6EcSqT1xSUGZCVK1GrMDBEUCC5k8HU6EweXZB6RRDlMAdOn768mRvKMuuAavuVTl3jN8ZCVNm68o3iY5TS7OKuSEJMkEqtMKeUo7GEF645Axb8026efnCDWV4HR6THfXI3qwWZCcYjl8L6HlVBuosep0XDbYifvFYNiOuCxXccTyxWZBNCayOxAlpby9qkSOf0BrZBMQdYcRpVGrFGQ1ZC3VXZC87keudEwZDZD',
+      'User-Agent': 'axios/1.13.2',
+      'Content-Length': '584',
+      'Accept-Encoding': 'gzip, compress, deflate, br'
+    },
+    method: 'post',
+    url: 'https://graph.facebook.com/v22.0/852829371256540/messages',
+    data: `{"messaging_product":"whatsapp","recipient_type":"individual","to":"254700000000","type":"text","text":{"preview_url":false,"body":"Jambo! ✨ Welcome to Hima - The Future of Smart Insurance! 🛡️\\n\\nWe're reimagining motorcycle protection with blockchain security and instant payouts.\\n\\n🚀 Since this is your first time here, we've automatically secured a blockchain wallet for you. You can manage your digital assets and view your policies anytime in your profile.\\n\\nAre you ready to start your registration and join the elite group of protected riders?\\n\\n1. Register Now"}}`,
+    allowAbsoluteUrls: true
+  },
+  request: <ref *1> ClientRequest {
+    _events: [Object: null prototype] {
+      abort: [Function (anonymous)],
+      aborted: [Function (anonymous)],
+      connect: [Function (anonymous)],
+      error: [Function (anonymous)],
+      socket: [Function (anonymous)],
+      timeout: [Function (anonymous)],
+      finish: [Function: requestOnFinish]
+    },
+    _eventsCount: 7,
+    _maxListeners: undefined,
+    outputData: [],
+    outputSize: 0,
+    writable: true,
+    destroyed: true,
+    _last: false,
+    chunkedEncoding: false,
+    shouldKeepAlive: true,
+    maxRequestsOnConnectionReached: false,
+    _defaultKeepAlive: true,
+    useChunkedEncodingByDefault: true,
+    sendDate: false,
+    _removedConnection: false,
+    _removedContLen: false,
+    _removedTE: false,
+    strictContentLength: false,
+    _contentLength: 584,
+    _hasBody: true,
+    _trailer: '',
+    finished: true,
+    _headerSent: true,
+    _closed: true,
+    _header: 'POST /v22.0/852829371256540/messages HTTP/1.1\r\n' +
+      'Accept: application/json, text/plain, */*\r\n' +
+      'Content-Type: application/json\r\n' +
+      'Authorization: Bearer EAAMu0yPDPZCcBQfssraectoKieL4vAyOuBoCYwZBTChZBZBvXlYcZCIBLTy24mz2pYzGT0FJVMod6EcSqT1xSUGZCVK1GrMDBEUCC5k8HU6EweXZB6RRDlMAdOn768mRvKMuuAavuVTl3jN8ZCVNm68o3iY5TS7OKuSEJMkEqtMKeUo7GEF645Axb8026efnCDWV4HR6THfXI3qwWZCcYjl8L6HlVBuosep0XDbYifvFYNiOuCxXccTyxWZBNCayOxAlpby9qkSOf0BrZBMQdYcRpVGrFGQ1ZC3VXZC87keudEwZDZD\r\n' +
+      'User-Agent: axios/1.13.2\r\n' +
+      'Content-Length: 584\r\n' +
+      'Accept-Encoding: gzip, compress, deflate, br\r\n' +
+      'Host: graph.facebook.com\r\n' +
+      'Connection: keep-alive\r\n' +
+      '\r\n',
+    _keepAliveTimeout: 0,
+    _onPendingData: [Function: nop],
+    agent: Agent {
+      _events: [Object: null prototype],
+      _eventsCount: 2,
+      _maxListeners: undefined,
+      defaultPort: 443,
+      protocol: 'https:',
+      options: [Object: null prototype],
+      requests: [Object: null prototype] {},
+      sockets: [Object: null prototype] {},
+      freeSockets: [Object: null prototype],
+      keepAliveMsecs: 1000,
+      keepAlive: true,
+      maxSockets: Infinity,
+      maxFreeSockets: 256,
+      scheduling: 'lifo',
+      maxTotalSockets: Infinity,
+      totalSocketCount: 1,
+      maxCachedSessions: 100,
+      _sessionCache: [Object],
+      [Symbol(shapeMode)]: false,
+      [Symbol(kCapture)]: false
+    },
+    socketPath: undefined,
+    method: 'POST',
+    maxHeaderSize: undefined,
+    insecureHTTPParser: undefined,
+    joinDuplicateHeaders: undefined,
+    path: '/v22.0/852829371256540/messages',
+    _ended: true,
+    res: IncomingMessage {
+      _events: [Object],
+      _readableState: [ReadableState],
+      _maxListeners: undefined,
+      socket: null,
+      httpVersionMajor: 1,
+      httpVersionMinor: 1,
+      httpVersion: '1.1',
+      complete: true,
+      rawHeaders: [Array],
+      rawTrailers: [],
+      joinDuplicateHeaders: undefined,
+      aborted: false,
+      upgrade: false,
+      url: '',
+      method: null,
+      statusCode: 401,
+      statusMessage: 'Unauthorized',
+      client: [TLSSocket],
+      _consuming: false,
+      _dumped: false,
+      req: [Circular *1],
+      _eventsCount: 4,
+      responseUrl: 'https://graph.facebook.com/v22.0/852829371256540/messages',
+      redirects: [],
+      [Symbol(shapeMode)]: true,
+      [Symbol(kCapture)]: false,
+      [Symbol(kHeaders)]: [Object],
+      [Symbol(kHeadersCount)]: 52,
+      [Symbol(kTrailers)]: null,
+      [Symbol(kTrailersCount)]: 0
+    },
+    aborted: false,
+    timeoutCb: null,
+    upgradeOrConnect: false,
+    parser: null,
+    maxHeadersCount: null,
+    reusedSocket: true,
+    host: 'graph.facebook.com',
+    protocol: 'https:',
+    _redirectable: Writable {
+      _events: [Object],
+      _writableState: [WritableState],
+      _maxListeners: undefined,
+      _options: [Object],
+      _ended: true,
+      _ending: true,
+      _redirectCount: 0,
+      _redirects: [],
+      _requestBodyLength: 584,
+      _requestBodyBuffers: [],
+      _eventsCount: 3,
+      _onNativeResponse: [Function (anonymous)],
+      _currentRequest: [Circular *1],
+      _currentUrl: 'https://graph.facebook.com/v22.0/852829371256540/messages',
+      _timeout: null,
+      [Symbol(shapeMode)]: true,
+      [Symbol(kCapture)]: false
+    },
+    [Symbol(shapeMode)]: false,
+    [Symbol(kCapture)]: false,
+    [Symbol(kBytesWritten)]: 0,
+    [Symbol(kNeedDrain)]: false,
+    [Symbol(corked)]: 0,
+    [Symbol(kChunkedBuffer)]: [],
+    [Symbol(kChunkedLength)]: 0,
+    [Symbol(kSocket)]: TLSSocket {
+      _tlsOptions: [Object],
+      _secureEstablished: true,
+      _securePending: false,
+      _newSessionPending: false,
+      _controlReleased: true,
+      secureConnecting: false,
+      _SNICallback: null,
+      servername: 'graph.facebook.com',
+      alpnProtocol: false,
+      authorized: true,
+      authorizationError: null,
+      encrypted: true,
+      _events: [Object: null prototype],
+      _eventsCount: 9,
+      connecting: false,
+      _hadError: false,
+      _parent: null,
+      _host: 'graph.facebook.com',
+      _closeAfterHandlingError: false,
+      _readableState: [ReadableState],
+      _writableState: [WritableState],
+      allowHalfOpen: false,
+      _maxListeners: undefined,
+      _sockname: null,
+      _pendingData: null,
+      _pendingEncoding: '',
+      server: undefined,
+      _server: null,
+      ssl: [TLSWrap],
+      _requestCert: true,
+      _rejectUnauthorized: true,
+      timeout: 5000,
+      parser: null,
+      _httpMessage: null,
+      autoSelectFamilyAttemptedAddresses: [Array],
+      [Symbol(alpncallback)]: null,
+      [Symbol(res)]: [TLSWrap],
+      [Symbol(verified)]: true,
+      [Symbol(pendingSession)]: null,
+      [Symbol(async_id_symbol)]: -1,
+      [Symbol(kHandle)]: [TLSWrap],
+      [Symbol(lastWriteQueueSize)]: 0,
+      [Symbol(timeout)]: Timeout {
+        _idleTimeout: 5000,
+        _idlePrev: [TimersList],
+        _idleNext: [TimersList],
+        _idleStart: 4139119,
+        _onTimeout: [Function: bound ],
+        _timerArgs: undefined,
+        _repeat: null,
+        _destroyed: false,
+        [Symbol(refed)]: false,
+        [Symbol(kHasPrimitive)]: false,
+        [Symbol(asyncId)]: 134445,
+        [Symbol(triggerId)]: 134443,
+        [Symbol(kAsyncContextFrame)]: undefined
+      },
+      [Symbol(kBuffer)]: null,
+      [Symbol(kBufferCb)]: null,
+      [Symbol(kBufferGen)]: null,
+      [Symbol(shapeMode)]: true,
+      [Symbol(kCapture)]: false,
+      [Symbol(kSetNoDelay)]: false,
+      [Symbol(kSetKeepAlive)]: true,
+      [Symbol(kSetKeepAliveInitialDelay)]: 1,
+      [Symbol(kBytesRead)]: 0,
+      [Symbol(kBytesWritten)]: 0,
+      [Symbol(connect-options)]: [Object]
+    },
+    [Symbol(kOutHeaders)]: [Object: null prototype] {
+      accept: [Array],
+      'content-type': [Array],
+      authorization: [Array],
+      'user-agent': [Array],
+      'content-length': [Array],
+      'accept-encoding': [Array],
+      host: [Array]
+    },
+    [Symbol(errored)]: null,
+    [Symbol(kHighWaterMark)]: 65536,
+    [Symbol(kRejectNonStandardBodyWrites)]: false,
+    [Symbol(kUniqueHeaders)]: null
+  },
+  response: {
+    status: 401,
+    statusText: 'Unauthorized',
+    headers: Object [AxiosHeaders] {
+      'debug-link': 'https://www.meta.com/debug/?mid=3b61b1893bdda23cc09efe288a53acdf',
+      'error-mid': '3b61b1893bdda23cc09efe288a53acdf',
+      vary: 'Origin, Accept-Encoding',
+      'access-control-allow-origin': '*',
+      'x-fb-aed': '700',
+      'cross-origin-resource-policy': 'cross-origin',
+      'x-app-usage': '{"call_count":0,"total_cputime":0,"total_time":0}',
+      'content-type': 'application/json',
+      'www-authenticate': 'OAuth "Facebook Platform" "invalid_token" "Error validating access token: Session has expired on Sunday, 04-Jan-26 19:00:00 PST. The current time is Sunday, 04-Jan-26 19:33:22 PST."',
+      'strict-transport-security': 'max-age=15552000; preload',
+      pragma: 'no-cache',
+      'cache-control': 'no-store',
+      expires: 'Sat, 01 Jan 2000 00:00:00 GMT',
+      'x-fb-request-id': 'A9hcDF3q_fZjk0E7ywicmQN',
+      'x-fb-trace-id': 'GPrg022/zLr',
+      'x-fb-rev': '1031618054',
+      'x-fb-debug': 'Tsk/GQMbW+r/Ta4XLJSqFnucpuZa3pqIL4syPiIE/5dl/h2VqtkbFlDXIOHmeYPQJm9OJ+T2bulmhNm5KidCaA==',
+      'x-fb-server-load': '6',
+      date: 'Mon, 05 Jan 2026 03:33:22 GMT',
+      'proxy-status': 'http_request_error; e_fb_vipaddr="AcNvG4Kr_Ln1O3FwyN_ZobZXNO7QHYlS2tLqo-zxRetnm9RLEUlMDIYkA1BXlqsn2zUrpJgdgvEkzm_YIBfvWolgxicHTZCdvw"; e_clientaddr="AcNw3Eb9sLJqg4aOZv3aM3nWJ91funmpdyVLpp6kAItjp-jZUIA2yh5vK9x4XeVeXFvm4SdM4jHUI-7uxQJrxe16-Wq2vWV_-RVEr-ODFknh3kktTg"; e_upip="AcNyH2GsaRwcRJ3gOCzO-JLTC-2ahRsuo4W--ZgIf3gRb_7wgYbHFOlHVxshEZ2hcwT3jhcOZVd1pTAR9iKV7BJnbHxZd_vrHAb27tN0EP8"; e_fb_zone="AcNfaVMs848C6sD8nGZvB4L46bDWmMZfkOiGmpP8HaLtkCIlhXatODOiM-g07H3p"; e_fb_twtaskhandle="AcO9JPJnbGsEsKPJEK7Jg-JJZ5l_DzRQHceedh_HDammf6RVoaqAZ2mtfJ2Y-nWzAPUT9UWg0gjuYNuxTx8eL0ZAaTuPDNNnBvwsrEXQtynAsmE"; e_proxy="AcNODYuKHL5Y7jXVQqVhyw1HlxoVIHZ8kEL3hvp7xnJl0VDIFHY1zuqm7J_P1zP37PbJY-sTlo3A2L2HeX0", http_request_error; e_fb_vipaddr="AcMHcNFHnFneh8Ao47ZBZR_Ts1TNCevfEVIz9qBBuU8JWZiK33T7f-rfgZ-NIb9zw1TGye0JgMk"; e_clientaddr="AcNhGKI_3GiAmZC8MgDyU3liUfo9eJ4UZLjPRNVFgTjN59mk3xZe5t-Y1dYC4pDispFa0Cd24RKQ9ZftMQ"; e_upip="AcMi0Z3dLXIxhNI6Ujhe0r8qFIpxdQtmVQrLY5hQeRpHSRNQ4meIeqJU2UlbL_ri3B6MiB6ds5kutJiRfxEXUPTC7_MeKpY1bQ"; e_fb_zone="AcM7V0NjMcTjsWV04nlH6j70qu1_9LFbPa8sX3U1S6BgsI_iQAvulu3CqnQXuw"; e_fb_twtaskhandle="AcOnRdbl1PA_JtcOx3lWD-WDsXu_PUT71V0xBZ9Ic5zqxyDmmSF0j6wfpFvi7JFRZ5p24dF6lep9gVY_Pls03JhKujhHwk0AvA"; e_proxy="AcPzS3Mls6CrNJvxBV7yXnJsq5ZhSCPlz2ONwim95x_NTyVfQUla8dqXTTXxhjFDHClIS6wONfEZqHw"',
+      'x-fb-connection-quality': 'EXCELLENT; q=0.9, rtt=15, rtx=0, c=10, mss=1380, tbw=3108, tp=-1, tpl=-1, uplat=253, ullat=0',
+      'alt-svc': 'h3=":443"; ma=86400',
+      connection: 'keep-alive',
+      'content-length': '193'
+    },
+    config: {
+      transitional: [Object],
+      adapter: [Array],
+      transformRequest: [Array],
+      transformResponse: [Array],
+      timeout: 0,
+      xsrfCookieName: 'XSRF-TOKEN',
+      xsrfHeaderName: 'X-XSRF-TOKEN',
+      maxContentLength: -1,
+      maxBodyLength: -1,
+      env: [Object],
+      validateStatus: [Function: validateStatus],
+      headers: [Object [AxiosHeaders]],
+      method: 'post',
+      url: 'https://graph.facebook.com/v22.0/852829371256540/messages',
+      data: `{"messaging_product":"whatsapp","recipient_type":"individual","to":"254700000000","type":"text","text":{"preview_url":false,"body":"Jambo! ✨ Welcome to Hima - The Future of Smart Insurance! 🛡️\\n\\nWe're reimagining motorcycle protection with blockchain security and instant payouts.\\n\\n🚀 Since this is your first time here, we've automatically secured a blockchain wallet for you. You can manage your digital assets and view your policies anytime in your profile.\\n\\nAre you ready to start your registration and join the elite group of protected riders?\\n\\n1. Register Now"}}`,
+      allowAbsoluteUrls: true
+    },
+    request: <ref *1> ClientRequest {
+      _events: [Object: null prototype],
+      _eventsCount: 7,
+      _maxListeners: undefined,
+      outputData: [],
+      outputSize: 0,
+      writable: true,
+      destroyed: true,
+      _last: false,
+      chunkedEncoding: false,
+      shouldKeepAlive: true,
+      maxRequestsOnConnectionReached: false,
+      _defaultKeepAlive: true,
+      useChunkedEncodingByDefault: true,
+      sendDate: false,
+      _removedConnection: false,
+      _removedContLen: false,
+      _removedTE: false,
+      strictContentLength: false,
+      _contentLength: 584,
+      _hasBody: true,
+      _trailer: '',
+      finished: true,
+      _headerSent: true,
+      _closed: true,
+      _header: 'POST /v22.0/852829371256540/messages HTTP/1.1\r\n' +
+        'Accept: application/json, text/plain, */*\r\n' +
+        'Content-Type: application/json\r\n' +
+        'Authorization: Bearer EAAMu0yPDPZCcBQfssraectoKieL4vAyOuBoCYwZBTChZBZBvXlYcZCIBLTy24mz2pYzGT0FJVMod6EcSqT1xSUGZCVK1GrMDBEUCC5k8HU6EweXZB6RRDlMAdOn768mRvKMuuAavuVTl3jN8ZCVNm68o3iY5TS7OKuSEJMkEqtMKeUo7GEF645Axb8026efnCDWV4HR6THfXI3qwWZCcYjl8L6HlVBuosep0XDbYifvFYNiOuCxXccTyxWZBNCayOxAlpby9qkSOf0BrZBMQdYcRpVGrFGQ1ZC3VXZC87keudEwZDZD\r\n' +
+        'User-Agent: axios/1.13.2\r\n' +
+        'Content-Length: 584\r\n' +
+        'Accept-Encoding: gzip, compress, deflate, br\r\n' +
+        'Host: graph.facebook.com\r\n' +
+        'Connection: keep-alive\r\n' +
+        '\r\n',
+      _keepAliveTimeout: 0,
+      _onPendingData: [Function: nop],
+      agent: [Agent],
+      socketPath: undefined,
+      method: 'POST',
+      maxHeaderSize: undefined,
+      insecureHTTPParser: undefined,
+      joinDuplicateHeaders: undefined,
+      path: '/v22.0/852829371256540/messages',
+      _ended: true,
+      res: [IncomingMessage],
+      aborted: false,
+      timeoutCb: null,
+      upgradeOrConnect: false,
+      parser: null,
+      maxHeadersCount: null,
+      reusedSocket: true,
+      host: 'graph.facebook.com',
+      protocol: 'https:',
+      _redirectable: [Writable],
+      [Symbol(shapeMode)]: false,
+      [Symbol(kCapture)]: false,
+      [Symbol(kBytesWritten)]: 0,
+      [Symbol(kNeedDrain)]: false,
+      [Symbol(corked)]: 0,
+      [Symbol(kChunkedBuffer)]: [],
+      [Symbol(kChunkedLength)]: 0,
+      [Symbol(kSocket)]: [TLSSocket],
+      [Symbol(kOutHeaders)]: [Object: null prototype],
+      [Symbol(errored)]: null,
+      [Symbol(kHighWaterMark)]: 65536,
+      [Symbol(kRejectNonStandardBodyWrites)]: false,
+      [Symbol(kUniqueHeaders)]: null
+    },
+    data: { error: [Object] }
+  },
+  status: 401
+}
