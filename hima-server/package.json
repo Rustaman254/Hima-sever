@@ -8,7 +8,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node dist/app.js",
     "dev": "nodemon src/app.ts",
-    "build": "tsc",
+    "build": "pnpm run compile && tsc",
     "compile": "npx hardhat compile",
     "deploy:testnet": "npx hardhat run scripts/deploy.ts --network mantleTestnet",
     "deploy:mainnet": "npx hardhat run scripts/deploy.ts --network mantleMainnet"
