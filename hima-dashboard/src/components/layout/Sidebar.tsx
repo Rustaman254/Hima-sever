@@ -18,6 +18,7 @@ import {
 } from "lucide-react";
 // @ts-ignore
 import styles from "./sidebar.module.css";
+import { API_BASE_URL } from "@/lib/config";
 
 import { useState, useEffect } from "react";
 
@@ -35,7 +36,7 @@ export default function Sidebar({ role, isOpen, onClose }: SidebarProps) {
         if (role === "admin") {
             const fetchStats = async () => {
                 try {
-                    const res = await fetch("http://localhost:8100/api/insurance/admin/stats");
+                    const res = await fetch(`${API_BASE_URL}/api/insurance/admin/stats`);
                     const data = await res.json();
                     if (data.success) {
                         setPendingCount(data.stats.pendingKyc + data.stats.pendingPolicies + data.stats.pendingClaims);

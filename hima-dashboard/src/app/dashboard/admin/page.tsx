@@ -7,6 +7,7 @@ import { ActivePositionCard } from "@/components/dashboard/ActivePositionCard";
 // @ts-ignore
 import styles from "./admin.module.css";
 import { toast } from "sonner";
+import { API_BASE_URL } from "@/lib/config";
 
 export default function AdminOverview() {
     const [stats, setStats] = useState<any>({
@@ -30,8 +31,8 @@ export default function AdminOverview() {
         const fetchData = async () => {
             try {
                 const [statsRes, reviewsRes] = await Promise.all([
-                    fetch("http://localhost:8100/api/insurance/admin/stats"),
-                    fetch("http://localhost:8100/api/insurance/admin/reviews")
+                    fetch(`${API_BASE_URL}/api/insurance/admin/stats`),
+                    fetch(`${API_BASE_URL}/api/insurance/admin/reviews`)
                 ]);
 
                 const statsData = await statsRes.json();

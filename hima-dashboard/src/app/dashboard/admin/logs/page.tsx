@@ -6,6 +6,7 @@ import { Activity, Clock, Terminal, ChevronRight, Loader2, Wifi } from "lucide-r
 import tableStyles from "@/components/dashboard/tables.module.css";
 import { useLogs } from "@/context/LogsContext";
 import { useRouter } from "next/navigation";
+import { API_BASE_URL } from "@/lib/config";
 
 export default function AdminLogs() {
     const { logs: liveLogs, isConnected } = useLogs();
@@ -25,7 +26,7 @@ export default function AdminLogs() {
             setLoading(true);
             try {
                 // Fetch historical logs
-                const res = await fetch(`http://localhost:8100/api/logs?limit=100&type=${selectedFilter}`);
+                const res = await fetch(`${API_BASE_URL}/api/logs?limit=100&type=${selectedFilter}`);
                 const data = await res.json();
                 if (data.success) {
                     setHistoricalLogs(data.logs);

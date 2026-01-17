@@ -7,6 +7,7 @@ import { Shield, MapPin, Phone, Mail, Calendar, CheckCircle, Clock, Plus } from 
 import styles from "../../admin/admin.module.css";
 import { toast } from "sonner";
 import * as auth from "@/lib/auth";
+import { API_BASE_URL } from "@/lib/config";
 
 export default function UserProfile() {
     const [userData, setUserData] = useState<any>(null);
@@ -25,7 +26,7 @@ export default function UserProfile() {
             }
 
             try {
-                const res = await fetch(`http://localhost:8100/api/insurance/users/${phone}`);
+                const res = await fetch(`${API_BASE_URL}/api/insurance/users/${phone}`);
                 const data = await res.json();
 
                 if (data.success) {

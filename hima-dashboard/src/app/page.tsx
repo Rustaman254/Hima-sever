@@ -7,6 +7,7 @@ import { ArrowRight } from "lucide-react";
 import styles from "./auth.module.css";
 import { toast } from 'sonner';
 import * as auth from "@/lib/auth";
+import { API_BASE_URL } from "@/lib/config";
 import CustomPhoneInput from "@/components/auth/CustomPhoneInput";
 import AuthLayout from "@/components/auth/AuthLayout";
 import OtpInput from "@/components/auth/OtpInput";
@@ -40,7 +41,7 @@ function LoginForm() {
     toast.loading("Authenticating secure session...");
 
     try {
-      const res = await fetch("http://localhost:8100/api/insurance/admin/login", {
+      const res = await fetch(`${API_BASE_URL}/api/insurance/admin/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password })
@@ -74,7 +75,7 @@ function LoginForm() {
     toast.loading("Sending WhatsApp login code...");
 
     try {
-      const res = await fetch("http://localhost:8100/api/auth/otp/request", {
+      const res = await fetch(`${API_BASE_URL}/api/auth/otp/request`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ phoneNumber })
@@ -103,7 +104,7 @@ function LoginForm() {
     toast.loading("Verifying code...");
 
     try {
-      const res = await fetch("http://localhost:8100/api/auth/otp/verify", {
+      const res = await fetch(`${API_BASE_URL}/api/auth/otp/verify`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ phoneNumber, code: otp })

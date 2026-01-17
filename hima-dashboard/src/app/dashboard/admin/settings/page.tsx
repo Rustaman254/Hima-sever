@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 // @ts-ignore
 import styles from "@/components/dashboard/tables.module.css"; // Reuse table styles for consistency if needed, or inline
 import { Settings, Shield, Globe, MessageCircle, Lock, Server } from "lucide-react";
+import { API_BASE_URL } from "@/lib/config";
 
 export default function SettingsPage() {
     const [config, setConfig] = useState<any>(null);
@@ -12,7 +13,7 @@ export default function SettingsPage() {
     useEffect(() => {
         const fetchSettings = async () => {
             try {
-                const res = await fetch("http://localhost:8100/api/settings");
+                const res = await fetch(`${API_BASE_URL}/api/settings`);
                 const data = await res.json();
                 if (data.success) {
                     setConfig(data.settings);

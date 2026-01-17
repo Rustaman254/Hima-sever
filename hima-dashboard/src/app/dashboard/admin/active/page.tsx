@@ -5,6 +5,7 @@ import { useState, useEffect } from "react";
 // @ts-ignore
 import tableStyles from "@/components/dashboard/tables.module.css";
 import { toast } from "sonner";
+import { API_BASE_URL } from "@/lib/config";
 
 export default function AdminActivePolicies() {
     const [policies, setPolicies] = useState<any[]>([]);
@@ -13,7 +14,7 @@ export default function AdminActivePolicies() {
 
     const fetchPolicies = async () => {
         try {
-            const res = await fetch("http://localhost:8100/api/insurance/admin/policies");
+            const res = await fetch(`${API_BASE_URL}/api/insurance/admin/policies`);
             const data = await res.json();
             if (data.success) {
                 setPolicies(data.policies);
@@ -34,7 +35,7 @@ export default function AdminActivePolicies() {
         const newStatus = !currentStatus;
         toast.loading(`Updating policy claimability...`);
         try {
-            const res = await fetch(`http://localhost:8100/api/insurance/admin/policies/${id}/claimable`, {
+            const res = await fetch(`${API_BASE_URL}/api/insurance/admin/policies/${id}/claimable`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ isClaimable: newStatus })

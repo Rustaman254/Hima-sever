@@ -8,6 +8,7 @@ import styles from "../admin/admin.module.css";
 import { toast } from 'sonner';
 import * as auth from "@/lib/auth";
 import { useEffect, useState } from "react";
+import { API_BASE_URL } from "@/lib/config";
 
 export default function UserOverview() {
     const [products, setProducts] = useState<any[]>([]);
@@ -20,7 +21,7 @@ export default function UserOverview() {
         const user = auth.getUser();
         if (user) {
             // Fetch products
-            fetch("http://localhost:8100/api/insurance/products")
+            fetch(`${API_BASE_URL}/api/insurance/products`)
                 .then(res => res.json())
                 .then(data => {
                     if (data.success) {
@@ -30,7 +31,7 @@ export default function UserOverview() {
                 .catch(() => { });
 
             // Try to fetch full profile for name and policies
-            fetch(`http://localhost:8100/api/insurance/users/${user.phoneNumber}`)
+            fetch(`${API_BASE_URL}/api/insurance/users/${user.phoneNumber}`)
                 .then(res => res.json())
                 .then(data => {
                     if (data.success) {

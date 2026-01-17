@@ -9,6 +9,7 @@ import CustomPhoneInput from "@/components/auth/CustomPhoneInput";
 import AuthLayout from "@/components/auth/AuthLayout";
 import OtpInput from "@/components/auth/OtpInput";
 import * as auth from "@/lib/auth";
+import { API_BASE_URL } from "@/lib/config";
 
 export default function RegisterPage() {
     const router = useRouter();
@@ -25,7 +26,7 @@ export default function RegisterPage() {
         toast.loading("Sending WhatsApp code...");
 
         try {
-            const res = await fetch("http://localhost:8100/api/auth/otp/request", {
+            const res = await fetch(`${API_BASE_URL}/api/auth/otp/request`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ phoneNumber })
@@ -54,7 +55,7 @@ export default function RegisterPage() {
         toast.loading("Verifying code...");
 
         try {
-            const res = await fetch("http://localhost:8100/api/auth/otp/verify", {
+            const res = await fetch(`${API_BASE_URL}/api/auth/otp/verify`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ phoneNumber, code: otp })

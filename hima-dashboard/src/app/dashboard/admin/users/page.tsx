@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import tableStyles from "@/components/dashboard/tables.module.css";
 import { Users, Search, Filter, MoreHorizontal, Shield, User as UserIcon, Check, X, Ban, MessageCircle, Send } from "lucide-react";
 import { toast } from "sonner";
+import { API_BASE_URL } from "@/lib/config";
 
 export default function UsersPage() {
     const [users, setUsers] = useState<any[]>([]);
@@ -14,7 +15,7 @@ export default function UsersPage() {
         if (!confirm("Are you sure you want to perform this action?")) return;
 
         try {
-            const res = await fetch(`http://localhost:8100/api/users/${userId}/status`, {
+            const res = await fetch(`${API_BASE_URL}/api/users/${userId}/status`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ action })
@@ -35,7 +36,7 @@ export default function UsersPage() {
         const fetchUsers = async () => {
             try {
                 // Fetch from the new generic userRouter
-                const res = await fetch("http://localhost:8100/api/users");
+                const res = await fetch(`${API_BASE_URL}/api/users`);
                 const data = await res.json();
                 if (data.success) {
                     setUsers(data.users);
@@ -62,6 +63,9 @@ export default function UsersPage() {
         }
     };
 
+    const openMessageModal = (user: any) => {
+        toast.info(`Messaging feature for ${user.firstName || 'user'} is coming soon!`);
+    };
 
     return (
         <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>

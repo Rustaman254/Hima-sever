@@ -1,6 +1,7 @@
 "use client";
 
 import React, { createContext, useContext, useEffect, useState } from "react";
+import { API_BASE_URL } from "@/lib/config";
 
 interface Log {
     type: string;
@@ -33,7 +34,10 @@ export const LogsProvider = ({ children }: { children: React.ReactNode }) => {
 
         const connect = () => {
             console.log("Connecting to log stream...");
-            eventSource = new EventSource("http://localhost:8100/api/logs/stream");
+            // Use API_BASE_URL for the EventSource, and ensure it uses the correct protocol (http/https)
+            const streamUrl = API_BASE_URL.replace('http://', '').replace('https://', '');
+            const protocol = API_BASE_URL.startsWith('https') ? 'https' : 'http';
+            eventSource = new EventSource(`${protocol}://${streamUrl}/api/logs/stream`);
 
             eventSource.onopen = () => {
                 console.log("Log stream connected");

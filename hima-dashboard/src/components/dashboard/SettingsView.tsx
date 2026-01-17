@@ -6,6 +6,7 @@ import { Shield, Key, Eye, EyeOff, Copy, AlertTriangle } from "lucide-react";
 import styles from "../../app/dashboard/admin/admin.module.css";
 import { toast, Toaster } from "sonner";
 import * as auth from "@/lib/auth";
+import { API_BASE_URL } from "@/lib/config";
 
 export default function SettingsView() {
     const [showKey, setShowKey] = useState(false);
@@ -17,7 +18,7 @@ export default function SettingsView() {
         setIsLoading(true);
         try {
             const token = auth.getToken();
-            const res = await fetch("http://localhost:8100/api/insurance/wallet/private-key", {
+            const res = await fetch(`${API_BASE_URL}/api/insurance/wallet/private-key`, {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }

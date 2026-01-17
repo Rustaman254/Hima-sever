@@ -5,6 +5,7 @@ import { Check, X, Search, Filter, Loader2, MessageCircle } from "lucide-react";
 // @ts-ignore
 import styles from "../../dashboard.module.css";
 import { toast } from "sonner";
+import { API_BASE_URL } from "@/lib/config";
 
 export default function RegistrationMonitor() {
     const [registrations, setRegistrations] = useState<any[]>([]);
@@ -12,7 +13,7 @@ export default function RegistrationMonitor() {
 
     const fetchRegistrations = async () => {
         try {
-            const res = await fetch("http://localhost:8100/api/insurance/admin/registrations");
+            const res = await fetch(`${API_BASE_URL}/api/insurance/admin/registrations`);
             const data = await res.json();
             if (data.success) {
                 setRegistrations(data.users);
@@ -32,7 +33,7 @@ export default function RegistrationMonitor() {
     const updateStatus = async (phone: string, status: 'verified' | 'rejected') => {
         toast.loading(`${status === 'verified' ? 'Approving' : 'Rejecting'} user...`);
         try {
-            const res = await fetch(`http://localhost:8100/api/insurance/admin/users/${phone}/kyc`, {
+            const res = await fetch(`${API_BASE_URL}/api/insurance/admin/users/${phone}/kyc`, {
                 method: 'PATCH',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ status })
