@@ -15,12 +15,11 @@ import authRouter from "./routers/authRouter.js";
 import testRouter from "./routers/testRouter.js";
 import webhookRouter from "./routers/webhookRouter.js";
 import mpesaRouter from "./routers/mpesaRouter.js";
-import mpesaRouter from "./routers/mpesaRouter.js";
 import himaRouter from "./routers/himaRouter.js";
 
 dotenv.config();
 
-const app: Express = express();
+const app = express();
 const PORT = config.port || 8100;
 
 // Middleware
