@@ -2,7 +2,7 @@ services:
   - type: web
     name: hima-server
     env: node
-    buildCommand: pnpm install && pnpm run build
+    buildCommand: pnpm install --prod=false && pnpm run build
     startCommand: pnpm run start
     envVars:
       - key: NODE_ENV

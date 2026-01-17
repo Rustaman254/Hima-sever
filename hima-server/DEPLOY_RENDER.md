@@ -18,6 +18,7 @@ This guide outlines the steps to deploy the Hima Server to [Render](https://rend
 2.  **Service Configuration**
     - Render will automatically detect the `render.yaml` file.
     - Review the service name (`hima-server`) and commands.
+    - **Important**: Ensure Build Command is `pnpm install --prod=false && pnpm run build`.
     - Click **Apply**.
 
 3.  **Environment Variables**
