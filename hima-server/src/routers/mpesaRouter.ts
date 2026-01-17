@@ -1,5 +1,5 @@
 import express from "express";
-import type { Request, Response } from "express";
+import type { Request, Response, Router } from "express";
 import { Policy } from "../models/Policy.js";
 import { User } from "../models/User.js";
 import { InsuranceProduct } from "../models/InsuranceProduct.js";
@@ -8,7 +8,7 @@ import { ethers } from "ethers";
 import HimaInsurance from "../../artifacts/contracts/HimaInsurance.sol/HimaInsurance.json" with { type: "json" };
 import config from "../Configs/configs.js";
 
-const router = express.Router();
+const router: Router = express.Router();
 
 // M-Pesa callback URL
 router.post("/callback", async (req: Request, res: Response) => {
