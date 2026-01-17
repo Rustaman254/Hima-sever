@@ -9,9 +9,9 @@
     "start": "node dist/app.js",
     "dev": "nodemon --exec tsx src/app.ts",
     "build": "pnpm run compile && tsc",
-    "compile": "npx hardhat compile --config hardhat.config.js",
-    "deploy:testnet": "npx hardhat run scripts/deploy.ts --network mantleTestnet --config hardhat.config.js",
-    "deploy:mainnet": "npx hardhat run scripts/deploy.ts --network mantleMainnet --config hardhat.config.js"
+    "compile": "pnpm exec hardhat compile --config hardhat.config.js",
+    "deploy:testnet": "pnpm exec hardhat run scripts/deploy.ts --network mantleTestnet --config hardhat.config.js",
+    "deploy:mainnet": "pnpm exec hardhat run scripts/deploy.ts --network mantleMainnet --config hardhat.config.js"
   },
   "author": "Anwar Magara",
   "license": "MIT",
