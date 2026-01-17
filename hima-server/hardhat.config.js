@@ -1,7 +1,7 @@
-const { HardhatUserConfig } = require("hardhat/config");
-require("@nomicfoundation/hardhat-toolbox");
-require("dotenv/config");
+import "@nomicfoundation/hardhat-toolbox";
+import "dotenv/config";
 
+/** @type import('hardhat/config').HardhatUserConfig */
 const config = {
     solidity: {
         version: "0.8.26",
@@ -57,4 +57,4 @@ const config = {
     },
 };
 
-module.exports = config;
+export default config;
