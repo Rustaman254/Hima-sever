@@ -1,10 +1,10 @@
 import express from "express";
 import type { Request, Response, Router } from "express";
-import { logEmitter } from "../libs/activityLogger.ts";
+import { logEmitter } from "../libs/activityLogger.js";
 
 const router: Router = express.Router();
 
-import { ActivityLog } from "../models/ActivityLog.ts"; // Add import
+import { ActivityLog } from "../models/ActivityLog.js"; // Add import
 
 
 

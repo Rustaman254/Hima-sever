@@ -1,7 +1,5 @@
 import DashboardShell from "@/components/layout/DashboardShell";
 import { LogsProvider } from "@/context/LogsContext";
-import WhatsAppChat from "@/components/chat/WhatsAppChat";
-
 export default function DashboardLayout({
     children,
 }: {
@@ -11,7 +9,6 @@ export default function DashboardLayout({
         <LogsProvider>
             <DashboardShell>
                 {children}
-                <WhatsAppChat />
             </DashboardShell>
         </LogsProvider>
     );

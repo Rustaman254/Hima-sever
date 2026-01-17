@@ -1,17 +1,16 @@
 import express from "express";
 import type { Request, Response, Router } from "express";
-import { User } from "../models/User.ts";
+import { User } from "../models/User.js";
 import jwt from "jsonwebtoken";
-import config from "../Configs/configs.ts";
-import WhatsAppClientFactory from "../whatsapp/WhatsAppClientFactory.ts";
+import config from "../Configs/configs.js";
 
 const router: Router = express.Router();
 
 /**
- * POST /api/auth/whatsapp/login
- * Request a login code via WhatsApp
+ * POST /api/auth/otp/request
+ * Request a login code (Generic OTP)
  */
-router.post("/whatsapp/login", async (req: Request, res: Response) => {
+router.post("/otp/request", async (req: Request, res: Response) => {
     try {
         const { phoneNumber } = req.body;
 
@@ -26,7 +25,7 @@ router.post("/whatsapp/login", async (req: Request, res: Response) => {
         let user = await User.findOne({ phoneNumber: cleanedPhone });
         if (!user) {
             return res.status(404).json({
-                error: "Account not found. Please register via WhatsApp by messaging us first!"
+                error: "Account not found. Please register first!"
             });
         }
 
@@ -39,42 +38,21 @@ router.post("/whatsapp/login", async (req: Request, res: Response) => {
         await user.save();
 
         // Send via WhatsApp
-        const whatsappClient = await WhatsAppClientFactory.getClient();
+        const whatsappClient = (await import("../whatsapp/WhatsAppClient.js")).default;
 
         console.log(`📤 [AUTH] Sending login code to ${cleanedPhone}`);
 
-        // Meta WhatsApp requires approved templates
-        // Template name: hima_login_code (must be created in Meta Business Manager)
+        // Try to send as text message for simplicity (or use template if configured)
+        // In production, this MUST be a template message to initiate conversation
         try {
-            await whatsappClient.sendTemplateMessage(
+            await whatsappClient.sendTextMessage(
                 cleanedPhone,
-                "hima_login_code", // Template name
-                "en_US", // Language code
-                [
-                    {
-                        type: "body",
-                        parameters: [{ type: "text", text: code }]
-                    },
-                    {
-                        type: "button",
-                        sub_type: "copy_code",
-                        index: 0,
-                        parameters: [{ type: "text", text: code }]
-                    }
-                ]
+                `Your Hima Insurance login code is: *${code}*\n\nIt expires in 10 minutes. Do not share this code.`
             );
-            console.log(`✅ [AUTH] Template message sent successfully`);
-        } catch (templateError: any) {
-            console.warn(`⚠️ [AUTH] Template failed, trying fallback...`);
-
-            const messageBody = `Your Hima Insurance login code is: *${code}*\n\nIt expires in 10 minutes. Do not share this code with anyone.`;
-            try {
-                // Try interactive button message
-                await whatsappClient.sendButtonMessage(cleanedPhone, messageBody, ["Copy Code"]);
-            } catch (buttonError) {
-                // absolute fallback to text
-                await whatsappClient.sendTextMessage(cleanedPhone, messageBody);
-            }
+            console.log(`✅ [AUTH] WhatsApp message sent successfully`);
+        } catch (error) {
+            console.warn(`⚠️ [AUTH] Failed to send WhatsApp message, falling back to console log`);
+            console.log(`🔐 [AUTH] Generated Login Code for ${cleanedPhone}: ${code}`);
         }
 
         res.json({ success: true, message: "Login code sent via WhatsApp" });
@@ -85,10 +63,10 @@ router.post("/whatsapp/login", async (req: Request, res: Response) => {
 });
 
 /**
- * POST /api/auth/whatsapp/verify
+ * POST /api/auth/otp/verify
  * Verify the code and return JWT
  */
-router.post("/whatsapp/verify", async (req: Request, res: Response) => {
+router.post("/otp/verify", async (req: Request, res: Response) => {
     try {
         const { phoneNumber, code } = req.body;
 

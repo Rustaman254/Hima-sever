@@ -10,6 +10,16 @@ export interface IUser extends Document {
 
     // KYC Information (encrypted)
     kycStatus?: "pending" | "verified" | "rejected";
+    kycData?: {
+        fullName?: string;
+        idNumber?: string;
+        dateOfBirth?: string;
+        plateNumber?: string;
+        idPhotoBase64?: string;
+        logbookPhotoBase64?: string;
+        bikePhotoBase64?: string;
+        selfiePhotoBase64?: string;
+    };
     nationalId?: string; // Encrypted
     dateOfBirth?: Date;
     address?: string; // Encrypted
@@ -32,6 +42,8 @@ export interface IUser extends Document {
 
     // Preferences
     preferredLanguage?: "en" | "sw"; // English or Swahili
+    botLanguage?: "en" | "sw"; // Bot conversation language
+    botConversationState?: string; // Current state in bot conversation
 
     // Coverage & Policy
     coverageType?: "basic" | "comprehensive" | "premium";
@@ -43,6 +55,9 @@ export interface IUser extends Document {
     // Wallet Information (custodial)
     walletAddress?: string;
     walletPrivateKey?: string; // Encrypted private key
+    walletCreatedAt?: Date;
+    onChainRegistered?: boolean;
+    registrationTxHash?: string;
 
     // Blockchain
     transactionHash?: string;
@@ -125,6 +140,19 @@ const UserSchema = new Schema<IUser>(
             enum: ["en", "sw"],
             default: "en",
         },
+        botLanguage: {
+            type: String,
+            enum: ["en", "sw"],
+            default: "en",
+        },
+        botConversationState: {
+            type: String,
+            default: "LANG_SELECT",
+        },
+        kycData: {
+            type: Object,
+            default: {},
+        },
 
         // Coverage
         coverageType: {
@@ -143,6 +171,9 @@ const UserSchema = new Schema<IUser>(
         // Wallet
         walletAddress: String,
         walletPrivateKey: String, // Encrypted
+        walletCreatedAt: Date,
+        onChainRegistered: { type: Boolean, default: false },
+        registrationTxHash: String,
         transactionHash: String,
 
         // Conversation

@@ -16,16 +16,16 @@ export default function RegisterPage() {
     const [phoneNumber, setPhoneNumber] = useState("");
     const [isOtpSent, setIsOtpSent] = useState(false);
 
-    // --- WhatsApp Code Request ---
+    // --- Login Code Request ---
     const handleRequestCode = async (e: React.FormEvent) => {
         e.preventDefault();
         if (!phoneNumber) return toast.error("Enter your phone number");
 
         setIsLoading(true);
-        toast.loading("Sending secure code via WhatsApp...");
+        toast.loading("Sending WhatsApp code...");
 
         try {
-            const res = await fetch("http://localhost:8100/api/auth/whatsapp/login", {
+            const res = await fetch("http://localhost:8100/api/auth/otp/request", {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ phoneNumber })
@@ -34,7 +34,7 @@ export default function RegisterPage() {
 
             if (data.success) {
                 toast.dismiss();
-                toast.success("Code sent! Check your WhatsApp");
+                toast.success("Code sent to WhatsApp!");
                 setIsOtpSent(true);
             } else {
                 toast.dismiss();
@@ -54,7 +54,7 @@ export default function RegisterPage() {
         toast.loading("Verifying code...");
 
         try {
-            const res = await fetch("http://localhost:8100/api/auth/whatsapp/verify", {
+            const res = await fetch("http://localhost:8100/api/auth/otp/verify", {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ phoneNumber, code: otp })

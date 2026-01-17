@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
-import { User } from "../models/User.ts";
-import config from "../Configs/configs.ts";
+import { User } from "../models/User.js";
+import config from "../Configs/configs.js";
 
 async function seedAdmin() {
     try {

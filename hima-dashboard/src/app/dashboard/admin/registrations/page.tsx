@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Check, X, Search, Filter, Loader2 } from "lucide-react";
+import { Check, X, Search, Filter, Loader2, MessageCircle } from "lucide-react";
 // @ts-ignore
 import styles from "../../dashboard.module.css";
 import { toast } from "sonner";
@@ -53,7 +53,7 @@ export default function RegistrationMonitor() {
         <div>
             <div className={styles.header}>
                 <h1 className={styles.title}>KYC Monitor</h1>
-                <p className={styles.subtitle}>Manage real-time WhatsApp registrations</p>
+                <p className={styles.subtitle}>Manage real-time user registrations</p>
             </div>
 
             <div className={styles.section}>
@@ -71,7 +71,7 @@ export default function RegistrationMonitor() {
                     </div>
                 ) : (registrations.length === 0 ? (
                     <div style={{ padding: '4rem', textAlign: 'center', background: 'rgba(255,255,255,0.02)', borderRadius: '2rem', border: '1px dashed rgba(255,255,255,0.1)' }}>
-                        <p style={{ color: '#64748b' }}>No registrations found. Users must register on WhatsApp first.</p>
+                        <p style={{ color: '#64748b' }}>No registrations found.</p>
                     </div>
                 ) : (
                     <div style={{ overflowX: 'auto' }}>
@@ -123,6 +123,13 @@ export default function RegistrationMonitor() {
                                                         title="Reject"
                                                     >
                                                         <X size={18} />
+                                                    </button>
+                                                    <button
+                                                        onClick={() => window.open(`https://wa.me/${user.phoneNumber}`, '_blank')}
+                                                        style={{ padding: '0.5rem', background: 'rgba(37, 211, 102, 0.1)', color: '#25D366', borderRadius: '0.5rem', border: '1px solid rgba(37, 211, 102, 0.2)', cursor: 'pointer' }}
+                                                        title="Chat on WhatsApp"
+                                                    >
+                                                        <MessageCircle size={18} />
                                                     </button>
                                                 </div>
                                             )}

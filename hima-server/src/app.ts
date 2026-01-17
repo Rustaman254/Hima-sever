@@ -3,19 +3,20 @@ import express from "express";
 import dotenv from "dotenv";
 import mongoose from "mongoose";
 import cors from "cors";
-import config from "./Configs/configs.ts";
+import config from "./Configs/configs.js";
+import { fileLogger } from "./libs/fileLogger.js";
 
-// ============================================
-// WHATSAPP INTEGRATIONS (BOTH ACTIVE)
-// ============================================
-import webhookRouter from "./routers/webhookRouter.ts";
-import settingsRouter from "./routers/settingsRouter.ts";
-import logsRouter from "./routers/logsRouter.ts";
-import userRouter from "./routers/userRouter.ts";
+import settingsRouter from "./routers/settingsRouter.js";
+import logsRouter from "./routers/logsRouter.js";
+import userRouter from "./routers/userRouter.js";
 
-import insuranceRouter from "./routers/insurance.ts";
-import authRouter from "./routers/authRouter.ts";
-import testRouter from "./routers/testRouter.ts";
+import insuranceRouter from "./routers/insurance.js";
+import authRouter from "./routers/authRouter.js";
+import testRouter from "./routers/testRouter.js";
+import webhookRouter from "./routers/webhookRouter.js";
+import mpesaRouter from "./routers/mpesaRouter.js";
+import himaRouter from "./routers/himaRouter.js";
+import { startBot, stopBot } from "./whatsapp-bot/index.js";
 
 dotenv.config();
 
@@ -29,13 +30,9 @@ app.use(express.urlencoded({ extended: true }));
 
 // Health check endpoint
 app.get("/health", async (req, res) => {
-    const WhatsAppClientFactory = (await import("./whatsapp/WhatsAppClientFactory.ts")).default;
-    const currentProvider = WhatsAppClientFactory.getCurrentProvider() || "meta";
-
     res.json({
         status: "ok",
         message: "Hima Insurance Server is running",
-        whatsappProvider: currentProvider,
         network: "Mantle Testnet",
         chainId: config.blockchain.chainId
     });
@@ -43,9 +40,8 @@ app.get("/health", async (req, res) => {
 
 // Routes
 // ============================================
-// WHATSAPP WEBHOOKS (BOTH ACTIVE)
+// ROUTES
 // ============================================
-app.use("/webhook", webhookRouter);
 
 app.use("/api/insurance", insuranceRouter);
 app.use("/api/auth", authRouter);
@@ -53,6 +49,9 @@ app.use("/api/users", userRouter);
 app.use("/api/settings", settingsRouter);
 app.use("/api/logs", logsRouter);
 app.use("/api/test", testRouter);
+app.use("/api/webhook", webhookRouter);
+app.use("/api/mpesa", mpesaRouter);
+app.use("/api/hima", himaRouter);
 
 const startServer = async () => {
     try {
@@ -63,21 +62,23 @@ const startServer = async () => {
         }
 
         // Log configuration
-        const WhatsAppClientFactory = (await import("./whatsapp/WhatsAppClientFactory.ts")).default;
-        await WhatsAppClientFactory.getClient(); // Ensure initialized
-        const currentProvider = WhatsAppClientFactory.getCurrentProvider() || "unknown";
-
         console.log("🔧 Configuration:");
-        console.log(`   - WhatsApp Provider: ${currentProvider}`);
-        console.log(`   - Meta Phone ID: ${config.whatsappPhoneNumberId || 'Not configured'}`);
         console.log(`   - Network: Mantle Testnet (Chain ID: ${config.blockchain.chainId})`);
         console.log(`   - RPC URL: ${config.blockchain.rpcUrl}`);
 
-        app.listen(PORT, () => {
+        app.listen(PORT, "0.0.0.0", async () => {
             console.log(`🚀 Server started on port ${PORT}`);
-            console.log(`📱 Hima Insurance WhatsApp Bot is ready`);
-            console.log(`🔗 Meta Webhook URL: https://unmeet-meghan-displeasedly.ngrok-free.dev/webhook`);
-            console.log(`💡 Configure webhooks in your respective platforms`);
+            fileLogger.log(`🚀 Server started on port ${PORT}`);
+            console.log(`💡 Hima Insurance Server is ready`);
+
+            // Start WhatsApp bot
+            try {
+                await startBot();
+                console.log(`✅ WhatsApp bot initialized`);
+            } catch (error) {
+                console.error(`⚠️ WhatsApp bot failed to start: ${error}`);
+                console.log(`   Server will continue without bot functionality`);
+            }
         });
     } catch (error) {
         console.error("❌ Error starting server:", error);
@@ -88,12 +89,14 @@ const startServer = async () => {
 // Graceful shutdown
 process.on("SIGINT", async () => {
     console.log("\n🛑 Shutting down gracefully...");
+    await stopBot();
     await mongoose.disconnect();
     process.exit(0);
 });
 
 process.on("SIGTERM", async () => {
     console.log("\n🛑 Shutting down gracefully...");
+    await stopBot();
     await mongoose.disconnect();
     process.exit(0);
 });

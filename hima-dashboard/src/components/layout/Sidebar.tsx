@@ -58,7 +58,6 @@ export default function Sidebar({ role, isOpen, onClose }: SidebarProps) {
         { name: "Providers", href: `/dashboard/admin/providers`, icon: Users },
         { name: "Active Policies", href: `/dashboard/admin/active`, icon: Zap },
         { name: "System Logs", href: `/dashboard/admin/logs`, icon: Activity },
-        { name: "WhatsApp Settings", href: `/dashboard/admin/whatsapp`, icon: MessageSquare },
         { name: "Settings", href: `/dashboard/admin/settings`, icon: Settings },
     ];
 

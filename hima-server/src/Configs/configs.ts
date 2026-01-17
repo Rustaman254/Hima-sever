@@ -8,14 +8,6 @@ function getConfig() {
     const jwtSecret = process.env.JWT_SECRET || "defaultsecret";
     const mongoDbUri = dbUrl;
 
-    // ============================================
-    // WHATSAPP BUSINESS API
-    // ============================================
-    const whatsappAccessToken = process.env.WHATSAPP_ACCESS_TOKEN || "";
-    const whatsappPhoneNumberId = process.env.WHATSAPP_PHONE_NUMBER_ID || "";
-    const whatsappBusinessAccountId = process.env.WHATSAPP_BUSINESS_ACCOUNT_ID || "";
-    const whatsappWebhookVerifyToken = process.env.WHATSAPP_WEBHOOK_VERIFY_TOKEN || "hima_webhook_verify_token_2024";
-
     // Blockchain config - Mantle Testnet
     const rpcUrl = process.env.RPC_URL || "https://rpc.testnet.mantle.xyz";
     const contractAddress = process.env.INSURANCE_CONTRACT_ADDRESS || "";
@@ -38,12 +30,6 @@ function getConfig() {
         mongoDbUri,
         jwtSecret,
 
-        // WhatsApp Business API
-        whatsappAccessToken,
-        whatsappPhoneNumberId,
-        whatsappBusinessAccountId,
-        whatsappWebhookVerifyToken,
-
         blockchain: {
             rpcUrl,
             contractAddress,
@@ -59,6 +45,20 @@ function getConfig() {
         admin: {
             email: adminEmail,
             password: adminPassword,
+        },
+        whatsapp: {
+            apiVersion: "v22.0",
+            phoneNumberId: process.env.WHATSAPP_PHONE_NUMBER_ID || "852829371256540",
+            businessAccountId: process.env.WHATSAPP_BUSINESS_ACCOUNT_ID || "879843564631752",
+            accessToken: process.env.WHATSAPP_ACCESS_TOKEN || "",
+            verifyToken: process.env.WHATSAPP_VERIFY_TOKEN || "hima_secure_webhook_token_2026",
+            testNumber: "+1 555 146 5823"
+        },
+        bot: {
+            sessionName: process.env.BOT_SESSION_NAME || "hima-bot",
+            headless: process.env.BOT_HEADLESS !== "false",
+            qrTimeout: parseInt(process.env.BOT_QR_TIMEOUT || "60000", 10),
+            sessionDataPath: process.env.BOT_SESSION_DATA_PATH || "./sessions"
         }
     };
 }

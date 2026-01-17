@@ -1,8 +1,8 @@
-import { Claim, type IClaim } from "../models/Claim.ts";
-import { Policy } from "../models/Policy.ts";
-import { Payment } from "../models/Payment.ts";
-import MantleService from "./MantleService.ts";
-import MpesaService from "./MpesaService.ts";
+import { Claim, type IClaim } from "../models/Claim.js";
+import { Policy } from "../models/Policy.js";
+import { Payment } from "../models/Payment.js";
+import MantleService from "./MantleService.js";
+import MpesaService from "./MpesaService.js";
 
 /**
  * Claims Service

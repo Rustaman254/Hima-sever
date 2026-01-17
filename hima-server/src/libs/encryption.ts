@@ -1,5 +1,5 @@
 import crypto from "crypto";
-import config from "../Configs/configs.ts";
+import config from "../Configs/configs.js";
 
 const ALGORITHM = "aes-256-cbc";
 const ENCRYPTION_KEY = Buffer.from(config.encryptionKey.padEnd(32, "0").slice(0, 32));

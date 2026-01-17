@@ -1,0 +1,17 @@
+{
+    "watch": [
+        "src"
+    ],
+    "ext": "ts,js,json",
+    "ignore": [
+        "node_modules",
+        "dist",
+        "sessions",
+        ".wwebjs_auth",
+        ".node-persist",
+        "*.log",
+        "server.log",
+        "server_debug.log"
+    ],
+    "exec": "tsx src/app.ts"
+}

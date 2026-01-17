@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Shield, Sprout, Wheat, Users, FileCheck, Landmark, Activity } from "lucide-react";
+import { Shield, Sprout, Wheat, Users, FileCheck, Landmark, Activity, MessageCircle } from "lucide-react";
 import { PoolCard } from "@/components/dashboard/HighFiCards";
 import { ActivePositionCard } from "@/components/dashboard/ActivePositionCard";
 // @ts-ignore
@@ -155,7 +155,16 @@ export default function AdminOverview() {
                                                 <div style={{ fontWeight: 600 }}>{user.firstName} {user.lastName}</div>
                                                 <div style={{ fontSize: '0.75rem', color: '#64748b' }}>+{user.phoneNumber}</div>
                                             </div>
-                                            <a href="/dashboard/admin/registrations" className="btn btn-outline" style={{ padding: '0.4rem 0.8rem', fontSize: '0.75rem' }}>Review</a>
+                                            <div style={{ display: 'flex', gap: '0.5rem' }}>
+                                                <button
+                                                    onClick={() => window.open(`https://wa.me/${user.phoneNumber}`, '_blank')}
+                                                    className="btn btn-outline"
+                                                    style={{ padding: '0.4rem 0.8rem', fontSize: '0.75rem', display: 'flex', alignItems: 'center', gap: '0.25rem', borderColor: 'rgba(37, 211, 102, 0.3)', color: '#25D366' }}
+                                                >
+                                                    <MessageCircle size={14} /> Chat
+                                                </button>
+                                                <a href="/dashboard/admin/registrations" className="btn btn-outline" style={{ padding: '0.4rem 0.8rem', fontSize: '0.75rem' }}>Review</a>
+                                            </div>
                                         </div>
                                     ))}
                                 </div>
@@ -175,8 +184,15 @@ export default function AdminOverview() {
                                                 <div style={{ fontWeight: 600 }}>{policy.coverageType?.toUpperCase()} - {policy.policyNumber}</div>
                                                 <div style={{ fontSize: '0.75rem', color: '#64748b' }}>User: {policy.user?.firstName} ({policy.user?.phoneNumber})</div>
                                             </div>
-                                            <div style={{ display: 'flex', gap: '0.5rem' }}>
+                                            <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
                                                 <span style={{ fontSize: '0.875rem', fontWeight: 700, color: '#10b981' }}>${policy.premiumAmountKES}</span>
+                                                <button
+                                                    onClick={() => window.open(`https://wa.me/${policy.user?.phoneNumber}`, '_blank')}
+                                                    className="btn btn-outline"
+                                                    style={{ padding: '0.4rem 0.8rem', fontSize: '0.75rem', display: 'flex', alignItems: 'center', gap: '0.25rem', borderColor: 'rgba(37, 211, 102, 0.3)', color: '#25D366' }}
+                                                >
+                                                    <MessageCircle size={14} />
+                                                </button>
                                                 <button className="btn btn-primary" style={{ padding: '0.4rem 0.8rem', fontSize: '0.75rem' }}>Approve</button>
                                             </div>
                                         </div>
@@ -198,7 +214,16 @@ export default function AdminOverview() {
                                                 <div style={{ fontWeight: 600 }}>Claim #{claim._id.slice(-6)}</div>
                                                 <div style={{ fontSize: '0.75rem', color: '#64748b' }}>{claim.incidentDescription?.substring(0, 40)}...</div>
                                             </div>
-                                            <button className="btn btn-outline" style={{ padding: '0.4rem 0.8rem', fontSize: '0.75rem', borderColor: '#ec4899', color: '#ec4899' }}>Assess</button>
+                                            <div style={{ display: 'flex', gap: '0.5rem' }}>
+                                                <button
+                                                    onClick={() => window.open(`https://wa.me/${claim.user?.phoneNumber}`, '_blank')}
+                                                    className="btn btn-outline"
+                                                    style={{ padding: '0.4rem 0.8rem', fontSize: '0.75rem', display: 'flex', alignItems: 'center', gap: '0.25rem', borderColor: 'rgba(37, 211, 102, 0.3)', color: '#25D366' }}
+                                                >
+                                                    <MessageCircle size={14} />
+                                                </button>
+                                                <button className="btn btn-outline" style={{ padding: '0.4rem 0.8rem', fontSize: '0.75rem', borderColor: '#ec4899', color: '#ec4899' }}>Assess</button>
+                                            </div>
                                         </div>
                                     ))}
                                 </div>

@@ -1,24 +1,51 @@
 import express from "express";
 import type { Request, Response, Router } from "express";
-import { User } from "../models/User.ts";
-import { InsuranceQuote } from "../models/InsuranceQuote.ts";
-import { Policy } from "../models/Policy.ts";
-import { Transaction } from "../models/Transaction.ts";
-import { Claim } from "../models/Claim.ts";
-import QuoteCalculator from "../whatsapp/QuoteCalculator.ts";
-import config from "../Configs/configs.ts";
-import { authenticateJWT } from "../libs/authMiddleware.ts";
-import type { AuthRequest } from "../libs/authMiddleware.ts";
-import { decryptData } from "../libs/encryption.ts";
+import { User } from "../models/User.js";
+import { InsuranceQuote } from "../models/InsuranceQuote.js";
+import { Policy } from "../models/Policy.js";
+import { Transaction } from "../models/Transaction.js";
+import { Claim } from "../models/Claim.js";
+import config from "../Configs/configs.js";
+import { authenticateJWT } from "../libs/authMiddleware.js";
+import type { AuthRequest } from "../libs/authMiddleware.js";
+import { decryptData } from "../libs/encryption.js";
 import jwt from "jsonwebtoken";
-import { MESSAGES } from "../whatsapp/constants.ts";
-import { logActivity } from "../libs/activityLogger.ts";
-import { ActivityLog } from "../models/ActivityLog.ts";
-import { InsuranceProduct } from "../models/InsuranceProduct.ts";
+import { logActivity } from "../libs/activityLogger.js";
+import { ActivityLog } from "../models/ActivityLog.js";
+import { InsuranceProduct } from "../models/InsuranceProduct.js";
 
 const router: Router = express.Router();
 
-// WhatsApp client is now retrieved from WhatsAppClientFactory where needed
+// Helper for quote calculation
+const calculateQuote = async (userId: string, make: string, model: string, year: number, value: number, type: string) => {
+    // Simple logic: Base premium 5% of value + taxes
+    const basePremium = value * 0.05;
+    const taxes = basePremium * 0.16;
+    const totalPrice = basePremium + taxes;
+
+    // Create a mock quote object (or save to DB if needed)
+    // For now we just return the calculated values as if it was a document
+    // In a real app we'd save it to InsuranceQuote model
+    const validUntil = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000); // 7 days
+
+    // We should actually save it to DB to be persistent if used later
+    const quote = new InsuranceQuote({
+        userId,
+        motorcycleMake: make,
+        motorcycleModel: model,
+        motorcycleYear: year,
+        motorcycleValue: value,
+        coverageType: type,
+        basePremium,
+        taxes,
+        totalPrice,
+        validUntil,
+        isAccepted: false
+    });
+    await quote.save();
+
+    return quote;
+};
 
 /**
  * @route   POST /api/insurance/quotes
@@ -51,7 +78,7 @@ router.post("/quotes", async (req: Request, res: Response) => {
 
         const user = await User.findOne({ phoneNumber });
         if (!user) {
-            return res.status(404).json({ error: "User not found. Please register via WhatsApp first." });
+            return res.status(404).json({ error: "User not found. Please register first." });
         }
 
         if (user.kycStatus !== 'verified') {
@@ -60,7 +87,7 @@ router.post("/quotes", async (req: Request, res: Response) => {
 
         const userId = user._id;
 
-        const quote = await QuoteCalculator.calculateQuote(
+        const quote = await calculateQuote(
             userId.toString(),
             motorcycleMake,
             motorcycleModel,
@@ -456,28 +483,28 @@ router.patch("/admin/users/:phoneNumber/kyc", async (req: Request, res: Response
         }
         await user.save();
 
-        // Send WhatsApp Notification
+        // WhatsApp Notification
         try {
-            const WhatsAppClientFactory = (await import("../whatsapp/WhatsAppClientFactory.ts")).default;
-            const whatsappClient = await WhatsAppClientFactory.getClient();
+            const whatsappClient = (await import("../whatsapp/WhatsAppClient.js")).default;
 
             if (status === 'verified') {
                 await logActivity("KYC_APPROVED", `Admin approved KYC for ${phoneNumber}`, user._id.toString());
-                const message = MESSAGES.KYC_APPROVED(user.firstName || "Rider");
-                // Send as button message to allow immediate choice
+                const message = `🎉 KYC Approved! Hello ${user.firstName || "there"}, your account is now verified. You can now purchase insurance.`;
                 await whatsappClient.sendButtonMessage(
                     user.phoneNumber,
                     message,
-                    ["Buy Insurance", "File a Claim"]
+                    [
+                        { id: "buy_insurance", title: "Buy Insurance" },
+                        { id: "file_claim", title: "File a Claim" }
+                    ]
                 );
             } else {
                 await logActivity("KYC_REJECTED", `Admin rejected KYC for ${phoneNumber}`, user._id.toString());
-                const message = MESSAGES.KYC_REJECTED(user.firstName || "Rider");
+                const message = `❌ KYC Update. Hello ${user.firstName || "there"}, unfortunately your verification was rejected. Please contact support.`;
                 await whatsappClient.sendTextMessage(user.phoneNumber, message);
             }
         } catch (waError) {
             console.error("Failed to send KYC notification WhatsApp:", waError);
-            // Don't fail the whole request if WhatsApp fails
         }
 
         res.json({

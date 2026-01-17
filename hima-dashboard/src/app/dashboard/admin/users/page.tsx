@@ -3,7 +3,8 @@
 import { useEffect, useState } from "react";
 // @ts-ignore
 import tableStyles from "@/components/dashboard/tables.module.css";
-import { Users, Search, Filter, MoreHorizontal, Shield, User as UserIcon, Check, X, Ban, MessageCircle } from "lucide-react";
+import { Users, Search, Filter, MoreHorizontal, Shield, User as UserIcon, Check, X, Ban, MessageCircle, Send } from "lucide-react";
+import { toast } from "sonner";
 
 export default function UsersPage() {
     const [users, setUsers] = useState<any[]>([]);
@@ -61,45 +62,6 @@ export default function UsersPage() {
         }
     };
 
-    const [isMessageModalOpen, setIsMessageModalOpen] = useState(false);
-    const [selectedUser, setSelectedUser] = useState<any>(null);
-    const [messageData, setMessageData] = useState({ type: 'text', message: '', buttons: '' });
-
-    const openMessageModal = (user: any) => {
-        setSelectedUser(user);
-        setMessageData({ type: 'text', message: '', buttons: '' });
-        setIsMessageModalOpen(true);
-    };
-
-    const handleSendMessage = async () => {
-        if (!messageData.message) return alert("Message is required");
-
-        try {
-            const body: any = { message: messageData.message, type: messageData.type };
-            if (messageData.type === 'buttons') {
-                body.buttons = messageData.buttons.split(',').map(b => b.trim()).filter(b => b);
-                if (body.buttons.length === 0 || body.buttons.length > 3) {
-                    return alert("Please provide 1-3 buttons separated by commas");
-                }
-            }
-
-            const res = await fetch(`http://localhost:8100/api/users/${selectedUser?._id}/message`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(body)
-            });
-            const data = await res.json();
-            if (data.success) {
-                alert("Message sent successfully!");
-                setIsMessageModalOpen(false);
-            } else {
-                alert("Failed to send: " + data.error);
-            }
-        } catch (error) {
-            console.error("Send error:", error);
-            alert("Error sending message");
-        }
-    };
 
     return (
         <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
@@ -226,69 +188,6 @@ export default function UsersPage() {
                 </table>
             </div>
 
-            {/* Message Modal */}
-            {isMessageModalOpen && (
-                <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.7)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 50 }}>
-                    <div style={{ background: '#111', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '1rem', padding: '2rem', width: '100%', maxWidth: '400px' }}>
-                        <h2 style={{ color: 'white', fontSize: '1.25rem', fontWeight: 600, marginBottom: '1rem' }}>
-                            Message {selectedUser?.firstName}
-                        </h2>
-
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-                            <div>
-                                <label style={{ color: '#9CA3AF', fontSize: '0.85rem', display: 'block', marginBottom: '0.5rem' }}>Message Type</label>
-                                <select
-                                    value={messageData.type}
-                                    onChange={(e) => setMessageData({ ...messageData, type: e.target.value })}
-                                    style={{ width: '100%', background: '#09090b', border: '1px solid rgba(255,255,255,0.1)', padding: '0.75rem', borderRadius: '0.5rem', color: 'white' }}
-                                >
-                                    <option value="text">Text Message</option>
-                                    <option value="buttons">Interactive Buttons</option>
-                                </select>
-                            </div>
-
-                            <div>
-                                <label style={{ color: '#9CA3AF', fontSize: '0.85rem', display: 'block', marginBottom: '0.5rem' }}>Message Body</label>
-                                <textarea
-                                    value={messageData.message}
-                                    onChange={(e) => setMessageData({ ...messageData, message: e.target.value })}
-                                    rows={4}
-                                    placeholder="Type your message..."
-                                    style={{ width: '100%', background: '#09090b', border: '1px solid rgba(255,255,255,0.1)', padding: '0.75rem', borderRadius: '0.5rem', color: 'white' }}
-                                />
-                            </div>
-
-                            {messageData.type === 'buttons' && (
-                                <div>
-                                    <label style={{ color: '#9CA3AF', fontSize: '0.85rem', display: 'block', marginBottom: '0.5rem' }}>Buttons (comma separated, max 3)</label>
-                                    <input
-                                        type="text"
-                                        value={messageData.buttons}
-                                        onChange={(e) => setMessageData({ ...messageData, buttons: e.target.value })}
-                                        placeholder="Yes, No, More Info"
-                                        style={{ width: '100%', background: '#09090b', border: '1px solid rgba(255,255,255,0.1)', padding: '0.75rem', borderRadius: '0.5rem', color: 'white' }}
-                                    />
-                                </div>
-                            )}
-
-                            <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '0.75rem', marginTop: '1rem' }}>
-                                <button
-                                    onClick={() => setIsMessageModalOpen(false)}
-                                    style={{ background: 'transparent', color: '#9CA3AF', padding: '0.75rem 1rem', borderRadius: '0.5rem', border: 'none', cursor: 'pointer' }}
-                                >
-                                    Cancel
-                                </button>
-                                <button
-                                    onClick={handleSendMessage}
-                                    style={{ background: '#3b82f6', color: 'white', padding: '0.75rem 1.5rem', borderRadius: '0.5rem', fontWeight: 600, border: 'none', cursor: 'pointer' }}
-                                >
-                                    Send Message
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            )}
         </div>
     );
 }

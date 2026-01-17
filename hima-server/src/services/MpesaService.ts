@@ -1,5 +1,5 @@
 import axios from "axios";
-import config from "../Configs/configs.ts";
+import config from "../Configs/configs.js";
 
 /**
  * M-Pesa Daraja API Integration Service

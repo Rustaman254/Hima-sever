@@ -11,28 +11,26 @@ import CustomPhoneInput from "@/components/auth/CustomPhoneInput";
 import AuthLayout from "@/components/auth/AuthLayout";
 import OtpInput from "@/components/auth/OtpInput";
 
-export default function LoginPage() {
+import { Suspense } from "react";
+// ... imports
+
+function LoginForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
+  // ... rest of the component logic (lines 17-238)
   const redirect = searchParams.get("redirect");
 
-  // "admin" or "user" (default)
   const [isAdminMode, setIsAdminMode] = useState(false);
-
   const [isLoading, setIsLoading] = useState(false);
-
-  // Admin State
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
-  // User/Partner State
   const [phoneNumber, setPhoneNumber] = useState("");
   const [isOtpSent, setIsOtpSent] = useState(false);
 
   // Toggle Mode
   const toggleAdminMode = () => {
     setIsAdminMode(!isAdminMode);
-    setIsOtpSent(false); // Reset flow
+    setIsOtpSent(false);
   };
 
   // --- Admin Login ---
@@ -67,16 +65,16 @@ export default function LoginPage() {
     }
   };
 
-  // --- WhatsApp Code Request ---
+  // --- Login Code Request ---
   const handleRequestCode = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!phoneNumber) return toast.error("Enter your phone number");
 
     setIsLoading(true);
-    toast.loading("Sending secure code via WhatsApp...");
+    toast.loading("Sending WhatsApp login code...");
 
     try {
-      const res = await fetch("http://localhost:8100/api/auth/whatsapp/login", {
+      const res = await fetch("http://localhost:8100/api/auth/otp/request", {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ phoneNumber })
@@ -85,7 +83,7 @@ export default function LoginPage() {
 
       if (data.success) {
         toast.dismiss();
-        toast.success("Code sent! Check your WhatsApp");
+        toast.success("Code sent to WhatsApp!");
         setIsOtpSent(true);
       } else {
         toast.dismiss();
@@ -105,7 +103,7 @@ export default function LoginPage() {
     toast.loading("Verifying code...");
 
     try {
-      const res = await fetch("http://localhost:8100/api/auth/whatsapp/verify", {
+      const res = await fetch("http://localhost:8100/api/auth/otp/verify", {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ phoneNumber, code: otp })
@@ -237,4 +235,12 @@ export default function LoginPage() {
       )}
     </AuthLayout>
   );
+}
+
+export default function LoginPage() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <LoginForm />
+    </Suspense>
+  )
 }

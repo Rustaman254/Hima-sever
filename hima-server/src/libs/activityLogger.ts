@@ -1,5 +1,6 @@
-import { ActivityLog } from "../models/ActivityLog.ts";
+import { ActivityLog } from "../models/ActivityLog.js";
 import { EventEmitter } from "events";
+import { fileLogger } from "./fileLogger.js";
 
 export const logEmitter = new EventEmitter();
 
@@ -12,7 +13,7 @@ export async function logActivity(
     recipient?: string
 ) {
     try {
-        const { ActivityLog } = await import("../models/ActivityLog.ts");
+        const { ActivityLog } = await import("../models/ActivityLog.js");
         const log: any = await ActivityLog.create({
             type,
             message,
@@ -28,8 +29,8 @@ export async function logActivity(
             timestamp: new Date()
         });
 
-        console.log(`[ACTIVITY LOG] ${type}: ${message}`);
+        fileLogger.log(`[ACTIVITY LOG] ${type}: ${message}`);
     } catch (error) {
-        console.error("Failed to save activity log:", error);
+        fileLogger.log(`Failed to save activity log: ${error}`, "ERROR");
     }
 }

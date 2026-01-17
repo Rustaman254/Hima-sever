@@ -1,7 +1,7 @@
 import express from "express";
 import type { Request, Response, Router } from "express";
 import mongoose from "mongoose";
-import { User } from "../models/User.ts";
+import { User } from "../models/User.js";
 
 const router: Router = express.Router();
 
@@ -70,14 +70,10 @@ router.put("/:id/status", async (req: Request, res: Response) => {
 router.post("/:id/message", async (req: Request, res: Response) => {
     try {
         const { id } = req.params;
-        const { message, type, buttons } = req.body; // type: 'text' | 'buttons'
+        const { message, type, buttons } = req.body;
 
         if (!message) {
             return res.status(400).json({ success: false, error: "Message body is required" });
-        }
-
-        if (!id || !mongoose.Types.ObjectId.isValid(id)) {
-            return res.status(400).json({ success: false, error: "Invalid user ID" });
         }
 
         const user = await User.findById(id);
@@ -85,37 +81,15 @@ router.post("/:id/message", async (req: Request, res: Response) => {
             return res.status(404).json({ success: false, error: "User not found" });
         }
 
-        // Get active WhatsApp client
-        const WhatsAppClientFactory = (await import("../whatsapp/WhatsAppClientFactory.ts")).default;
-        const client = await WhatsAppClientFactory.getClient();
-        const activityLogger = (await import("../libs/activityLogger.ts")).logActivity;
+        const whatsappClient = (await import("../whatsapp/WhatsAppClient.js")).default;
+        const activityLogger = (await import("../libs/activityLogger.js")).logActivity;
 
         let response;
         if (type === "buttons" && Array.isArray(buttons) && buttons.length > 0) {
-            response = await client.sendButtonMessage(user.phoneNumber, message, buttons);
+            response = await whatsappClient.sendButtonMessage(user.phoneNumber, message, buttons);
             await activityLogger("ADMIN_OUTBOUND", message, user._id.toString(), { buttons }, "ADMIN", user.phoneNumber);
-        } else if (type === "location") {
-            const { lat, lng, name, address } = req.body;
-            response = await (client as any).sendLocationMessage(user.phoneNumber, lat, lng, name, address);
-            await activityLogger("ADMIN_OUTBOUND", `Location: ${name || 'Shared Location'}`, user._id.toString(), { lat, lng, name, address }, "ADMIN", user.phoneNumber);
-        } else if (type === "contact") {
-            const { name, phone } = req.body;
-            response = await (client as any).sendContactMessage(user.phoneNumber, name, phone);
-            await activityLogger("ADMIN_OUTBOUND", `Contact: ${name}`, user._id.toString(), { name, phone }, "ADMIN", user.phoneNumber);
-        } else if (type === "list") {
-            const { title, button, sections } = req.body;
-            response = await (client as any).sendListMessage(user.phoneNumber, message, title, button, sections);
-            await activityLogger("ADMIN_OUTBOUND", message, user._id.toString(), { list: { title, button, sections } }, "ADMIN", user.phoneNumber);
-        } else if (type === "product") {
-            const { productRetailerId } = req.body;
-            response = await (client as any).sendProductMessage(user.phoneNumber, productRetailerId);
-            await activityLogger("ADMIN_OUTBOUND", `Product: ${productRetailerId}`, user._id.toString(), { productRetailerId }, "ADMIN", user.phoneNumber);
-        } else if (type === "flow") {
-            const { flowId, flowAction, flowData } = req.body;
-            response = await (client as any).sendFlowMessage(user.phoneNumber, flowId, flowAction, flowData);
-            await activityLogger("ADMIN_OUTBOUND", `Flow: ${flowId}`, user._id.toString(), { flowId, flowAction, flowData }, "ADMIN", user.phoneNumber);
         } else {
-            response = await client.sendTextMessage(user.phoneNumber, message);
+            response = await whatsappClient.sendTextMessage(user.phoneNumber, message);
             await activityLogger("ADMIN_OUTBOUND", message, user._id.toString(), undefined, "ADMIN", user.phoneNumber);
         }
 
@@ -126,55 +100,37 @@ router.post("/:id/message", async (req: Request, res: Response) => {
     }
 });
 
-
 /**
  * POST /api/users/broadcast - Send a message to ALL users
  */
 router.post("/broadcast", async (req: Request, res: Response) => {
     try {
-        const { message, type, buttons } = req.body;
+        const { message } = req.body;
 
         if (!message) {
             return res.status(400).json({ success: false, error: "Message body is required" });
         }
 
-        const users = await User.find({ status: { $ne: 'blocked' } }); // Don't message blocked users? Or maybe we should? Let's exclude blocked for safety.
-
-        const WhatsAppClientFactory = (await import("../whatsapp/WhatsAppClientFactory.ts")).default;
-        const client = await WhatsAppClientFactory.getClient();
-        const activityLogger = (await import("../libs/activityLogger.ts")).logActivity;
+        const users = await User.find({ status: { $ne: 'blocked' } });
+        const whatsappClient = (await import("../whatsapp/WhatsAppClient.js")).default;
 
         let sentCount = 0;
         let failedCount = 0;
 
-        // Process in chunks to avoid overwhelming? For now, simple loop is fine for MVP.
         for (const user of users) {
             if (!user.phoneNumber) continue;
-
             try {
-                if (type === "buttons" && Array.isArray(buttons) && buttons.length > 0) {
-                    await client.sendButtonMessage(user.phoneNumber, message, buttons);
-                } else {
-                    await client.sendTextMessage(user.phoneNumber, message);
-                }
+                await whatsappClient.sendTextMessage(user.phoneNumber, message);
                 sentCount++;
-            } catch (err) {
-                console.error(`Failed to send to ${user.phoneNumber}:`, err);
+            } catch (e) {
                 failedCount++;
             }
         }
 
-        await activityLogger("ADMIN_BROADCAST", message, "SYSTEM", {
-            sentCount,
-            failedCount,
-            type,
-            buttons: type === 'buttons' ? buttons : undefined
-        });
-
         res.json({ success: true, sent: sentCount, failed: failedCount });
     } catch (error: any) {
-        console.error("Error broadcasting message:", error);
-        res.status(500).json({ success: false, error: "Failed to broadcast: " + (error.message || "Unknown error") });
+        console.error("Error broadcasting:", error);
+        res.status(500).json({ success: false, error: "Failed to broadcast" });
     }
 });
 
@@ -184,7 +140,7 @@ router.post("/broadcast", async (req: Request, res: Response) => {
  */
 router.get("/messages/history", async (req: Request, res: Response) => {
     try {
-        const { ActivityLog } = await import("../models/ActivityLog.ts");
+        const { ActivityLog } = await import("../models/ActivityLog.js");
 
         // Fetch logs related to communications
         const logs = await ActivityLog.find({
@@ -217,7 +173,7 @@ router.get("/messages/history", async (req: Request, res: Response) => {
  */
 router.get("/chats", async (req: Request, res: Response) => {
     try {
-        const { ActivityLog } = await import("../models/ActivityLog.ts");
+        const { ActivityLog } = await import("../models/ActivityLog.js");
 
         // Find latest message for each user
         const chats = await ActivityLog.aggregate([
@@ -268,7 +224,7 @@ router.get("/chats", async (req: Request, res: Response) => {
 router.get("/chats/:userId/messages", async (req: Request, res: Response) => {
     try {
         const { userId } = req.params;
-        const { ActivityLog } = await import("../models/ActivityLog.ts");
+        const { ActivityLog } = await import("../models/ActivityLog.js");
 
         const messages = await (ActivityLog as any).find({ userId })
             .sort({ createdAt: 1 });
@@ -286,7 +242,7 @@ router.get("/chats/:userId/messages", async (req: Request, res: Response) => {
 router.post("/chats/:userId/read", async (req: Request, res: Response) => {
     try {
         const { userId } = req.params;
-        const { ActivityLog } = await import("../models/ActivityLog.ts");
+        const { ActivityLog } = await import("../models/ActivityLog.js");
 
         await (ActivityLog as any).updateMany(
             { userId, sender: "USER", isRead: false },
@@ -305,7 +261,7 @@ router.post("/chats/:userId/read", async (req: Request, res: Response) => {
  */
 router.get("/chats/unread-total", async (req: Request, res: Response) => {
     try {
-        const { ActivityLog } = await import("../models/ActivityLog.ts");
+        const { ActivityLog } = await import("../models/ActivityLog.js");
         const count = await ActivityLog.countDocuments({ sender: "USER", isRead: false });
         res.json({ success: true, count });
     } catch (error: any) {

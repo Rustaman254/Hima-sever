@@ -2,6 +2,7 @@ import mongoose, { Schema, Document } from "mongoose";
 
 export interface IPolicy extends Document {
     userId: string;
+    productId: string;
     quoteId?: string;
     policyNumber: string;
 
@@ -42,6 +43,7 @@ export interface IPolicy extends Document {
         quoteDetails?: any;
         userPreferences?: any;
         notes?: string;
+        checkoutRequestID?: string;
     };
 
     createdAt: Date;
@@ -54,6 +56,10 @@ const PolicySchema = new Schema<IPolicy>(
             type: String,
             required: true,
             index: true,
+        },
+        productId: {
+            type: String,
+            required: true,
         },
         quoteId: {
             type: String,

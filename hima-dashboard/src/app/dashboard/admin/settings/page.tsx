@@ -58,14 +58,6 @@ export default function SettingsPage() {
                 <p style={{ color: '#9CA3AF', marginTop: '0.25rem' }}>Manage integrations and audit system connection status.</p>
             </div>
 
-            <SectionCard title="WhatsApp Integration" icon={MessageCircle}>
-                <Field label="Active Provider" value={config?.whatsapp?.provider?.toUpperCase()} />
-                <Field label="Phone Number ID" value={config?.whatsapp?.phoneNumberId} />
-                <Field label="Business Account ID" value={config?.whatsapp?.businessAccountId} />
-                <Field label="Access Token" value={config?.whatsapp?.accessToken} />
-                <Field label="Twilio Sandbox" value={config?.whatsapp?.twilioPhone} />
-            </SectionCard>
-
             <SectionCard title="Blockchain Connection" icon={Server}>
                 <Field label="Network" value="Mantle Testnet" />
                 <Field label="RPC Status" value={config?.blockchain?.rpcUrl} />
@@ -84,6 +76,6 @@ export default function SettingsPage() {
                     <strong>Admin Note:</strong> Some settings are managed via environment variables and require a server restart to change.
                 </div>
             </div>
-        </div>
+        </div >
     );
 }
