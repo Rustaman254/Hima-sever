@@ -11,10 +11,18 @@ interface TranslationParams {
 
 // Translation dictionary
 const translations: Record<string, Record<Language, string>> = {
-    // Language Selection
-    welcome_language: {
-        en: 'Karibu HIMA 🚀\nWelcome to HIMA, boda boda insurance on WhatsApp.\n\nChagua lugha / Choose language:',
-        sw: 'Karibu HIMA 🚀\nWelcome to HIMA, bima ya boda boda kwenye WhatsApp.\n\nChagua lugha / Choose language:'
+    // Welcome & Language
+    welcome_message: {
+        en: 'Welcome to HIMA 🚀\nYour boda boda insurance partner on WhatsApp.',
+        sw: 'Karibu HIMA 🚀\nMshirika wako wa bima ya boda boda kwenye WhatsApp.'
+    },
+    language_select_title: {
+        en: 'HIMA Language',
+        sw: 'Lugha ya HIMA'
+    },
+    language_select_prompt: {
+        en: 'Please select your language to continue:',
+        sw: 'Tafadhali chagua lugha yako ili kuendelea:'
     },
     lang_button_english: {
         en: 'English',
@@ -23,6 +31,12 @@ const translations: Record<string, Record<Language, string>> = {
     lang_button_swahili: {
         en: 'Kiswahili',
         sw: 'Kiswahili'
+    },
+
+    // Main Menu Extra
+    main_menu_change_lang: {
+        en: 'Change language',
+        sw: 'Badilisha lugha'
     },
 
     // No Account / Registration

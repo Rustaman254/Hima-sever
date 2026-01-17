@@ -138,12 +138,10 @@ const UserSchema = new Schema<IUser>(
         preferredLanguage: {
             type: String,
             enum: ["en", "sw"],
-            default: "en",
         },
         botLanguage: {
             type: String,
             enum: ["en", "sw"],
-            default: "en",
         },
         botConversationState: {
             type: String,

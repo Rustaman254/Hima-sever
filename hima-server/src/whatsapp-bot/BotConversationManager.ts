@@ -45,6 +45,19 @@ export class BotConversationManager {
                 });
                 await user.save();
                 fileLogger.log(`👤 [BOT-CONV] New user created: ${phoneNumber}`);
+
+                // Immediately ask for language selection for new users
+                await BotClient.sendText(phoneNumber, t('en', 'welcome_message'));
+                await this.sendLanguageSelection(phoneNumber);
+                return;
+            }
+
+            // If existing user hasn't selected a language yet, force selection
+            if (!user.botLanguage && user.botConversationState !== 'LANG_SELECT') {
+                user.botConversationState = 'LANG_SELECT';
+                await user.save();
+                await this.sendLanguageSelection(phoneNumber);
+                return;
             }
 
             // Handle greetings - reset to appropriate state
@@ -110,7 +123,8 @@ export class BotConversationManager {
 
         if (user.kycStatus === 'verified') {
             // KYC approved - show main menu
-            await BotClient.sendText(phoneNumber, t(lang, 'kyc_approved_welcome'));
+            const name = user.kycData?.fullName || user.firstName || 'User';
+            await BotClient.sendText(phoneNumber, t(lang, 'greeting_registered', { name }));
             user.botConversationState = 'MAIN_MENU';
             await user.save();
             await this.sendMainMenu(user, phoneNumber);
@@ -194,12 +208,12 @@ export class BotConversationManager {
     private async sendLanguageSelection(phoneNumber: string): Promise<void> {
         await BotClient.sendButtons(
             phoneNumber,
-            t('en', 'welcome_language'),
+            t('en', 'language_select_prompt'), // Default to English prompt for selection
             [
                 { id: 'LANG_EN', text: t('en', 'lang_button_english') },
                 { id: 'LANG_SW', text: t('sw', 'lang_button_swahili') }
             ],
-            'HIMA Language',
+            t('en', 'language_select_title'),
             t('en', 'button_tap_prompt')
         );
     }
@@ -214,15 +228,33 @@ export class BotConversationManager {
                 selectedLang = 'en';
             } else if (body === '2' || body.includes('swahili') || body.includes('kiswahili') || body === 'sw') {
                 selectedLang = 'sw';
+            } else {
+                // Invalid selection, ask again
+                await this.sendLanguageSelection(phoneNumber);
+                return;
             }
+        } else {
+            // Not a text message, ask again
+            await this.sendLanguageSelection(phoneNumber);
+            return;
         }
 
         user.botLanguage = selectedLang;
         user.preferredLanguage = selectedLang;
-        user.botConversationState = 'REGISTER_START';
         await user.save();
 
-        await this.sendRegistrationStart(user, phoneNumber);
+        // If user is already verified (e.g. changing language from menu), go to main menu
+        if (user.kycStatus === 'verified') {
+            user.botConversationState = 'MAIN_MENU';
+            await user.save();
+            await BotClient.sendText(phoneNumber, t(selectedLang, 'greeting_registered', { name: user.firstName || 'User' }));
+            await this.sendMainMenu(user, phoneNumber);
+        } else {
+            // New user or incomplete registration
+            user.botConversationState = 'REGISTER_START';
+            await user.save();
+            await this.sendRegistrationStart(user, phoneNumber);
+        }
     }
 
     // ============================================
@@ -461,7 +493,8 @@ export class BotConversationManager {
             [
                 { id: 'BUY_INS', text: t(lang, 'main_menu_buy') },
                 { id: 'VIEW_PROFILE', text: t(lang, 'main_menu_profile') },
-                { id: 'FILE_CLAIM', text: t(lang, 'main_menu_claim') }
+                { id: 'FILE_CLAIM', text: t(lang, 'main_menu_claim') },
+                { id: 'CHANGE_LANG', text: t(lang, 'main_menu_change_lang') }
             ],
             'HIMA Menu',
             t(lang, 'button_tap_prompt')
@@ -491,6 +524,11 @@ export class BotConversationManager {
             user.botConversationState = 'CLAIM_DATE';
             await user.save();
             await BotClient.sendText(phoneNumber, t(lang, 'claim_start_date'));
+        } else if (choice === '4') {
+            // Change Language
+            user.botConversationState = 'LANG_SELECT';
+            await user.save();
+            await this.sendLanguageSelection(phoneNumber);
         } else {
             await this.sendMainMenu(user, phoneNumber);
         }

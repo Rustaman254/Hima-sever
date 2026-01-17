@@ -1188,3 +1188,93 @@ Webhook Error: AxiosError: Request failed with status code 401
 [2026-01-17T06:29:00.955Z] [INFO] 🤖 [BOT] Initializing WhatsApp bot...
 [2026-01-17T06:29:43.097Z] [INFO] ✅ [BOT] WhatsApp bot initialized successfully
 [2026-01-17T06:29:43.097Z] [INFO] ✅ [BOT] WhatsApp bot started successfully
+[2026-01-17T07:08:55.594Z] [INFO] 🚀 Server started on port 8100
+[2026-01-17T07:09:03.955Z] [INFO] 🚀 Server started on port 8100
+[2026-01-17T07:09:11.980Z] [INFO] 🚀 [BOT] Starting WhatsApp bot...
+[2026-01-17T07:09:11.982Z] [INFO] 🤖 [BOT] Initializing WhatsApp bot...
+[2026-01-17T07:09:45.774Z] [INFO] ✅ [BOT] WhatsApp bot initialized successfully
+[2026-01-17T07:09:45.779Z] [INFO] ✅ [BOT] WhatsApp bot started successfully
+[2026-01-17T07:27:59.040Z] [INFO] 🔄 [BOT] State changed: OPENING
+[2026-01-17T12:47:53.306Z] [INFO] 🚀 Server started on port 8100
+[2026-01-17T12:48:03.492Z] [INFO] 🚀 [BOT] Starting WhatsApp bot...
+[2026-01-17T12:48:03.494Z] [INFO] 🤖 [BOT] Initializing WhatsApp bot...
+[2026-01-17T12:48:38.303Z] [INFO] ✅ [BOT] WhatsApp bot initialized successfully
+[2026-01-17T12:48:38.308Z] [INFO] ✅ [BOT] WhatsApp bot started successfully
+[2026-01-17T12:49:23.491Z] [INFO] 📨 [BOT-CONV] Processing message from 97826621157619@lid
+[2026-01-17T12:49:23.699Z] [INFO] 👋 [BOT-CONV] Greeting detected from 97826621157619@lid
+[2026-01-17T12:49:23.760Z] [INFO] 📤 [BOT] Sent text to 97826621157619@lid
+[2026-01-17T12:49:23.982Z] [INFO] 📤 [BOT] Sent text to 97826621157619@lid
+[2026-01-17T12:49:23.983Z] [INFO] 📤 [BOT] Sent options menu to 97826621157619@lid
+[2026-01-17T12:58:48.545Z] [INFO] 📨 [BOT-CONV] Processing message from 209191214043383@lid
+[2026-01-17T12:58:49.073Z] [INFO] 👤 [BOT-CONV] New user created: 209191214043383@lid
+[2026-01-17T12:58:49.120Z] [INFO] 📤 [BOT] Sent text to 209191214043383@lid
+[2026-01-17T12:58:49.120Z] [INFO] 📤 [BOT] Sent options menu to 209191214043383@lid
+[2026-01-17T12:59:02.049Z] [INFO] 📨 [BOT-CONV] Processing message from 209191214043383@lid
+[2026-01-17T12:59:02.212Z] [INFO] 🔀 [BOT-CONV] Routing to state: LANG_SELECT
+[2026-01-17T12:59:02.428Z] [INFO] 📤 [BOT] Sent text to 209191214043383@lid
+[2026-01-17T12:59:02.428Z] [INFO] 📤 [BOT] Sent options menu to 209191214043383@lid
+[2026-01-17T12:59:09.770Z] [INFO] 📨 [BOT-CONV] Processing message from 209191214043383@lid
+[2026-01-17T12:59:09.964Z] [INFO] 🔀 [BOT-CONV] Routing to state: REGISTER_START
+[2026-01-17T12:59:10.200Z] [INFO] 📤 [BOT] Sent text to 209191214043383@lid
+[2026-01-17T12:59:21.320Z] [INFO] 📨 [BOT-CONV] Processing message from 209191214043383@lid
+[2026-01-17T12:59:21.473Z] [INFO] 🔀 [BOT-CONV] Routing to state: REG_FULL_NAME
+[2026-01-17T12:59:21.635Z] [INFO] 📤 [BOT] Sent text to 209191214043383@lid
+[2026-01-17T12:59:37.529Z] [INFO] 📨 [BOT-CONV] Processing message from 209191214043383@lid
+[2026-01-17T12:59:37.684Z] [INFO] 🔀 [BOT-CONV] Routing to state: REG_ID_NUMBER
+[2026-01-17T12:59:37.880Z] [INFO] 📤 [BOT] Sent text to 209191214043383@lid
+[2026-01-17T13:00:00.046Z] [INFO] 📨 [BOT-CONV] Processing message from 209191214043383@lid
+[2026-01-17T13:00:00.235Z] [INFO] 🔀 [BOT-CONV] Routing to state: REG_DOB
+[2026-01-17T13:00:00.413Z] [INFO] 📤 [BOT] Sent text to 209191214043383@lid
+[2026-01-17T13:00:26.702Z] [INFO] 📨 [BOT-CONV] Processing message from 209191214043383@lid
+[2026-01-17T13:00:26.861Z] [INFO] 🔀 [BOT-CONV] Routing to state: REG_PLATE_NUMBER
+[2026-01-17T13:00:27.088Z] [INFO] 📤 [BOT] Sent text to 209191214043383@lid
+[2026-01-17T13:00:47.176Z] [INFO] 📨 [BOT-CONV] Processing message from 209191214043383@lid
+[2026-01-17T13:00:47.337Z] [INFO] 🔀 [BOT-CONV] Routing to state: REG_ID_PHOTO
+[2026-01-17T13:00:47.666Z] [INFO] ✅ [BOT] Media downloaded successfully
+[2026-01-17T13:00:47.871Z] [INFO] 📤 [BOT] Sent text to 209191214043383@lid
+[2026-01-17T13:01:12.130Z] [INFO] 📨 [BOT-CONV] Processing message from 209191214043383@lid
+[2026-01-17T13:01:12.323Z] [INFO] 🔀 [BOT-CONV] Routing to state: REG_LOGBOOK_PHOTO
+[2026-01-17T13:01:12.619Z] [INFO] ✅ [BOT] Media downloaded successfully
+[2026-01-17T13:01:12.861Z] [INFO] 📤 [BOT] Sent text to 209191214043383@lid
+[2026-01-17T13:01:34.466Z] [INFO] 📨 [BOT-CONV] Processing message from 209191214043383@lid
+[2026-01-17T13:01:34.625Z] [INFO] 🔀 [BOT-CONV] Routing to state: REG_BIKE_PHOTO
+[2026-01-17T13:01:34.736Z] [INFO] ✅ [BOT] Media downloaded successfully
+[2026-01-17T13:01:34.962Z] [INFO] 📤 [BOT] Sent text to 209191214043383@lid
+[2026-01-17T13:02:52.594Z] [INFO] 📨 [BOT-CONV] Processing message from 209191214043383@lid
+[2026-01-17T13:02:52.748Z] [INFO] 🔀 [BOT-CONV] Routing to state: REG_SELFIE_PHOTO
+[2026-01-17T13:02:53.082Z] [INFO] ✅ [BOT] Media downloaded successfully
+[2026-01-17T13:02:53.354Z] [INFO] ✅ [WALLET] WalletService initialized
+[2026-01-17T13:02:53.421Z] [INFO] 🔐 [WALLET] Created new wallet: 0x99d02C34f9F46b91D4F0ede37591aBB684D0aCc5
+[2026-01-17T13:02:53.592Z] [INFO] ✅ [WALLET] Wallet created for user: 209191214043383@lid -> 0x99d02C34f9F46b91D4F0ede37591aBB684D0aCc5
+[2026-01-17T13:02:53.755Z] [INFO] 📤 [BOT] Sent text to 209191214043383@lid
+[2026-01-17T13:02:53.756Z] [INFO] ✅ [BOT-CONV] KYC submitted for 209191214043383@lid, wallet: 0x99d02C34f9F46b91D4F0ede37591aBB684D0aCc5
+[2026-01-17T20:18:02.236Z] [INFO] 🚀 Server started on port 8100
+[2026-01-17T20:18:03.623Z] [INFO] 🚀 [BOT] Starting WhatsApp bot...
+[2026-01-17T20:18:03.624Z] [INFO] 🤖 [BOT] Initializing WhatsApp bot...
+[2026-01-17T20:18:31.729Z] [INFO] ✅ [BOT] WhatsApp bot initialized successfully
+[2026-01-17T20:18:31.729Z] [INFO] ✅ [BOT] WhatsApp bot started successfully
+[2026-01-17T20:21:25.975Z] [INFO] 📨 [BOT-CONV] Processing message from 97826621157619@lid
+[2026-01-17T20:21:26.145Z] [INFO] 👋 [BOT-CONV] Greeting detected from 97826621157619@lid
+[2026-01-17T20:21:26.180Z] [INFO] 📤 [BOT] Sent text to 97826621157619@lid
+[2026-01-17T20:21:26.345Z] [INFO] 📤 [BOT] Sent text to 97826621157619@lid
+[2026-01-17T20:21:26.345Z] [INFO] 📤 [BOT] Sent options menu to 97826621157619@lid
+[2026-01-17T20:21:34.288Z] [INFO] 📨 [BOT-CONV] Processing message from 97826621157619@lid
+[2026-01-17T20:21:34.478Z] [INFO] 🔀 [BOT-CONV] Routing to state: MAIN_MENU
+[2026-01-17T20:21:34.718Z] [INFO] 📤 [BOT] Sent text to 97826621157619@lid
+[2026-01-17T20:21:34.718Z] [INFO] 📤 [BOT] Sent options menu to 97826621157619@lid
+[2026-01-17T20:21:39.509Z] [INFO] 📨 [BOT-CONV] Processing message from 97826621157619@lid
+[2026-01-17T20:21:39.658Z] [INFO] 🔀 [BOT-CONV] Routing to state: LANG_SELECT
+[2026-01-17T20:21:40.180Z] [INFO] 📤 [BOT] Sent text to 97826621157619@lid
+[2026-01-17T20:21:40.236Z] [INFO] 📤 [BOT] Sent text to 97826621157619@lid
+[2026-01-17T20:21:40.236Z] [INFO] 📤 [BOT] Sent options menu to 97826621157619@lid
+[2026-01-17T20:24:11.436Z] [INFO] 📨 [BOT-CONV] Processing message from 97826621157619@lid
+[2026-01-17T20:24:11.601Z] [INFO] 🔀 [BOT-CONV] Routing to state: MAIN_MENU
+[2026-01-17T20:24:11.954Z] [INFO] ✅ [WALLET] WalletService initialized
+[2026-01-17T20:24:11.975Z] [INFO] 📤 [BOT] Sent text to 97826621157619@lid
+[2026-01-17T20:24:11.975Z] [INFO] 📤 [BOT] Sent options menu to 97826621157619@lid
+[2026-01-17T20:27:00.365Z] [INFO] [ACTIVITY LOG] KYC_APPROVED: Admin approved KYC for 209191214043383@lid
+[2026-01-17T20:27:34.866Z] [INFO] 🚀 Server started on port 8100
+[2026-01-17T20:27:36.400Z] [INFO] 🚀 [BOT] Starting WhatsApp bot...
+[2026-01-17T20:27:36.400Z] [INFO] 🤖 [BOT] Initializing WhatsApp bot...
+[2026-01-17T20:27:59.480Z] [INFO] ✅ [BOT] WhatsApp bot initialized successfully
+[2026-01-17T20:27:59.480Z] [INFO] ✅ [BOT] WhatsApp bot started successfully
