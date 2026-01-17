@@ -16,7 +16,10 @@ export const fileLogger = {
         }
 
         try {
-            fs.appendFileSync(logFilePath, logMessage);
+            // Disable file logging on Vercel as the filesystem is read-only
+            if (process.env.VERCEL !== '1') {
+                fs.appendFileSync(logFilePath, logMessage);
+            }
         } catch (error) {
             console.error('Failed to write to log file:', error);
         }

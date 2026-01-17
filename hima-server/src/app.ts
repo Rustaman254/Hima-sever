@@ -15,8 +15,8 @@ import authRouter from "./routers/authRouter.js";
 import testRouter from "./routers/testRouter.js";
 import webhookRouter from "./routers/webhookRouter.js";
 import mpesaRouter from "./routers/mpesaRouter.js";
+import mpesaRouter from "./routers/mpesaRouter.js";
 import himaRouter from "./routers/himaRouter.js";
-import { startBot, stopBot } from "./whatsapp-bot/index.js";
 
 dotenv.config();
 
@@ -33,6 +33,7 @@ app.get("/health", async (req, res) => {
     res.json({
         status: "ok",
         message: "Hima Insurance Server is running",
+        environment: process.env.VERCEL === '1' ? 'Vercel Serverless' : 'Standalone',
         network: "Mantle Testnet",
         chainId: config.blockchain.chainId
     });
@@ -53,13 +54,25 @@ app.use("/api/webhook", webhookRouter);
 app.use("/api/mpesa", mpesaRouter);
 app.use("/api/hima", himaRouter);
 
+/**
+ * Handle serverless MongoDB connection
+ */
+let cachedDb: any = null;
+
+const connectToDatabase = async () => {
+    if (cachedDb) return cachedDb;
+    if (!config.mongoDbUri) return null;
+
+    console.log("📂 [DB] Connecting to MongoDB...");
+    const db = await mongoose.connect(config.mongoDbUri);
+    cachedDb = db;
+    console.log("✅ [DB] Connected successfully");
+    return db;
+};
+
 const startServer = async () => {
     try {
-        // Connect to MongoDB
-        if (config.mongoDbUri) {
-            await mongoose.connect(config.mongoDbUri);
-            console.log("✅ Connected to MongoDB");
-        }
+        await connectToDatabase();
 
         // Log configuration
         console.log("🔧 Configuration:");
@@ -73,8 +86,9 @@ const startServer = async () => {
                 fileLogger.log(`🚀 Server started on port ${PORT}`);
                 console.log(`💡 Hima Insurance Server is ready`);
 
-                // Start WhatsApp bot
+                // Start WhatsApp bot using dynamic import to avoid heavy dependency load on Vercel
                 try {
+                    const { startBot } = await import("./whatsapp-bot/index.js");
                     await startBot();
                     console.log(`✅ WhatsApp bot initialized`);
                 } catch (error) {
@@ -82,8 +96,6 @@ const startServer = async () => {
                     console.log(`   Server will continue without bot functionality`);
                 }
             });
-        } else {
-            console.log("⚡ Running in Vercel Serverless environment. Bot initialization skipped.");
         }
     } catch (error) {
         console.error("❌ Error starting server:", error);
@@ -93,33 +105,30 @@ const startServer = async () => {
     }
 };
 
-// Graceful shutdown
+// Graceful shutdown handling
 if (process.env.VERCEL !== '1') {
-    process.on("SIGINT", async () => {
-        console.log("\n🛑 Shutting down gracefully...");
-        await stopBot();
+    const handleShutdown = async (signal: string) => {
+        console.log(`\n🛑 [${signal}] Shutting down gracefully...`);
+        try {
+            const { stopBot } = await import("./whatsapp-bot/index.js");
+            await stopBot();
+        } catch (e) { }
         await mongoose.disconnect();
         process.exit(0);
-    });
+    };
 
-    process.on("SIGTERM", async () => {
-        console.log("\n🛑 Shutting down gracefully...");
-        await stopBot();
-        await mongoose.disconnect();
-        process.exit(0);
-    });
+    process.on("SIGINT", () => handleShutdown("SIGINT"));
+    process.on("SIGTERM", () => handleShutdown("SIGTERM"));
 }
 
-// Initial connection for serverless environments
-if (config.mongoDbUri && process.env.VERCEL === '1') {
-    mongoose.connect(config.mongoDbUri).then(() => {
-        console.log("✅ MongoDB Connected (Serverless Mode)");
-    }).catch(err => {
-        console.error("❌ MongoDB Connection Error (Serverless Mode):", err);
+// Optimization for Vercel Serverless Functions
+if (process.env.VERCEL === '1') {
+    // Connect to database but don't call startBot
+    connectToDatabase().catch(err => {
+        console.error("❌ Fatal MongoDB Connection Error:", err);
     });
-}
-
-if (process.env.VERCEL !== '1') {
+} else {
+    // Start standard server
     startServer();
 }
 
