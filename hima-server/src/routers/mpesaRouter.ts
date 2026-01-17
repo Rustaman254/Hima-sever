@@ -5,8 +5,25 @@ import { User } from "../models/User.js";
 import { InsuranceProduct } from "../models/InsuranceProduct.js";
 import WhatsAppClient from "../whatsapp/WhatsAppClient.js";
 import { ethers } from "ethers";
-import HimaInsurance from "../../artifacts/contracts/HimaInsurance.sol/HimaInsurance.json" with { type: "json" };
 import config from "../Configs/configs.js";
+import fs from "fs";
+import path from "path";
+
+// Helper to load artifact safely
+const loadArtifact = () => {
+    try {
+        // Adjust path relative to this file
+        const artifactPath = path.resolve(process.cwd(), "artifacts/contracts/HimaInsurance.sol/HimaInsurance.json");
+        if (fs.existsSync(artifactPath)) {
+            return JSON.parse(fs.readFileSync(artifactPath, "utf8"));
+        }
+    } catch (e) {
+        console.error("Failed to load HimaInsurance artifact:", e);
+    }
+    return { abi: [] }; // Fallback empty ABI
+};
+
+const HimaInsurance = loadArtifact();
 
 const router: Router = express.Router();
 

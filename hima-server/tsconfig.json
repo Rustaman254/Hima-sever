@@ -9,6 +9,7 @@
     "module": "nodenext",
     "target": "esnext",
     "allowImportingTsExtensions": false,
+    "resolveJsonModule": true,
     "noEmit": false,
     "types": [],
     // For nodejs:
