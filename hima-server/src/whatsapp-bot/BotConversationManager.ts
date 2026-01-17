@@ -13,6 +13,7 @@ import { Claim } from '../models/Claim.js';
 import { fileLogger } from '../libs/fileLogger.js';
 import { v4 as uuidv4 } from 'uuid';
 import MpesaService from '../services/MpesaService.js';
+import config from '../Configs/configs.js';
 
 export class BotConversationManager {
     private static instance: BotConversationManager;
@@ -428,10 +429,12 @@ export class BotConversationManager {
             await user.save();
 
             // Send confirmation with wallet info
+            const dashboardProfileUrl = `${config.dashboardUrl}/dashboard/user/profile`;
+
             const confirmationMessage = t(lang, 'reg_thank_you') +
                 `\n\n🔐 ${lang === 'sw' ? 'Mkoba wako wa blockchain' : 'Your blockchain wallet'}:\n` +
                 `${WalletService.formatAddress(address)}\n\n` +
-                `${lang === 'sw' ? 'Angalia mkoba' : 'View wallet'}: ${WalletService.getExplorerUrl(address)}`;
+                `${lang === 'sw' ? 'Angalia kwenye Dashboard' : 'View on Dashboard'}:\n${dashboardProfileUrl}`;
 
             await BotClient.sendText(phoneNumber, confirmationMessage);
             fileLogger.log(`✅ [BOT-CONV] KYC submitted for ${phoneNumber}, wallet: ${address}`);
@@ -624,18 +627,17 @@ export class BotConversationManager {
         const WalletService = (await import('../services/WalletService.js')).default;
         await WalletService.ensureUserHasWallet(user);
 
-        const profileUrl = `https://hima.com/profile/${user._id}`;
-        const walletExplorerUrl = user.walletAddress ? WalletService.getExplorerUrl(user.walletAddress) : '';
+        const dashboardProfileUrl = `${config.dashboardUrl}/dashboard/user/profile`;
 
         const profileMessage = t(lang, 'profile_details', {
             name: user.kycData?.fullName || user.firstName || 'N/A',
             idNumber: user.kycData?.idNumber || 'N/A',
             plate: user.kycData?.plateNumber || 'N/A',
             policyNumber: policy?.policyNumber || t(lang, 'profile_no_policy'),
-            profileUrl
+            profileUrl: dashboardProfileUrl
         }) + `\n\n🔐 ${lang === 'sw' ? 'Mkoba wa Blockchain' : 'Blockchain Wallet'}:\n` +
             `${user.walletAddress ? WalletService.formatAddress(user.walletAddress) : 'N/A'}\n\n` +
-            `${lang === 'sw' ? 'Angalia mkoba' : 'View on Explorer'}:\n${walletExplorerUrl}`;
+            `${lang === 'sw' ? 'Angalia kwenye Dashboard' : 'View on Dashboard'}:\n${dashboardProfileUrl}`;
 
         await BotClient.sendButtons(
             phoneNumber,

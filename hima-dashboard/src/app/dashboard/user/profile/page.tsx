@@ -120,10 +120,21 @@ export default function UserProfile() {
                                     toast.success("Wallet address copied!");
                                 }}
                                 className={styles.actionBtn}
-                                style={{ padding: '0.5rem 1rem', fontSize: '0.75rem' }}
+                                style={{ padding: '0.5rem 1rem', fontSize: '0.75rem', marginRight: '0.5rem' }}
                             >
                                 Copy Address
                             </button>
+                            {walletAddress && (
+                                <a
+                                    href={`https://sepolia.mantlescan.xyz/address/${walletAddress}`}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className={styles.actionBtn}
+                                    style={{ padding: '0.5rem 1rem', fontSize: '0.75rem', textDecoration: 'none', display: 'inline-flex', alignItems: 'center', background: 'rgba(139, 92, 246, 0.2)' }}
+                                >
+                                    Explorer
+                                </a>
+                            )}
                         </div>
                         <p style={{ fontSize: '0.75rem', color: '#64748b', marginTop: '1rem' }}>
                             This is your custodial wallet on the Mantle network. You can reveal your private key in the <strong>Settings</strong> page.

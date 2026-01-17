@@ -16,6 +16,7 @@ function getConfig() {
     const chainId = parseInt(process.env.CHAIN_ID || "5001", 10); // Mantle Testnet
     const explorerUrl = process.env.EXPLORER_URL || "https://explorer.testnet.mantle.xyz";
     const paymentGatewayUrl = process.env.PAYMENT_GATEWAY_URL || "";
+    const dashboardUrl = process.env.DASHBOARD_URL || "https://hima-dashboard-ten.vercel.app";
 
     // Admin Credentials
     const adminEmail = process.env.ADMIN_EMAIL || "admin@hima.com";
@@ -41,6 +42,7 @@ function getConfig() {
         payment: {
             gatewayUrl: paymentGatewayUrl,
         },
+        dashboardUrl,
         encryptionKey,
         admin: {
             email: adminEmail,
