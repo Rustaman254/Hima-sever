@@ -618,7 +618,7 @@ export class BotConversationManager {
         const lang = getUserLanguage(user);
 
         // Get active policy
-        const policy = await Policy.findOne({ userId: user._id, policyStatus: 'active' });
+        const policy = await Policy.findOne({ userId: user._id.toString(), policyStatus: 'active' });
 
         // Ensure user has wallet
         const WalletService = (await import('../services/WalletService.js')).default;
