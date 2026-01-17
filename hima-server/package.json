@@ -30,16 +30,13 @@
     "typescript": "^5.9.3",
     "uuid": "^13.0.0",
     "viem": "^2.41.2",
-    "web3": "^4.16.0"
+    "web3": "^4.16.0",
+    "@nomicfoundation/hardhat-toolbox": "^5.0.0",
+    "hardhat": "^2.22.0"
   },
   "devDependencies": {
-    "@nomicfoundation/hardhat-toolbox": "^5.0.0",
-    "@types/cors": "^2.8.19",
-    "@types/express": "^5.0.5",
-    "@types/node": "^24.10.1",
     "@types/uuid": "^10.0.0",
     "chai": "^6.2.1",
-    "hardhat": "^2.22.0",
     "jest": "^30.2.0",
     "mocha": "^11.7.5",
     "nodemon": "^3.1.11",
