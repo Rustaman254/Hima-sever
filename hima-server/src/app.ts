@@ -66,39 +66,61 @@ const startServer = async () => {
         console.log(`   - Network: Mantle Testnet (Chain ID: ${config.blockchain.chainId})`);
         console.log(`   - RPC URL: ${config.blockchain.rpcUrl}`);
 
-        app.listen(PORT, "0.0.0.0", async () => {
-            console.log(`🚀 Server started on port ${PORT}`);
-            fileLogger.log(`🚀 Server started on port ${PORT}`);
-            console.log(`💡 Hima Insurance Server is ready`);
+        // Only start the listener and bot if not running as a Vercel serverless function
+        if (process.env.VERCEL !== '1') {
+            app.listen(PORT, "0.0.0.0", async () => {
+                console.log(`🚀 Server started on port ${PORT}`);
+                fileLogger.log(`🚀 Server started on port ${PORT}`);
+                console.log(`💡 Hima Insurance Server is ready`);
 
-            // Start WhatsApp bot
-            try {
-                await startBot();
-                console.log(`✅ WhatsApp bot initialized`);
-            } catch (error) {
-                console.error(`⚠️ WhatsApp bot failed to start: ${error}`);
-                console.log(`   Server will continue without bot functionality`);
-            }
-        });
+                // Start WhatsApp bot
+                try {
+                    await startBot();
+                    console.log(`✅ WhatsApp bot initialized`);
+                } catch (error) {
+                    console.error(`⚠️ WhatsApp bot failed to start: ${error}`);
+                    console.log(`   Server will continue without bot functionality`);
+                }
+            });
+        } else {
+            console.log("⚡ Running in Vercel Serverless environment. Bot initialization skipped.");
+        }
     } catch (error) {
         console.error("❌ Error starting server:", error);
-        process.exit(1);
+        if (process.env.VERCEL !== '1') {
+            process.exit(1);
+        }
     }
 };
 
 // Graceful shutdown
-process.on("SIGINT", async () => {
-    console.log("\n🛑 Shutting down gracefully...");
-    await stopBot();
-    await mongoose.disconnect();
-    process.exit(0);
-});
+if (process.env.VERCEL !== '1') {
+    process.on("SIGINT", async () => {
+        console.log("\n🛑 Shutting down gracefully...");
+        await stopBot();
+        await mongoose.disconnect();
+        process.exit(0);
+    });
 
-process.on("SIGTERM", async () => {
-    console.log("\n🛑 Shutting down gracefully...");
-    await stopBot();
-    await mongoose.disconnect();
-    process.exit(0);
-});
+    process.on("SIGTERM", async () => {
+        console.log("\n🛑 Shutting down gracefully...");
+        await stopBot();
+        await mongoose.disconnect();
+        process.exit(0);
+    });
+}
 
-startServer();
+// Initial connection for serverless environments
+if (config.mongoDbUri && process.env.VERCEL === '1') {
+    mongoose.connect(config.mongoDbUri).then(() => {
+        console.log("✅ MongoDB Connected (Serverless Mode)");
+    }).catch(err => {
+        console.error("❌ MongoDB Connection Error (Serverless Mode):", err);
+    });
+}
+
+if (process.env.VERCEL !== '1') {
+    startServer();
+}
+
+export default app;

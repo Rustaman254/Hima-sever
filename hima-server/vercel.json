@@ -1,0 +1,23 @@
+{
+    "version": 2,
+    "builds": [
+        {
+            "src": "src/app.ts",
+            "use": "@vercel/node"
+        }
+    ],
+    "routes": [
+        {
+            "src": "/api/logs/stream",
+            "dest": "src/app.ts",
+            "headers": {
+                "Cache-Control": "no-cache",
+                "Connection": "keep-alive"
+            }
+        },
+        {
+            "src": "/(.*)",
+            "dest": "src/app.ts"
+        }
+    ]
+}
