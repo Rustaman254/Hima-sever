@@ -19,7 +19,7 @@ import himaRouter from "./routers/himaRouter.js";
 
 dotenv.config();
 
-const app = express();
+const app: Express = express();
 const PORT = config.port || 8100;
 
 // Middleware
