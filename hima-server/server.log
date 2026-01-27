@@ -1283,3 +1283,7 @@ Webhook Error: AxiosError: Request failed with status code 401
 [2026-01-17T21:03:06.297Z] [INFO] 🤖 [BOT] Initializing WhatsApp bot...
 [2026-01-17T21:03:30.461Z] [INFO] ✅ [BOT] WhatsApp bot initialized successfully
 [2026-01-17T21:03:30.461Z] [INFO] ✅ [BOT] WhatsApp bot started successfully
+[2026-01-17T21:09:29.162Z] [INFO] 📨 [BOT-CONV] Processing message from 97826621157619@lid
+[2026-01-17T21:09:29.319Z] [INFO] 🔀 [BOT-CONV] Routing to state: MAIN_MENU
+[2026-01-17T21:09:29.379Z] [INFO] 📤 [BOT] Sent text to 97826621157619@lid
+[2026-01-17T21:09:29.379Z] [INFO] 📤 [BOT] Sent options menu to 97826621157619@lid
