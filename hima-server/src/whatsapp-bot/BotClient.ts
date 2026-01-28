@@ -34,37 +34,59 @@ export class BotClient {
 
             // Helper to find Chrome executable
             const getChromePath = () => {
-                // Check common Puppeteer cache locations
-                const cacheDir = process.env.PUPPETEER_CACHE_DIR ||
-                    (config.bot?.sessionDataPath ? path.join(config.bot.sessionDataPath, '../.puppeteer') : null);
-
-                if (cacheDir && fs.existsSync(cacheDir)) {
-                    fileLogger.log(`🔍 [BOT] Checking cache dir: ${cacheDir}`);
-
-                    // Try to find chrome binary recursively or in known paths
-                    // Render/Linux structure from npx install: chrome/linux-<version>/chrome-linux64/chrome
-                    const chromeDir = path.join(cacheDir, 'chrome');
-                    if (fs.existsSync(chromeDir)) {
-                        const platforms = fs.readdirSync(chromeDir);
-                        for (const platform of platforms) {
-                            if (platform.startsWith('linux-')) {
-                                const binaryPath = path.join(chromeDir, platform, 'chrome-linux64', 'chrome');
-                                if (fs.existsSync(binaryPath)) {
-                                    fileLogger.log(`✅ [BOT] Found Chrome at: ${binaryPath}`);
-                                    return binaryPath;
-                                }
-                            }
-                        }
+                // First check if PUPPETEER_EXECUTABLE_PATH is set
+                if (process.env.PUPPETEER_EXECUTABLE_PATH) {
+                    if (fs.existsSync(process.env.PUPPETEER_EXECUTABLE_PATH)) {
+                        fileLogger.log(`✅ [BOT] Using PUPPETEER_EXECUTABLE_PATH: ${process.env.PUPPETEER_EXECUTABLE_PATH}`);
+                        return process.env.PUPPETEER_EXECUTABLE_PATH;
+                    } else {
+                        fileLogger.log(`⚠️ [BOT] PUPPETEER_EXECUTABLE_PATH set but file not found: ${process.env.PUPPETEER_EXECUTABLE_PATH}`);
                     }
                 }
 
-                // If PUPPETEER_EXECUTABLE_PATH is set, use it
-                if (process.env.PUPPETEER_EXECUTABLE_PATH) {
-                    fileLogger.log(`🔍 [BOT] Using PUPPETEER_EXECUTABLE_PATH: ${process.env.PUPPETEER_EXECUTABLE_PATH}`);
-                    return process.env.PUPPETEER_EXECUTABLE_PATH;
+                // Check common Puppeteer cache locations
+                const cacheDirs = [
+                    process.env.PUPPETEER_CACHE_DIR,
+                    '/opt/render/.cache/puppeteer',
+                    path.join(process.cwd(), '.puppeteer'),
+                    config.bot?.sessionDataPath ? path.join(config.bot.sessionDataPath, '../.puppeteer') : null
+                ].filter(Boolean);
+
+                for (const cacheDir of cacheDirs) {
+                    if (!cacheDir || !fs.existsSync(cacheDir)) {
+                        continue;
+                    }
+
+                    fileLogger.log(`🔍 [BOT] Checking cache dir: ${cacheDir}`);
+
+                    // Try to find chrome binary
+                    // Structure: chrome/linux-<version>/chrome-linux64/chrome
+                    const chromeDir = path.join(cacheDir, 'chrome');
+                    if (fs.existsSync(chromeDir)) {
+                        try {
+                            const platforms = fs.readdirSync(chromeDir);
+                            fileLogger.log(`📁 [BOT] Found platforms in ${chromeDir}: ${platforms.join(', ')}`);
+
+                            for (const platform of platforms) {
+                                if (platform.startsWith('linux-')) {
+                                    const binaryPath = path.join(chromeDir, platform, 'chrome-linux64', 'chrome');
+                                    if (fs.existsSync(binaryPath)) {
+                                        fileLogger.log(`✅ [BOT] Found Chrome at: ${binaryPath}`);
+                                        return binaryPath;
+                                    } else {
+                                        fileLogger.log(`⚠️ [BOT] Chrome binary not found at expected path: ${binaryPath}`);
+                                    }
+                                }
+                            }
+                        } catch (error) {
+                            fileLogger.log(`⚠️ [BOT] Error reading chrome dir: ${error}`);
+                        }
+                    } else {
+                        fileLogger.log(`⚠️ [BOT] Chrome dir not found: ${chromeDir}`);
+                    }
                 }
 
-                fileLogger.log(`⚠️ [BOT] Custom Chrome path not found, relying on default`);
+                fileLogger.log(`⚠️ [BOT] No Chrome installation found in any cache directory`);
                 return undefined;
             };
 
