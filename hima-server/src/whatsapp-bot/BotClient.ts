@@ -39,6 +39,8 @@ export class BotClient {
                     (config.bot?.sessionDataPath ? path.join(config.bot.sessionDataPath, '../.puppeteer') : null);
 
                 if (cacheDir && fs.existsSync(cacheDir)) {
+                    fileLogger.log(`🔍 [BOT] Checking cache dir: ${cacheDir}`);
+
                     // Try to find chrome binary recursively or in known paths
                     // Render/Linux structure from npx install: chrome/linux-<version>/chrome-linux64/chrome
                     const chromeDir = path.join(cacheDir, 'chrome');
@@ -48,7 +50,7 @@ export class BotClient {
                             if (platform.startsWith('linux-')) {
                                 const binaryPath = path.join(chromeDir, platform, 'chrome-linux64', 'chrome');
                                 if (fs.existsSync(binaryPath)) {
-                                    fileLogger.log(`🔍 [BOT] Found Chrome at: ${binaryPath}`);
+                                    fileLogger.log(`✅ [BOT] Found Chrome at: ${binaryPath}`);
                                     return binaryPath;
                                 }
                             }
@@ -56,7 +58,13 @@ export class BotClient {
                     }
                 }
 
-                // Fallback to system locations if needed, or null to let puppeteer decide
+                // If PUPPETEER_EXECUTABLE_PATH is set, use it
+                if (process.env.PUPPETEER_EXECUTABLE_PATH) {
+                    fileLogger.log(`🔍 [BOT] Using PUPPETEER_EXECUTABLE_PATH: ${process.env.PUPPETEER_EXECUTABLE_PATH}`);
+                    return process.env.PUPPETEER_EXECUTABLE_PATH;
+                }
+
+                fileLogger.log(`⚠️ [BOT] Custom Chrome path not found, relying on default`);
                 return undefined;
             };
 
@@ -64,10 +72,10 @@ export class BotClient {
             if (executablePath) {
                 fileLogger.log(`🚀 [BOT] Using custom executable path: ${executablePath}`);
             } else {
-                fileLogger.log(`⚠️ [BOT] Custom Chrome path not found, relying on default info`);
+                fileLogger.log(`⚠️ [BOT] No custom Chrome path found, using default`);
             }
 
-            this.client = await create({
+            const clientConfig: any = {
                 sessionId: config.bot?.sessionName || 'hima-bot',
                 headless: true, // Force headless on server
                 qrTimeout: config.bot?.qrTimeout || 60000,
@@ -77,7 +85,6 @@ export class BotClient {
                 popup: false,
                 sessionDataPath: config.bot?.sessionDataPath || './sessions',
                 qrRefreshS: 15,
-                ...(executablePath ? { executablePath } : {}),
 
                 // Callbacks
                 qrLogSkip: false,
@@ -89,25 +96,31 @@ export class BotClient {
                 // Session management
                 killProcessOnBrowserClose: true,
                 throwErrorOnTosBlock: false,
-                // Ensure we use the installed Chrome
-                useChrome: false,
+
+                // IMPORTANT: Set useChrome to true when we have executablePath
+                useChrome: !!executablePath,
+
+                // Chrome args - remove the ones causing issues with multi-device
                 chromiumArgs: [
                     '--no-sandbox',
                     '--disable-setuid-sandbox',
                     '--disable-dev-shm-usage',
-                    '--disable-accelerated-2d-canvas',
-                    '--no-first-run',
-                    '--no-zygote',
-                    '--single-process',
                     '--disable-gpu'
                 ]
-            });
+            };
+
+            // Only add executablePath if we found one
+            if (executablePath) {
+                clientConfig.executablePath = executablePath;
+            }
+
+            this.client = await create(clientConfig);
 
             // Set up event handlers
             this.client.onMessage(async (message: Message) => {
                 try {
                     // Only process messages from users (not from bot itself)
-                    if (!message.fromMe && message.type === 'chat' || message.type === 'image') {
+                    if (!message.fromMe && (message.type === 'chat' || message.type === 'image')) {
                         await onMessage(message);
                     }
                 } catch (error) {
