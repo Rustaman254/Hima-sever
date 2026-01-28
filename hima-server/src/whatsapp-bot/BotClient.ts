@@ -7,6 +7,8 @@ import { create, Client } from '@open-wa/wa-automate';
 import type { Message, Chat } from '@open-wa/wa-automate';
 import config from '../Configs/configs.js';
 import { fileLogger } from '../libs/fileLogger.js';
+import * as fs from 'fs';
+import * as path from 'path';
 
 export class BotClient {
     private static instance: BotClient;
@@ -30,6 +32,41 @@ export class BotClient {
         try {
             fileLogger.log('🤖 [BOT] Initializing WhatsApp bot...');
 
+            // Helper to find Chrome executable
+            const getChromePath = () => {
+                // Check common Puppeteer cache locations
+                const cacheDir = process.env.PUPPETEER_CACHE_DIR ||
+                    (config.bot?.sessionDataPath ? path.join(config.bot.sessionDataPath, '../.puppeteer') : null);
+
+                if (cacheDir && fs.existsSync(cacheDir)) {
+                    // Try to find chrome binary recursively or in known paths
+                    // Render/Linux structure from npx install: chrome/linux-<version>/chrome-linux64/chrome
+                    const chromeDir = path.join(cacheDir, 'chrome');
+                    if (fs.existsSync(chromeDir)) {
+                        const platforms = fs.readdirSync(chromeDir);
+                        for (const platform of platforms) {
+                            if (platform.startsWith('linux-')) {
+                                const binaryPath = path.join(chromeDir, platform, 'chrome-linux64', 'chrome');
+                                if (fs.existsSync(binaryPath)) {
+                                    fileLogger.log(`🔍 [BOT] Found Chrome at: ${binaryPath}`);
+                                    return binaryPath;
+                                }
+                            }
+                        }
+                    }
+                }
+
+                // Fallback to system locations if needed, or null to let puppeteer decide
+                return undefined;
+            };
+
+            const executablePath = getChromePath();
+            if (executablePath) {
+                fileLogger.log(`🚀 [BOT] Using custom executable path: ${executablePath}`);
+            } else {
+                fileLogger.log(`⚠️ [BOT] Custom Chrome path not found, relying on default info`);
+            }
+
             this.client = await create({
                 sessionId: config.bot?.sessionName || 'hima-bot',
                 headless: true, // Force headless on server
@@ -40,6 +77,7 @@ export class BotClient {
                 popup: false,
                 sessionDataPath: config.bot?.sessionDataPath || './sessions',
                 qrRefreshS: 15,
+                ...(executablePath ? { executablePath } : {}),
 
                 // Callbacks
                 qrLogSkip: false,
