@@ -32,7 +32,7 @@ export class BotClient {
 
             this.client = await create({
                 sessionId: config.bot?.sessionName || 'hima-bot',
-                headless: config.bot?.headless !== false,
+                headless: true, // Force headless on server
                 qrTimeout: config.bot?.qrTimeout || 60000,
                 authTimeout: 60000,
                 disableSpins: true,
@@ -51,6 +51,8 @@ export class BotClient {
                 // Session management
                 killProcessOnBrowserClose: true,
                 throwErrorOnTosBlock: false,
+                // Ensure we use the installed Chrome
+                useChrome: false,
                 chromiumArgs: [
                     '--no-sandbox',
                     '--disable-setuid-sandbox',
@@ -58,6 +60,7 @@ export class BotClient {
                     '--disable-accelerated-2d-canvas',
                     '--no-first-run',
                     '--no-zygote',
+                    '--single-process',
                     '--disable-gpu'
                 ]
             });

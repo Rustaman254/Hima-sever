@@ -1287,3 +1287,42 @@ Webhook Error: AxiosError: Request failed with status code 401
 [2026-01-17T21:09:29.319Z] [INFO] 🔀 [BOT-CONV] Routing to state: MAIN_MENU
 [2026-01-17T21:09:29.379Z] [INFO] 📤 [BOT] Sent text to 97826621157619@lid
 [2026-01-17T21:09:29.379Z] [INFO] 📤 [BOT] Sent options menu to 97826621157619@lid
+[2026-01-28T10:30:55.976Z] [INFO] 🚀 Server started on port 8100
+[2026-01-28T10:30:57.317Z] [INFO] 🚀 [BOT] Starting WhatsApp bot...
+[2026-01-28T10:30:57.317Z] [INFO] 🤖 [BOT] Initializing WhatsApp bot...
+[2026-01-28T10:33:30.692Z] [INFO] ✅ [BOT] WhatsApp bot initialized successfully
+[2026-01-28T10:33:30.692Z] [INFO] ✅ [BOT] WhatsApp bot started successfully
+[2026-01-28T10:33:38.910Z] [INFO] 📨 [BOT-CONV] Processing message from 97826621157619@lid
+[2026-01-28T10:33:39.006Z] [INFO] 👋 [BOT-CONV] Greeting detected from 97826621157619@lid
+[2026-01-28T10:33:39.045Z] [INFO] 📤 [BOT] Sent text to 97826621157619@lid
+[2026-01-28T10:33:39.137Z] [INFO] 📤 [BOT] Sent text to 97826621157619@lid
+[2026-01-28T10:33:39.137Z] [INFO] 📤 [BOT] Sent options menu to 97826621157619@lid
+[2026-01-28T10:38:16.368Z] [INFO] 📨 [BOT-CONV] Processing message from 97826621157619@lid
+[2026-01-28T10:38:16.439Z] [INFO] 🔀 [BOT-CONV] Routing to state: MAIN_MENU
+[2026-01-28T10:38:16.554Z] [INFO] 📤 [BOT] Sent text to 97826621157619@lid
+[2026-01-28T10:38:16.555Z] [INFO] 📤 [BOT] Sent options menu to 97826621157619@lid
+[2026-01-28T10:38:29.940Z] [INFO] 📨 [BOT-CONV] Processing message from 97826621157619@lid
+[2026-01-28T10:38:30.011Z] [INFO] 🔀 [BOT-CONV] Routing to state: BUY_SELECT_COVER
+[2026-01-28T10:38:30.110Z] [INFO] 📤 [BOT] Sent text to 97826621157619@lid
+[2026-01-28T10:38:55.283Z] [INFO] 📨 [BOT-CONV] Processing message from 97826621157619@lid
+[2026-01-28T10:38:55.356Z] [INFO] 🔀 [BOT-CONV] Routing to state: BUY_SELECT_COVER
+[2026-01-28T10:38:55.448Z] [INFO] 📤 [BOT] Sent text to 97826621157619@lid
+[2026-01-28T10:39:01.512Z] [INFO] 📨 [BOT-CONV] Processing message from 97826621157619@lid
+[2026-01-28T10:39:01.582Z] [INFO] 👋 [BOT-CONV] Greeting detected from 97826621157619@lid
+[2026-01-28T10:39:01.589Z] [INFO] 📤 [BOT] Sent text to 97826621157619@lid
+[2026-01-28T10:39:01.685Z] [INFO] 📤 [BOT] Sent text to 97826621157619@lid
+[2026-01-28T10:39:01.685Z] [INFO] 📤 [BOT] Sent options menu to 97826621157619@lid
+[2026-01-28T10:39:10.547Z] [INFO] 📨 [BOT-CONV] Processing message from 97826621157619@lid
+[2026-01-28T10:39:10.618Z] [INFO] 🔀 [BOT-CONV] Routing to state: MAIN_MENU
+[2026-01-28T10:39:10.699Z] [INFO] 📤 [BOT] Sent text to 97826621157619@lid
+[2026-01-28T10:39:10.699Z] [INFO] 📤 [BOT] Sent options menu to 97826621157619@lid
+[2026-01-28T10:39:15.865Z] [INFO] 📨 [BOT-CONV] Processing message from 97826621157619@lid
+[2026-01-28T10:39:15.936Z] [INFO] 🔀 [BOT-CONV] Routing to state: LANG_SELECT
+[2026-01-28T10:39:16.108Z] [INFO] 📤 [BOT] Sent text to 97826621157619@lid
+[2026-01-28T10:39:16.140Z] [INFO] 📤 [BOT] Sent text to 97826621157619@lid
+[2026-01-28T10:39:16.140Z] [INFO] 📤 [BOT] Sent options menu to 97826621157619@lid
+[2026-01-28T11:24:47.041Z] [INFO] 📨 [BOT-CONV] Processing message from 97826621157619@lid
+[2026-01-28T11:24:47.137Z] [INFO] 🔀 [BOT-CONV] Routing to state: MAIN_MENU
+[2026-01-28T11:24:47.407Z] [INFO] ✅ [WALLET] WalletService initialized
+[2026-01-28T11:24:47.511Z] [INFO] 📤 [BOT] Sent text to 97826621157619@lid
+[2026-01-28T11:24:47.511Z] [INFO] 📤 [BOT] Sent options menu to 97826621157619@lid

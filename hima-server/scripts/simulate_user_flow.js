@@ -1,7 +1,7 @@
 
 // Run this script with: node scripts/simulate_user_flow.js
 
-const BASE_URL = 'http://localhost:8100';
+const BASE_URL = process.env.SERVER_URL || 'http://localhost:8100';
 const PHONE_NUMBER = '1234567890'; // Dummy number for demo
 
 async function runDemo() {
