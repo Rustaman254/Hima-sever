@@ -1,0 +1,12 @@
+services:
+  hima-server:
+    build: .
+    ports:
+      - "8100:8100"
+    environment:
+      - NODE_ENV=production
+      - PORT=8100
+      # Add other environment variables here or use env_file
+    env_file:
+      - .env
+    restart: always

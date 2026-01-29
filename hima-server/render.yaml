@@ -1,7 +1,7 @@
 services:
      - type: web
        name: hima-server
-       env: node
+       env: docker
        buildCommand: ./scripts/render-build.sh
        startCommand: pnpm run start
        envVars:
@@ -13,3 +13,4 @@ services:
            value: /opt/render/.cache/puppeteer
          - key: PUPPETEER_SKIP_CHROMIUM_DOWNLOAD
            value: false
+         - fromGroup: hima-env-vars
