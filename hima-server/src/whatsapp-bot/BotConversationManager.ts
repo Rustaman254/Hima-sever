@@ -1084,7 +1084,7 @@ export class BotConversationManager {
         const incidentDateStr = `${kycData.claimDate} ${kycData.claimTime || '12:00'}`;
 
         // Find active policy for this user to link the claim
-        const userPolicy = await Policy.findOne({ userId: user._id, policyStatus: 'active' });
+        const userPolicy = await Policy.findOne({ userId: user._id.toString(), policyStatus: 'active' });
 
         const newClaim = new Claim({
             userId: user._id,

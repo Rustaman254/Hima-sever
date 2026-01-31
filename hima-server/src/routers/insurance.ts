@@ -491,7 +491,7 @@ router.patch("/admin/users/:phoneNumber/kyc", async (req: Request, res: Response
             if (status === 'verified') {
                 await logActivity("KYC_APPROVED", `Admin approved KYC for ${phoneNumber}`, user._id.toString());
                 const message = `🎉 KYC Approved! Hello ${user.firstName || "there"}, your account is now verified. You can now purchase insurance.`;
-                await BotClient.sendOptions(
+                await BotClient.sendButtons(
                     user.phoneNumber,
                     message,
                     [

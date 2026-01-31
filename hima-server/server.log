@@ -2328,3 +2328,10 @@ Webhook Error: AxiosError: Request failed with status code 401
 [2026-01-31T13:43:04.165Z] [INFO] ⚠️ [BOT] No custom Chrome path found, using default
 [2026-01-31T13:43:28.827Z] [INFO] ✅ [BOT] WhatsApp bot initialized successfully
 [2026-01-31T13:43:28.827Z] [INFO] ✅ [BOT] WhatsApp bot started successfully
+[2026-01-31T13:50:45.173Z] [INFO] 🚀 Server started on port 8100
+[2026-01-31T13:50:45.232Z] [INFO] 🚀 [BOT] Starting WhatsApp bot...
+[2026-01-31T13:50:45.232Z] [INFO] 🤖 [BOT] Initializing WhatsApp bot...
+[2026-01-31T13:50:45.233Z] [INFO] ⚠️ [BOT] No Chrome installation found in any cache directory
+[2026-01-31T13:50:45.233Z] [INFO] ⚠️ [BOT] No custom Chrome path found, using default
+[2026-01-31T13:51:10.432Z] [INFO] ✅ [BOT] WhatsApp bot initialized successfully
+[2026-01-31T13:51:10.432Z] [INFO] ✅ [BOT] WhatsApp bot started successfully

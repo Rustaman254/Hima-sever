@@ -347,7 +347,7 @@ export class ConversationManager {
     }
 
     private async handleViewProfile(user: IUser, from: string) {
-        const policy = await Policy.findOne({ userId: user._id, policyStatus: 'active' });
+        const policy = await Policy.findOne({ userId: user._id.toString(), policyStatus: 'active' });
 
         // AI-generated profile intro
         const intro = await MistralService.getHimaResponse("Show user their profile information", 'en');
