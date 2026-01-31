@@ -3,7 +3,7 @@ import type { Request, Response, Router } from "express";
 import { Policy } from "../models/Policy.js";
 import { User } from "../models/User.js";
 import { InsuranceProduct } from "../models/InsuranceProduct.js";
-import WhatsAppClient from "../whatsapp/WhatsAppClient.js";
+import BotClient from "../whatsapp-bot/BotClient.js";
 import { ethers } from "ethers";
 import config from "../Configs/configs.js";
 import fs from "fs";
@@ -123,7 +123,7 @@ router.post("/callback", async (req: Request, res: Response) => {
             console.log(`[MPESA] Policy ${policy.policyNumber} activated`);
 
             // Send confirmation message to user
-            await WhatsAppClient.sendTextMessage(
+            await BotClient.sendText(
                 user.phoneNumber,
                 `🎉 Your policy ${policy.policyNumber} is now active! 🎉`
             );
@@ -141,7 +141,7 @@ router.post("/callback", async (req: Request, res: Response) => {
 
         const user = await User.findById(policy.userId);
         if (user) {
-            await WhatsAppClient.sendTextMessage(
+            await BotClient.sendText(
                 user.phoneNumber,
                 `Your payment for policy ${policy.policyNumber} failed. Please try again.`
             );

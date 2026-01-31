@@ -417,7 +417,8 @@ router.post("/admin/login", async (req: Request, res: Response) => {
             return res.status(401).json({ success: false, error: "Admin account not found in database" });
         }
 
-        if (email === config.admin.email && password === config.admin.password) {
+        // Verify password (comparing plain text as requested for this phase)
+        if (password === user.password || (email === config.admin.email && password === config.admin.password)) {
             // Sign JWT for admin
             const token = jwt.sign(
                 { id: user._id, email: user.email, role: user.role },
@@ -485,26 +486,27 @@ router.patch("/admin/users/:phoneNumber/kyc", async (req: Request, res: Response
 
         // WhatsApp Notification
         try {
-            const whatsappClient = (await import("../whatsapp/WhatsAppClient.js")).default;
+            const BotClient = (await import("../whatsapp-bot/BotClient.js")).default;
 
             if (status === 'verified') {
                 await logActivity("KYC_APPROVED", `Admin approved KYC for ${phoneNumber}`, user._id.toString());
                 const message = `🎉 KYC Approved! Hello ${user.firstName || "there"}, your account is now verified. You can now purchase insurance.`;
-                await whatsappClient.sendButtonMessage(
+                await BotClient.sendButtons(
                     user.phoneNumber,
                     message,
                     [
-                        { id: "buy_insurance", title: "Buy Insurance" },
-                        { id: "file_claim", title: "File a Claim" }
-                    ]
+                        { id: "buy_insurance", text: "Buy Insurance" },
+                        { id: "file_claim", text: "File a Claim" }
+                    ],
+                    "Verification Successful"
                 );
             } else {
                 await logActivity("KYC_REJECTED", `Admin rejected KYC for ${phoneNumber}`, user._id.toString());
                 const message = `❌ KYC Update. Hello ${user.firstName || "there"}, unfortunately your verification was rejected. Please contact support.`;
-                await whatsappClient.sendTextMessage(user.phoneNumber, message);
+                await BotClient.sendText(user.phoneNumber, message);
             }
         } catch (waError) {
-            console.error("Failed to send KYC notification WhatsApp:", waError);
+            console.error("Failed to send KYC notification via Bot:", waError);
         }
 
         res.json({

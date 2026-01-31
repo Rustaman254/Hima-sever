@@ -3,7 +3,10 @@
 import { useEffect, useState } from "react";
 // @ts-ignore
 import tableStyles from "@/components/dashboard/tables.module.css";
-import { Users, Search, Filter, MoreHorizontal, Shield, User as UserIcon, Check, X, Ban, MessageCircle, Send } from "lucide-react";
+import {
+    Users, Search, Filter, MoreHorizontal, Shield, User as UserIcon,
+    Check, X, Ban, MessageCircle, Send, Eye, RotateCcw, FileText
+} from "lucide-react";
 import { toast } from "sonner";
 import { API_BASE_URL } from "@/lib/config";
 
@@ -12,23 +15,30 @@ export default function UsersPage() {
     const [loading, setLoading] = useState(true);
 
     const handleAction = async (userId: string, action: string) => {
-        if (!confirm("Are you sure you want to perform this action?")) return;
+        let reason = "";
+        if (action === 'reject_kyc') {
+            reason = prompt("Please provide a reason for rejection (this will be sent to the user):") || "";
+            if (!reason) return; // Cancel if no reason
+        }
+
+        if (!confirm(`Are you sure you want to perform ${action.replace('_', ' ')}?`)) return;
 
         try {
             const res = await fetch(`${API_BASE_URL}/api/users/${userId}/status`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ action })
+                body: JSON.stringify({ action, reason })
             });
             const data = await res.json();
             if (data.success) {
+                toast.success(`Action ${action} successful`);
                 setUsers(users.map(u => u._id === userId ? data.user : u));
             } else {
-                alert("Action failed: " + (data.error || "Unknown error"));
+                toast.error("Action failed: " + (data.error || "Unknown error"));
             }
         } catch (error) {
             console.error("Action error:", error);
-            alert("Failed to perform action");
+            toast.error("Failed to perform action");
         }
     };
 
@@ -59,9 +69,11 @@ export default function UsersPage() {
             case "rejected":
                 return <span style={{ background: 'rgba(239, 68, 68, 0.1)', color: '#ef4444', padding: '2px 8px', borderRadius: '12px', fontSize: '11px', fontWeight: 600 }}>Rejected</span>;
             default:
-                return <span style={{ background: 'rgba(113, 113, 122, 0.1)', color: '#71717a', padding: '2px 8px', borderRadius: '12px', fontSize: '11px', fontWeight: 600 }}>Unverified</span>;
+                return <span style={{ background: 'rgba(255, 255, 255, 0.05)', color: '#94a3b8', padding: '2px 8px', borderRadius: '12px', fontSize: '11px', fontWeight: 600 }}>Unverified</span>;
         }
     };
+
+    const [selectedDocs, setSelectedDocs] = useState<any[] | null>(null);
 
     const openMessageModal = (user: any) => {
         toast.info(`Messaging feature for ${user.firstName || 'user'} is coming soon!`);
@@ -123,8 +135,11 @@ export default function UsersPage() {
                                     </div>
                                 </td>
                                 <td className={tableStyles.td}>
-                                    <div style={{ color: '#9CA3AF', fontSize: '0.85rem' }}>{user.phoneNumber}</div>
-                                    <div style={{ color: '#64748b', fontSize: '0.75rem' }}>ID: {user.nationalId || 'N/A'}</div>
+                                    <div style={{ color: '#9CA3AF', fontSize: '0.85rem' }}>WA: {user.phoneNumber}</div>
+                                    {user.loginPhoneNumber && (
+                                        <div style={{ color: '#8b5cf6', fontSize: '0.75rem', marginTop: '2px' }}>Login: {user.loginPhoneNumber}</div>
+                                    )}
+                                    <div style={{ color: '#64748b', fontSize: '0.75rem', marginTop: '2px' }}>ID: {user.nationalId || 'N/A'}</div>
                                 </td>
                                 <td className={tableStyles.td}>
                                     {getStatusBadge(user.kycStatus)}
@@ -141,6 +156,15 @@ export default function UsersPage() {
                                 </td>
                                 <td className={tableStyles.td}>
                                     <div style={{ display: 'flex', gap: '0.5rem', justifyContent: 'flex-end' }}>
+                                        {user.kycDocuments && user.kycDocuments.length > 0 && (
+                                            <button
+                                                onClick={() => setSelectedDocs(user.kycDocuments)}
+                                                title="View KYC Documents"
+                                                style={{ padding: '0.25rem', background: 'rgba(139, 92, 246, 0.1)', color: '#8b5cf6', border: '1px solid rgba(139, 92, 246, 0.2)', borderRadius: '4px', cursor: 'pointer' }}
+                                            >
+                                                <Eye size={14} />
+                                            </button>
+                                        )}
                                         <button
                                             onClick={() => openMessageModal(user)}
                                             title="Send Message"
@@ -167,6 +191,17 @@ export default function UsersPage() {
                                                 </button>
                                             </>
                                         )}
+
+                                        {user.kycStatus === 'verified' && (
+                                            <button
+                                                onClick={() => handleAction(user._id, 'unverify_kyc')}
+                                                title="Unverify User"
+                                                style={{ padding: '0.25rem', background: 'rgba(234, 179, 8, 0.1)', color: '#eab308', border: '1px solid rgba(234, 179, 8, 0.2)', borderRadius: '4px', cursor: 'pointer' }}
+                                            >
+                                                <RotateCcw size={14} />
+                                            </button>
+                                        )}
+
                                         {user.status !== 'blocked' ? (
                                             <button
                                                 onClick={() => handleAction(user._id, 'block_user')}
@@ -192,6 +227,34 @@ export default function UsersPage() {
                 </table>
             </div>
 
+            {/* KYC Documents Modal */}
+            {selectedDocs && (
+                <div style={{ position: 'fixed', inset: 0, zIndex: 60, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '2rem' }}>
+                    <div
+                        onClick={() => setSelectedDocs(null)}
+                        style={{ position: 'absolute', inset: 0, background: 'rgba(0,0,0,0.8)', backdropFilter: 'blur(8px)' }}
+                    ></div>
+                    <div style={{ position: 'relative', width: '100%', maxWidth: '900px', maxHeight: '90vh', background: '#111', borderRadius: '1.5rem', border: '1px solid rgba(255,255,255,0.1)', padding: '2rem', overflow: 'auto', display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                            <h2 style={{ fontSize: '1.25rem', fontWeight: 700, color: 'white' }}>KYC Verification Documents</h2>
+                            <button onClick={() => setSelectedDocs(null)} style={{ background: 'none', border: 'none', color: '#94a3b8', cursor: 'pointer' }}><X size={24} /></button>
+                        </div>
+                        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '1.5rem' }}>
+                            {selectedDocs.map((doc, i) => (
+                                <div key={i} style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', background: 'rgba(255,255,255,0.03)', padding: '1rem', borderRadius: '1rem' }}>
+                                    <div style={{ fontSize: '0.875rem', fontWeight: 600, color: '#8b5cf6', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                                        <FileText size={16} /> {doc.type?.replace('_', ' ')}
+                                    </div>
+                                    <div style={{ width: '100%', aspectRatio: '16/10', background: '#000', borderRadius: '0.5rem', overflow: 'hidden' }}>
+                                        <img src={doc.url} alt={doc.type} style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+                                    </div>
+                                    <div style={{ fontSize: '0.75rem', color: '#64748b' }}>Uploaded: {new Date(doc.uploadedAt).toLocaleString()}</div>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 }

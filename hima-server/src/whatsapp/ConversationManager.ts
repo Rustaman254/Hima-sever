@@ -316,7 +316,7 @@ export class ConversationManager {
         await WhatsAppClient.sendButtonMessage(to, greeting, buttons);
     }
 
-    private async handleMenuSelection(user: User, from: string, btnId: string) {
+    private async handleMenuSelection(user: IUser, from: string, btnId: string) {
         if (btnId === 'buy_insurance') {
             await this.startBuyFlow(user, from);
         } else if (btnId === 'file_claim') {
@@ -326,7 +326,7 @@ export class ConversationManager {
         }
     }
 
-    private async startBuyFlow(user: User, from: string) {
+    private async startBuyFlow(user: IUser, from: string) {
         // AI-generated intro to buying
         const prompt = await MistralService.getConversationalPrompt('BUY', 'SELECT_COVER', 'en');
         await WhatsAppClient.sendTextMessage(from, prompt);
@@ -339,15 +339,15 @@ export class ConversationManager {
         await user.save();
     }
 
-    private async startClaimFlow(user: User, from: string) {
+    private async startClaimFlow(user: IUser, from: string) {
         user.conversationState = "claim_date";
         await user.save();
         const prompt = await MistralService.getConversationalPrompt('CLAIM', 'CLAIM_DATE', 'en');
         await WhatsAppClient.sendTextMessage(from, prompt);
     }
 
-    private async handleViewProfile(user: User, from: string) {
-        const policy = await Policy.findOne({ userId: user._id, policyStatus: 'active' });
+    private async handleViewProfile(user: IUser, from: string) {
+        const policy = await Policy.findOne({ userId: user._id.toString(), policyStatus: 'active' });
 
         // AI-generated profile intro
         const intro = await MistralService.getHimaResponse("Show user their profile information", 'en');
@@ -357,7 +357,7 @@ export class ConversationManager {
         await WhatsAppClient.sendTextMessage(from, profileMsg);
     }
 
-    private async sendPurchaseConfirmation(user: User, from: string, plateNumber: string) {
+    private async sendPurchaseConfirmation(user: IUser, from: string, plateNumber: string) {
         const selectedProduct = await InsuranceProduct.findById(user.selectedProductId);
 
         // AI-generated confirmation prompt with details
@@ -375,7 +375,7 @@ export class ConversationManager {
         await WhatsAppClient.sendButtonMessage(from, confirmPrompt, buttons);
     }
 
-    private async executePurchase(user: User, from: string) {
+    private async executePurchase(user: IUser, from: string) {
         // AI-generated payment initiation message
         const paymentMsg = await MistralService.getConversationalPrompt('BUY', 'PAYMENT_INITIATED', 'en');
         await WhatsAppClient.sendTextMessage(from, paymentMsg);

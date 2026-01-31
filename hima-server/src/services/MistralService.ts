@@ -127,6 +127,8 @@ ${microInsuranceInfo}
             // Registration
             case 'REG_START': fieldDescription = "Welcome the user to HIMA and explain that you need to register them. Ask if they are ready to start."; break;
             case 'FULL_NAME': fieldDescription = "Ask for full name (as on ID)."; break;
+            case 'LOGIN_PHONE': fieldDescription = "Ask for their mobile phone number. Explain this will be used for logging into the dashboard on a browser."; break;
+            case 'MISSING_DATA_REQUEST': fieldDescription = "Gently explain that a new feature requires one more piece of information from them (like a mobile number). Ask for it politely."; break;
             case 'ID_NUMBER': fieldDescription = "Ask for National ID Number."; break;
             case 'DOB': fieldDescription = "Ask for Date of Birth (YYYY-MM-DD)."; break;
             case 'PLATE_NUMBER': fieldDescription = "Ask for Motorcycle Plate Number."; break;

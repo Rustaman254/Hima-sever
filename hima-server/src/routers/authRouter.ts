@@ -21,8 +21,14 @@ router.post("/otp/request", async (req: Request, res: Response) => {
         // Clean phone number (remove +, spaces, etc.)
         const cleanedPhone = phoneNumber.replace(/[\s\+]/g, "");
 
-        // Find user
-        let user = await User.findOne({ phoneNumber: cleanedPhone });
+        // Find user by WhatsApp ChatID or dedicated loginPhoneNumber
+        let user = await User.findOne({
+            $or: [
+                { phoneNumber: cleanedPhone },
+                { loginPhoneNumber: cleanedPhone }
+            ]
+        });
+
         if (!user) {
             return res.status(404).json({
                 error: "Account not found. Please register first!"
@@ -38,21 +44,18 @@ router.post("/otp/request", async (req: Request, res: Response) => {
         await user.save();
 
         // Send via WhatsApp
-        const whatsappClient = (await import("../whatsapp/WhatsAppClient.js")).default;
-
-        console.log(`📤 [AUTH] Sending login code to ${cleanedPhone}`);
-
-        // Try to send as text message for simplicity (or use template if configured)
-        // In production, this MUST be a template message to initiate conversation
         try {
-            await whatsappClient.sendTextMessage(
-                cleanedPhone,
+            const BotClient = (await import("../whatsapp-bot/BotClient.js")).default;
+            console.log(`📤 [AUTH] Sending login code to ${user.phoneNumber} via Bot`);
+
+            await BotClient.sendText(
+                user.phoneNumber,
                 `Your Hima Insurance login code is: *${code}*\n\nIt expires in 10 minutes. Do not share this code.`
             );
-            console.log(`✅ [AUTH] WhatsApp message sent successfully`);
+            console.log(`✅ [AUTH] WhatsApp message sent successfully via Bot`);
         } catch (error) {
-            console.warn(`⚠️ [AUTH] Failed to send WhatsApp message, falling back to console log`);
-            console.log(`🔐 [AUTH] Generated Login Code for ${cleanedPhone}: ${code}`);
+            console.warn(`⚠️ [AUTH] Failed to send WhatsApp message via Bot, falling back to console log: ${error}`);
+            console.log(`🔐 [AUTH] Generated Login Code for ${user.phoneNumber}: ${code}`);
         }
 
         res.json({ success: true, message: "Login code sent via WhatsApp" });
@@ -76,7 +79,12 @@ router.post("/otp/verify", async (req: Request, res: Response) => {
 
         const cleanedPhone = phoneNumber.replace(/[\s\+]/g, "");
 
-        const user = await User.findOne({ phoneNumber: cleanedPhone });
+        const user = await User.findOne({
+            $or: [
+                { phoneNumber: cleanedPhone },
+                { loginPhoneNumber: cleanedPhone }
+            ]
+        });
 
         if (!user || user.lastLoginCode !== code) {
             return res.status(401).json({ error: "Invalid login code" });
