@@ -2,7 +2,9 @@ import mongoose, { Schema, Document } from "mongoose";
 
 export interface IClaim extends Document {
     userId: string;
+    policyId: string; // Added missing field
     claimNumber: string;
+    onChainClaimId?: string; // Added missing field
     incidentTime: Date;
     incidentLocation: string;
     incidentDescription: string;
@@ -26,10 +28,19 @@ const ClaimSchema = new Schema<IClaim>(
             required: true,
             index: true,
         },
+        policyId: {
+            type: String,
+            required: true,
+            index: true,
+        },
         claimNumber: {
             type: String,
             required: true,
             unique: true,
+        },
+        onChainClaimId: {
+            type: String,
+            sparse: true,
         },
         incidentTime: {
             type: Date,

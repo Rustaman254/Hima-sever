@@ -36,17 +36,42 @@ router.put("/:id/status", async (req: Request, res: Response) => {
                 user.kycStatus = "verified";
                 // Notify user via WhatsApp
                 try {
-                    const whatsappClient = (await import("../whatsapp/WhatsAppClient.js")).default;
-                    await whatsappClient.sendTextMessage(user.phoneNumber, "🎉 Congratulations! Your KYC documents have been approved. You are now fully verified and can purchase insurance coverage instantly.");
+                    const BotClient = (await import("../whatsapp-bot/BotClient.js")).default;
+                    await BotClient.sendText(user.phoneNumber, "🎉 Congratulations! Your KYC documents have been approved. You are now fully verified and can purchase insurance coverage instantly.");
                     // Reset state to ensure they get main menu next time
                     user.conversationState = "registered";
                     user.botConversationState = "MAIN_MENU";
+                    user.registrationComplete = true; // Ensure this is set
                 } catch (err) {
-                    console.error("Failed to send KYC approval notification:", err);
+                    console.error("Failed to send KYC approval notification via Bot:", err);
                 }
                 break;
             case "reject_kyc":
+                const { reason } = req.body;
                 user.kycStatus = "rejected";
+                // Notify user via WhatsApp
+                try {
+                    const BotClient = (await import("../whatsapp-bot/BotClient.js")).default;
+                    const rejectionMsg = `❌ Your KYC verification has been rejected.\n\nReason: ${reason || 'Details provided were insufficient.'}\n\nPlease update your profile to try again.`;
+                    await BotClient.sendText(user.phoneNumber, rejectionMsg);
+                } catch (err) {
+                    console.error("Failed to send KYC rejection notification:", err);
+                }
+                break;
+            case "unverify_kyc":
+                user.kycStatus = "pending";
+                user.registrationComplete = false;
+                user.kycData = {};
+                user.kycDocuments = [];
+                // Notify user via WhatsApp
+                try {
+                    const BotClient = (await import("../whatsapp-bot/BotClient.js")).default;
+                    const unverifyMsg = "⚠️ Your KYC verification status has been reset and you are now unverified. \n\nTo continue using HIMA services, please complete the registration process again to provide up-to-date information that meets our latest standards. Type any message to start.";
+                    await BotClient.sendText(user.phoneNumber, unverifyMsg);
+                    user.botConversationState = "REGISTER_START";
+                } catch (err) {
+                    console.error("Failed to send KYC unverification notification:", err);
+                }
                 break;
             case "block_user":
                 user.status = "blocked"; // Assuming 'status' field exists or we use another flag

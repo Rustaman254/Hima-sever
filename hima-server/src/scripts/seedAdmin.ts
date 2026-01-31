@@ -16,8 +16,9 @@ async function seedAdmin() {
         const existingAdmin = await User.findOne({ email: adminEmail });
 
         if (existingAdmin) {
-            console.log("Admin user already exists. Updating role...");
+            console.log("Admin user already exists. Updating role and password...");
             existingAdmin.role = "admin";
+            existingAdmin.password = adminPassword;
             await existingAdmin.save();
         } else {
             const admin = new User({
@@ -26,6 +27,7 @@ async function seedAdmin() {
                 firstName: "System",
                 lastName: "Admin",
                 role: "admin",
+                password: adminPassword,
                 kycStatus: "verified",
                 registrationComplete: true
             });

@@ -37,11 +37,11 @@ export class BotConversationManager {
             fileLogger.log(`📨 [BOT-CONV] Processing message from ${phoneNumber}`);
 
             // Get or create user
-            let user = await User.findOne({ phoneNumber });
+            let user: any = await User.findOne({ phoneNumber });
             if (!user) {
                 // Fallback: Check if user exists with just digits (from previous version's truncated ID)
                 const cleanPhone = phoneNumber.split(/[@:]/)[0];
-                if (cleanPhone !== phoneNumber) {
+                if (cleanPhone && cleanPhone !== phoneNumber) {
                     user = await User.findOne({ phoneNumber: cleanPhone });
                     if (user) {
                         fileLogger.log(`👤 [BOT-CONV] Migrating user ${cleanPhone} to full ChatID ${phoneNumber}`);
@@ -136,6 +136,10 @@ export class BotConversationManager {
         }
 
         if (user.kycStatus === 'verified') {
+            // Check for missing critical data for existing users
+            const missingDataTriggered = await this.checkForMissingData(user, phoneNumber);
+            if (missingDataTriggered) return;
+
             // KYC approved - show conversational main menu
             const context = await this.getUserContext(user);
             const prompt = await MistralService.getHimaResponse("Greet me and ask how you can help. Remind me I can buy insurance, file a claim, or view my profile.", context, lang);
@@ -187,6 +191,9 @@ export class BotConversationManager {
             case 'REG_FULL_NAME':
                 await this.handleRegFullName(user, message, phoneNumber);
                 break;
+            case 'REG_LOGIN_PHONE':
+                await this.handleRegLoginPhone(user, message, phoneNumber);
+                break;
             case 'REG_ID_NUMBER':
                 await this.handleRegIdNumber(user, message, phoneNumber);
                 break;
@@ -210,6 +217,9 @@ export class BotConversationManager {
                 break;
             case 'MAIN_MENU':
                 await this.handleMainMenu(user, message, phoneNumber);
+                break;
+            case 'COLLECT_MISSING_DATA':
+                await this.handleCollectMissingData(user, message, phoneNumber);
                 break;
 
             // Buying Flows
@@ -361,6 +371,29 @@ export class BotConversationManager {
 
         if (!user.kycData) user.kycData = {};
         user.kycData.fullName = message.body.trim();
+        user.botConversationState = 'REG_LOGIN_PHONE';
+        await user.save();
+
+        const prompt = await MistralService.getConversationalPrompt('REGISTER', 'LOGIN_PHONE', lang, message.body);
+        await BotClient.sendText(phoneNumber, prompt);
+    }
+
+    private async handleRegLoginPhone(user: IUser, message: Message, phoneNumber: string): Promise<void> {
+        const lang = getUserLanguage(user);
+
+        if (message.type !== 'chat') {
+            await BotClient.sendText(phoneNumber, t(lang, 'error_invalid_input'));
+            return;
+        }
+
+        // Basic validation: at least 9-10 digits
+        const phone = message.body.trim().replace(/[\s\+]/g, '');
+        if (!/^\d{9,15}$/.test(phone)) {
+            await BotClient.sendText(phoneNumber, lang === 'sw' ? "Tafadhali weka namba sahihi ya simu." : "Please enter a valid phone number.");
+            return;
+        }
+
+        user.loginPhoneNumber = phone;
         user.botConversationState = 'REG_ID_NUMBER';
         await user.save();
 
@@ -516,6 +549,14 @@ export class BotConversationManager {
             const WalletService = (await import('../services/WalletService.js')).default;
             const { address, created } = await WalletService.ensureUserHasWallet(user);
 
+            // Populate kycDocuments for admin dashboard
+            user.kycDocuments = [
+                { type: 'ID_PHOTO', url: user.kycData.idPhotoBase64, uploadedAt: new Date() },
+                { type: 'LOGBOOK_PHOTO', url: user.kycData.logbookPhotoBase64, uploadedAt: new Date() },
+                { type: 'BIKE_PHOTO', url: user.kycData.bikePhotoBase64, uploadedAt: new Date() },
+                { type: 'SELFIE_PHOTO', url: user.kycData.selfiePhotoBase64, uploadedAt: new Date() }
+            ] as any;
+
             await user.save();
 
             // Send confirmation with wallet info
@@ -543,6 +584,49 @@ export class BotConversationManager {
         const context = await this.getUserContext(user);
         const prompt = await MistralService.getHimaResponse("Greet me and list my options: Buy Insurance, View Profile, File Claim, or Change Language.", context, lang);
         await BotClient.sendText(phoneNumber, prompt);
+    }
+
+    // ============================================
+    // DATA ENRICHMENT (FOR EXISTING USERS)
+    // ============================================
+
+    private async checkForMissingData(user: IUser, phoneNumber: string): Promise<boolean> {
+        if (!user.loginPhoneNumber) {
+            const lang = getUserLanguage(user);
+            user.botConversationState = 'COLLECT_MISSING_DATA';
+            await user.save();
+
+            const prompt = await MistralService.getConversationalPrompt('REGISTER', 'MISSING_DATA_REQUEST', lang, "Needs loginPhoneNumber");
+            await BotClient.sendText(phoneNumber, prompt);
+            return true;
+        }
+        return false;
+    }
+
+    private async handleCollectMissingData(user: IUser, message: Message, phoneNumber: string): Promise<void> {
+        const lang = getUserLanguage(user);
+
+        if (message.type !== 'chat') {
+            const prompt = await MistralService.getConversationalPrompt('REGISTER', 'MISSING_DATA_REQUEST', lang, "Invalid input");
+            await BotClient.sendText(phoneNumber, prompt);
+            return;
+        }
+
+        const phone = message.body.trim().replace(/[\s\+]/g, '');
+        if (!/^\d{9,15}$/.test(phone)) {
+            await BotClient.sendText(phoneNumber, lang === 'sw' ? "Tafadhali weka namba sahihi ya simu." : "Please enter a valid phone number.");
+            return;
+        }
+
+        user.loginPhoneNumber = phone;
+        user.botConversationState = 'MAIN_MENU';
+        await user.save();
+
+        const successMsg = lang === 'sw'
+            ? "Asante! Taarifa zako zimepokelewa. Sasa unaweza kuendelea."
+            : "Thank you! Your information has been updated. Now you can continue.";
+        await BotClient.sendText(phoneNumber, successMsg);
+        await this.sendMainMenu(user, phoneNumber);
     }
 
     private async handleMainMenu(user: IUser, message: Message, phoneNumber: string): Promise<void> {
@@ -650,7 +734,7 @@ export class BotConversationManager {
                     { userId: user.phoneNumber }, // Full chatId fallback
                     { userId: cleanPhone } // Clean digits fallback
                 ]
-            });
+            } as any);
 
             const claims = await Claim.find({
                 $or: [
@@ -658,7 +742,7 @@ export class BotConversationManager {
                     { userId: user.phoneNumber },
                     { userId: cleanPhone }
                 ]
-            });
+            } as any);
 
             const contextObj = {
                 name: user.kycData?.fullName || user.firstName || 'Not recorded',
@@ -999,8 +1083,12 @@ export class BotConversationManager {
         // Combine date and time
         const incidentDateStr = `${kycData.claimDate} ${kycData.claimTime || '12:00'}`;
 
+        // Find active policy for this user to link the claim
+        const userPolicy = await Policy.findOne({ userId: user._id, policyStatus: 'active' });
+
         const newClaim = new Claim({
             userId: user._id,
+            policyId: userPolicy ? userPolicy._id.toString() : 'manual_submission', // Added required policyId
             claimNumber,
             incidentTime: new Date(incidentDateStr),
             incidentLocation: kycData.claimLocation,

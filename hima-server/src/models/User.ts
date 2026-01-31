@@ -1,11 +1,13 @@
 import mongoose, { Schema, Document } from "mongoose";
 
 export interface IUser extends Document {
-    phoneNumber: string;
+    phoneNumber: string; // WhatsApp ChatID
+    loginPhoneNumber?: string; // Standard mobile number for browser login
     firstName: string;
     lastName?: string;
     email?: string;
     role: "user" | "admin" | "lp";
+    password?: string; // For admin login
     status: "active" | "blocked";
 
     // KYC Information (encrypted)
@@ -82,6 +84,11 @@ const UserSchema = new Schema<IUser>(
             unique: true,
             trim: true,
         },
+        loginPhoneNumber: {
+            type: String,
+            trim: true,
+            sparse: true, // Allow multiple users to not have it yet
+        },
         firstName: {
             type: String,
             trim: true,
@@ -99,6 +106,9 @@ const UserSchema = new Schema<IUser>(
             type: String,
             enum: ["user", "admin", "lp"],
             default: "user",
+        },
+        password: {
+            type: String, // Plain text for now to match existing config-based logic
         },
         status: {
             type: String,
