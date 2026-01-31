@@ -2162,3 +2162,12 @@ Webhook Error: AxiosError: Request failed with status code 401
 [2026-01-31T13:08:38.469Z] [INFO] 📨 [BOT-CONV] Processing message from 97826621157619@lid
 [2026-01-31T13:08:38.545Z] [INFO] 🔀 [BOT-CONV] Routing to state: BUY_SELECT_COVER
 [2026-01-31T13:08:39.735Z] [INFO] 📤 [BOT] Sent text to 97826621157619@lid
+[2026-01-31T15:27:08.679Z] [INFO] 🚀 Server started on port 8100
+[2026-01-31T15:27:15.006Z] [INFO] 🚀 [BOT] Starting WhatsApp bot...
+[2026-01-31T15:27:15.007Z] [INFO] 🤖 [BOT] Initializing WhatsApp bot...
+[2026-01-31T15:27:15.009Z] [INFO] 🔍 [BOT] Checking cache dir: /home/masterchiefff/Documents/Hima/hima-server/.puppeteer
+[2026-01-31T15:27:15.009Z] [INFO] 📁 [BOT] Found platforms in /home/masterchiefff/Documents/Hima/hima-server/.puppeteer/chrome: linux-144.0.7559.96
+[2026-01-31T15:27:15.010Z] [INFO] ✅ [BOT] Found Chrome at: /home/masterchiefff/Documents/Hima/hima-server/.puppeteer/chrome/linux-144.0.7559.96/chrome-linux64/chrome
+[2026-01-31T15:27:15.010Z] [INFO] 🚀 [BOT] Using custom executable path: /home/masterchiefff/Documents/Hima/hima-server/.puppeteer/chrome/linux-144.0.7559.96/chrome-linux64/chrome
+[2026-01-31T15:28:09.008Z] [INFO] ✅ [BOT] WhatsApp bot initialized successfully
+[2026-01-31T15:28:09.016Z] [INFO] ✅ [BOT] WhatsApp bot started successfully

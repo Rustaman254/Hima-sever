@@ -1,0 +1,32 @@
+services:
+  # Backend Server (Docker)
+  - type: web
+    name: hima-server
+    env: docker
+    rootDir: hima-server
+    dockerFilePath: Dockerfile
+    plan: starter
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 10000
+      - key: PUPPETEER_SKIP_CHROMIUM_DOWNLOAD
+        value: true
+
+  # Frontend Dashboard (Node)
+  - type: web
+    name: hima-dashboard
+    env: node
+    rootDir: hima-dashboard
+    plan: starter
+    buildCommand: pnpm install && pnpm run build
+    startCommand: pnpm run start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: NEXT_PUBLIC_API_URL
+        fromService:
+          name: hima-server
+          type: web
+          property: host

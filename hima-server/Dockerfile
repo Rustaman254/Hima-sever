@@ -1,24 +1,19 @@
-FROM node:20
+# Use the official Puppeteer image which includes Chromium
+FROM ghcr.io/puppeteer/puppeteer:24.0.0
 
-# Install dependencies for Puppeteer/Chrome
-RUN apt-get update \
-  && apt-get install -y wget gnupg \
-  && wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | gpg --dearmor -o /usr/share/keyrings/googlechrome-linux-keyring.gpg \
-  && sh -c 'echo "deb [arch=amd64 signed-by=/usr/share/keyrings/googlechrome-linux-keyring.gpg] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list' \
-  && apt-get update \
-  && apt-get install -y google-chrome-stable fonts-ipafont-gothic fonts-wqy-zenhei fonts-thai-tlwg fonts-kacst fonts-freefont-ttf libxss1 libgbm1 \
-  --no-install-recommends \
-  && rm -rf /var/lib/apt/lists/*
-
-# Enable corepack for pnpm
-RUN corepack enable
-
+# Set working directory
 WORKDIR /usr/src/app
 
-# Copy package files first for caching
+# Switch to root to install dependencies if needed (Puppeteer image runs as 'pptruser' by default)
+USER root
+
+# Enable corepack for pnpm
+RUN npm install -g corepack && corepack enable
+
+# Copy package files
 COPY package.json pnpm-lock.yaml ./
 
-# Install dependencies (frozen lockfile for stability)
+# Install dependencies
 RUN pnpm install --frozen-lockfile
 
 # Copy source code
@@ -27,14 +22,18 @@ COPY . .
 # Build the application
 RUN pnpm run build
 
-# Expose the port the app runs on
-EXPOSE 8100
+# Fix permissions for the pptruser
+RUN chown -R pptruser:pptruser /usr/src/app
 
-# Define environment variables
+# Switch back to non-root user for security
+USER pptruser
+
+# Expose the port
+EXPOSE 10000
+
+# Environment variables
 ENV NODE_ENV=production
-# Skip chromium download for puppeteer as we installed google-chrome-stable
 ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
-ENV PUPPETEER_EXECUTABLE_PATH=/usr/bin/google-chrome-stable
+# The image sets PUPPETEER_EXECUTABLE_PATH automatically, or acts as good default
 
-# Start the application
 CMD ["node", "dist/app.js"]

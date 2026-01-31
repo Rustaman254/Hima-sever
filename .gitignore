@@ -1,5 +1,8 @@
 # Dependencies
 node_modules/
+# Puppeteer browser binaries
+.puppeteer/
+**/.puppeteer/
 .pnpm-store/
 
 # Build
