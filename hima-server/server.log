@@ -1333,3 +1333,612 @@ Webhook Error: AxiosError: Request failed with status code 401
 [2026-01-29T08:19:44.413Z] [INFO] ⚠️ [BOT] No custom Chrome path found, using default
 [2026-01-29T08:20:04.162Z] [INFO] ✅ [BOT] WhatsApp bot initialized successfully
 [2026-01-29T08:20:04.163Z] [INFO] ✅ [BOT] WhatsApp bot started successfully
+[2026-01-30T11:14:02.903Z] [INFO] 🚀 Server started on port 8100
+[2026-01-30T11:14:05.191Z] [INFO] 🚀 [BOT] Starting WhatsApp bot...
+[2026-01-30T11:14:05.191Z] [INFO] 🤖 [BOT] Initializing WhatsApp bot...
+[2026-01-30T11:14:05.192Z] [INFO] ⚠️ [BOT] No Chrome installation found in any cache directory
+[2026-01-30T11:14:05.192Z] [INFO] ⚠️ [BOT] No custom Chrome path found, using default
+[2026-01-30T11:14:24.399Z] [INFO] ✅ [BOT] WhatsApp bot initialized successfully
+[2026-01-30T11:14:24.400Z] [INFO] ✅ [BOT] WhatsApp bot started successfully
+[2026-01-30T11:20:22.149Z] [INFO] 🚀 Server started on port 8100
+[2026-01-30T11:20:23.386Z] [INFO] 🚀 [BOT] Starting WhatsApp bot...
+[2026-01-30T11:20:23.386Z] [INFO] 🤖 [BOT] Initializing WhatsApp bot...
+[2026-01-30T11:20:23.386Z] [INFO] ⚠️ [BOT] No Chrome installation found in any cache directory
+[2026-01-30T11:20:23.387Z] [INFO] ⚠️ [BOT] No custom Chrome path found, using default
+[2026-01-30T11:20:40.051Z] [INFO] ✅ [BOT] WhatsApp bot initialized successfully
+[2026-01-30T11:20:40.052Z] [INFO] ✅ [BOT] WhatsApp bot started successfully
+[2026-01-30T11:20:48.652Z] [INFO] 📨 [BOT-CONV] Processing message from 97826621157619@lid
+[2026-01-30T11:20:48.741Z] [INFO] 👋 [BOT-CONV] Greeting detected from 97826621157619@lid
+[2026-01-30T11:20:48.812Z] [INFO] 📤 [BOT] Sent text to 97826621157619@lid
+[2026-01-30T11:20:48.937Z] [INFO] 📤 [BOT] Sent text to 97826621157619@lid
+[2026-01-30T11:20:48.937Z] [INFO] 📤 [BOT] Sent options menu to 97826621157619@lid
+[2026-01-30T11:22:07.479Z] [INFO] 📨 [BOT-CONV] Processing message from 97826621157619@lid
+[2026-01-30T11:22:07.551Z] [INFO] 🔀 [BOT-CONV] Routing to state: MAIN_MENU
+[2026-01-30T11:22:07.551Z] [INFO] 🤖 [BOT-CONV] Using AI fallback for: Naweza nunua bima
+[2026-01-30T11:22:08.228Z] [INFO] 🔍 [BOT-CONV] AI Detected Intent: BUY_INSURANCE
+[2026-01-30T11:22:08.330Z] [INFO] 📤 [BOT] Sent text to 97826621157619@lid
+[2026-01-30T11:22:08.331Z] [INFO] 📤 [BOT] Sent options menu to 97826621157619@lid
+[2026-01-30T11:22:38.202Z] [INFO] 📨 [BOT-CONV] Processing message from 97826621157619@lid
+[2026-01-30T11:22:38.288Z] [INFO] 🔀 [BOT-CONV] Routing to state: BUY_SELECT_COVER
+[2026-01-30T11:22:38.313Z] [INFO] 📤 [BOT] Sent text to 97826621157619@lid
+[2026-01-30T11:22:38.314Z] [INFO] 📤 [BOT] Sent options menu to 97826621157619@lid
+[2026-01-30T11:23:06.567Z] [INFO] 📨 [BOT-CONV] Processing message from 97826621157619@lid
+[2026-01-30T11:23:06.638Z] [INFO] 🔀 [BOT-CONV] Routing to state: BUY_SELECT_COVER
+[2026-01-30T11:23:06.646Z] [INFO] 📤 [BOT] Sent text to 97826621157619@lid
+[2026-01-30T11:23:06.646Z] [INFO] 📤 [BOT] Sent options menu to 97826621157619@lid
+[2026-01-30T11:26:24.494Z] [INFO] 🚀 Server started on port 8100
+[2026-01-30T11:26:25.296Z] [INFO] 🚀 [BOT] Starting WhatsApp bot...
+[2026-01-30T11:26:25.296Z] [INFO] 🤖 [BOT] Initializing WhatsApp bot...
+[2026-01-30T11:26:25.297Z] [INFO] ⚠️ [BOT] No Chrome installation found in any cache directory
+[2026-01-30T11:26:25.297Z] [INFO] ⚠️ [BOT] No custom Chrome path found, using default
+[2026-01-30T11:26:46.310Z] [INFO] ✅ [BOT] WhatsApp bot initialized successfully
+[2026-01-30T11:26:46.311Z] [INFO] ✅ [BOT] WhatsApp bot started successfully
+[2026-01-30T11:26:56.540Z] [INFO] 🚀 Server started on port 8100
+[2026-01-30T11:26:57.830Z] [INFO] 🚀 [BOT] Starting WhatsApp bot...
+[2026-01-30T11:26:57.830Z] [INFO] 🤖 [BOT] Initializing WhatsApp bot...
+[2026-01-30T11:26:57.830Z] [INFO] ⚠️ [BOT] No Chrome installation found in any cache directory
+[2026-01-30T11:26:57.831Z] [INFO] ⚠️ [BOT] No custom Chrome path found, using default
+[2026-01-30T11:27:18.459Z] [INFO] ✅ [BOT] WhatsApp bot initialized successfully
+[2026-01-30T11:27:18.460Z] [INFO] ✅ [BOT] WhatsApp bot started successfully
+[2026-01-30T11:28:06.551Z] [INFO] 🚀 Server started on port 8100
+[2026-01-30T11:28:07.820Z] [INFO] 🚀 [BOT] Starting WhatsApp bot...
+[2026-01-30T11:28:07.821Z] [INFO] 🤖 [BOT] Initializing WhatsApp bot...
+[2026-01-30T11:28:07.821Z] [INFO] ⚠️ [BOT] No Chrome installation found in any cache directory
+[2026-01-30T11:28:07.821Z] [INFO] ⚠️ [BOT] No custom Chrome path found, using default
+[2026-01-30T11:28:24.188Z] [INFO] ✅ [BOT] WhatsApp bot initialized successfully
+[2026-01-30T11:28:24.188Z] [INFO] ✅ [BOT] WhatsApp bot started successfully
+[2026-01-30T11:30:39.113Z] [INFO] 📨 [BOT-CONV] Processing message from 97826621157619@lid
+[2026-01-30T11:30:39.197Z] [INFO] 🔀 [BOT-CONV] Routing to state: BUY_SELECT_COVER
+[2026-01-30T11:30:39.266Z] [INFO] 📤 [BOT] Sent text to 97826621157619@lid
+[2026-01-30T11:30:39.267Z] [INFO] 📤 [BOT] Sent options menu to 97826621157619@lid
+[2026-01-30T11:34:46.968Z] [INFO] 📨 [BOT-CONV] Processing message from 97826621157619@lid
+[2026-01-30T11:34:47.045Z] [INFO] 🔀 [BOT-CONV] Routing to state: BUY_SELECT_COVER
+[2026-01-30T11:34:47.053Z] [INFO] 📤 [BOT] Sent text to 97826621157619@lid
+[2026-01-30T11:34:47.053Z] [INFO] 📤 [BOT] Sent options menu to 97826621157619@lid
+[2026-01-30T11:41:26.343Z] [INFO] 🚀 Server started on port 8100
+[2026-01-30T11:42:00.195Z] [INFO] 🚀 Server started on port 8100
+[2026-01-30T11:42:01.505Z] [INFO] 🚀 [BOT] Starting WhatsApp bot...
+[2026-01-30T11:42:01.505Z] [INFO] 🤖 [BOT] Initializing WhatsApp bot...
+[2026-01-30T11:42:01.506Z] [INFO] ⚠️ [BOT] No Chrome installation found in any cache directory
+[2026-01-30T11:42:01.506Z] [INFO] ⚠️ [BOT] No custom Chrome path found, using default
+[2026-01-30T11:42:21.223Z] [INFO] ✅ [BOT] WhatsApp bot initialized successfully
+[2026-01-30T11:42:21.228Z] [INFO] ✅ [BOT] WhatsApp bot started successfully
+[2026-01-30T11:43:42.898Z] [INFO] 🚀 Server started on port 8100
+[2026-01-30T11:43:44.909Z] [INFO] 🚀 [BOT] Starting WhatsApp bot...
+[2026-01-30T11:43:44.909Z] [INFO] 🤖 [BOT] Initializing WhatsApp bot...
+[2026-01-30T11:43:44.910Z] [INFO] ⚠️ [BOT] No Chrome installation found in any cache directory
+[2026-01-30T11:43:44.910Z] [INFO] ⚠️ [BOT] No custom Chrome path found, using default
+[2026-01-30T11:44:05.217Z] [INFO] ✅ [BOT] WhatsApp bot initialized successfully
+[2026-01-30T11:44:05.217Z] [INFO] ✅ [BOT] WhatsApp bot started successfully
+[2026-01-30T11:44:41.605Z] [INFO] 🚀 Server started on port 8100
+[2026-01-30T11:45:14.984Z] [INFO] 🚀 Server started on port 8100
+[2026-01-30T11:45:16.201Z] [INFO] 🚀 [BOT] Starting WhatsApp bot...
+[2026-01-30T11:45:16.202Z] [INFO] 🤖 [BOT] Initializing WhatsApp bot...
+[2026-01-30T11:45:16.202Z] [INFO] ⚠️ [BOT] No Chrome installation found in any cache directory
+[2026-01-30T11:45:16.202Z] [INFO] ⚠️ [BOT] No custom Chrome path found, using default
+[2026-01-30T11:45:32.794Z] [INFO] ✅ [BOT] WhatsApp bot initialized successfully
+[2026-01-30T11:45:32.794Z] [INFO] ✅ [BOT] WhatsApp bot started successfully
+[2026-01-30T11:46:21.460Z] [INFO] 📨 [BOT-CONV] Processing message from 97826621157619@lid
+[2026-01-30T11:46:21.554Z] [INFO] 👋 [BOT-CONV] Greeting detected from 97826621157619@lid
+[2026-01-30T11:46:21.656Z] [INFO] 📤 [BOT] Sent text to 97826621157619@lid
+[2026-01-30T11:46:21.744Z] [INFO] 📤 [BOT] Sent text to 97826621157619@lid
+[2026-01-30T11:46:21.744Z] [INFO] 📤 [BOT] Sent options menu to 97826621157619@lid
+[2026-01-30T12:01:06.321Z] [INFO] 📨 [BOT-CONV] Processing message from 97826621157619@lid
+[2026-01-30T12:01:06.410Z] [INFO] 🔀 [BOT-CONV] Routing to state: MAIN_MENU
+[2026-01-30T12:01:06.736Z] [INFO] ✅ [WALLET] WalletService initialized
+[2026-01-30T12:01:06.747Z] [INFO] 📤 [BOT] Sent text to 97826621157619@lid
+[2026-01-30T12:01:06.747Z] [INFO] 📤 [BOT] Sent options menu to 97826621157619@lid
+[2026-01-30T12:02:01.366Z] [INFO] 📨 [BOT-CONV] Processing message from 97826621157619@lid
+[2026-01-30T12:02:01.438Z] [INFO] 🔀 [BOT-CONV] Routing to state: MAIN_MENU
+[2026-01-30T12:02:01.539Z] [INFO] 📤 [BOT] Sent text to 97826621157619@lid
+[2026-01-30T12:02:01.539Z] [INFO] 📤 [BOT] Sent options menu to 97826621157619@lid
+[2026-01-30T12:24:06.042Z] [INFO] 🚀 Server started on port 8100
+[2026-01-30T12:24:14.277Z] [INFO] 🚀 [BOT] Starting WhatsApp bot...
+[2026-01-30T12:24:14.278Z] [INFO] 🤖 [BOT] Initializing WhatsApp bot...
+[2026-01-30T12:24:14.278Z] [INFO] ⚠️ [BOT] No Chrome installation found in any cache directory
+[2026-01-30T12:24:14.279Z] [INFO] ⚠️ [BOT] No custom Chrome path found, using default
+[2026-01-30T12:24:38.957Z] [INFO] ✅ [BOT] WhatsApp bot initialized successfully
+[2026-01-30T12:24:38.958Z] [INFO] ✅ [BOT] WhatsApp bot started successfully
+[2026-01-30T12:27:04.283Z] [INFO] 📨 [BOT-CONV] Processing message from 97826621157619@lid
+[2026-01-30T12:27:04.378Z] [INFO] 🔀 [BOT-CONV] Routing to state: BUY_SELECT_COVER
+[2026-01-30T12:27:05.406Z] [INFO] 📤 [BOT] Sent text to 97826621157619@lid
+[2026-01-30T12:27:05.507Z] [INFO] 📤 [BOT] Sent text to 97826621157619@lid
+[2026-01-30T12:27:05.507Z] [INFO] 📤 [BOT] Sent options menu to 97826621157619@lid
+[2026-01-30T12:45:31.520Z] [INFO] 🚀 Server started on port 8100
+[2026-01-30T12:45:35.849Z] [INFO] 🚀 [BOT] Starting WhatsApp bot...
+[2026-01-30T12:45:35.850Z] [INFO] 🤖 [BOT] Initializing WhatsApp bot...
+[2026-01-30T12:45:35.851Z] [INFO] ⚠️ [BOT] No Chrome installation found in any cache directory
+[2026-01-30T12:45:35.851Z] [INFO] ⚠️ [BOT] No custom Chrome path found, using default
+[2026-01-30T12:46:11.753Z] [INFO] ✅ [BOT] WhatsApp bot initialized successfully
+[2026-01-30T12:46:11.759Z] [INFO] ✅ [BOT] WhatsApp bot started successfully
+[2026-01-30T12:49:13.273Z] [INFO] 📨 [BOT-CONV] Processing message from 97826621157619@lid
+[2026-01-30T12:49:13.399Z] [INFO] 👋 [BOT-CONV] Greeting detected from 97826621157619@lid
+[2026-01-30T12:49:13.499Z] [INFO] 📤 [BOT] Sent text to 97826621157619@lid
+[2026-01-30T12:49:13.765Z] [INFO] 📤 [BOT] Sent text to 97826621157619@lid
+[2026-01-30T12:49:13.765Z] [INFO] 📤 [BOT] Sent options menu to 97826621157619@lid
+[2026-01-30T12:49:35.505Z] [INFO] 📨 [BOT-CONV] Processing message from 97826621157619@lid
+[2026-01-30T12:49:35.585Z] [INFO] 🔀 [BOT-CONV] Routing to state: MAIN_MENU
+[2026-01-30T12:49:36.598Z] [INFO] 📤 [BOT] Sent text to 97826621157619@lid
+[2026-01-30T12:49:36.790Z] [INFO] 📤 [BOT] Sent text to 97826621157619@lid
+[2026-01-30T12:49:36.790Z] [INFO] 📤 [BOT] Sent options menu to 97826621157619@lid
+[2026-01-30T12:49:58.892Z] [INFO] 📨 [BOT-CONV] Processing message from 97826621157619@lid
+[2026-01-30T12:49:58.966Z] [INFO] 🔀 [BOT-CONV] Routing to state: BUY_SELECT_COVER
+[2026-01-30T12:49:59.826Z] [INFO] 📤 [BOT] Sent text to 97826621157619@lid
+[2026-01-30T12:49:59.977Z] [INFO] 📤 [BOT] Sent text to 97826621157619@lid
+[2026-01-30T12:49:59.978Z] [INFO] 📤 [BOT] Sent options menu to 97826621157619@lid
+[2026-01-30T12:50:37.257Z] [INFO] 📨 [BOT-CONV] Processing message from 97826621157619@lid
+[2026-01-30T12:50:37.330Z] [INFO] 🔀 [BOT-CONV] Routing to state: BUY_SELECT_COVER
+[2026-01-30T12:50:38.116Z] [INFO] 📤 [BOT] Sent text to 97826621157619@lid
+[2026-01-30T12:50:38.245Z] [INFO] 📤 [BOT] Sent text to 97826621157619@lid
+[2026-01-30T12:50:38.245Z] [INFO] 📤 [BOT] Sent options menu to 97826621157619@lid
+[2026-01-30T12:51:07.994Z] [INFO] 📨 [BOT-CONV] Processing message from 97826621157619@lid
+[2026-01-30T12:51:08.069Z] [INFO] 🔀 [BOT-CONV] Routing to state: BUY_SELECT_COVER
+[2026-01-30T12:51:08.936Z] [INFO] 📤 [BOT] Sent text to 97826621157619@lid
+[2026-01-30T12:51:09.078Z] [INFO] 📤 [BOT] Sent text to 97826621157619@lid
+[2026-01-30T12:51:09.079Z] [INFO] 📤 [BOT] Sent options menu to 97826621157619@lid
+[2026-01-30T12:53:28.558Z] [INFO] 🚀 Server started on port 8100
+[2026-01-30T12:53:32.323Z] [INFO] 🚀 [BOT] Starting WhatsApp bot...
+[2026-01-30T12:53:32.324Z] [INFO] 🤖 [BOT] Initializing WhatsApp bot...
+[2026-01-30T12:53:32.325Z] [INFO] ⚠️ [BOT] No Chrome installation found in any cache directory
+[2026-01-30T12:53:32.325Z] [INFO] ⚠️ [BOT] No custom Chrome path found, using default
+[2026-01-30T12:54:07.503Z] [INFO] ✅ [BOT] WhatsApp bot initialized successfully
+[2026-01-30T12:54:07.504Z] [INFO] ✅ [BOT] WhatsApp bot started successfully
+[2026-01-30T12:54:17.731Z] [INFO] 📨 [BOT-CONV] Processing message from 97826621157619@lid
+[2026-01-30T12:54:17.841Z] [INFO] 👋 [BOT-CONV] Greeting detected from 97826621157619@lid
+[2026-01-30T12:54:17.921Z] [INFO] 📤 [BOT] Sent text to 97826621157619@lid
+[2026-01-30T12:54:18.107Z] [INFO] 📤 [BOT] Sent text to 97826621157619@lid
+[2026-01-30T12:54:18.108Z] [INFO] 📤 [BOT] Sent options menu to 97826621157619@lid
+[2026-01-30T12:54:39.407Z] [INFO] 📨 [BOT-CONV] Processing message from 97826621157619@lid
+[2026-01-30T12:54:39.481Z] [INFO] 🔀 [BOT-CONV] Routing to state: MAIN_MENU
+[2026-01-30T12:54:39.482Z] [INFO] 🤖 [BOT-CONV] Using AI fallback for: I want to see my profile
+[2026-01-30T12:54:40.429Z] [INFO] 🔍 [BOT-CONV] AI Detected Intent: VIEW_PROFILE
+[2026-01-30T12:54:40.731Z] [INFO] ✅ [WALLET] WalletService initialized
+[2026-01-30T12:54:40.783Z] [INFO] 📤 [BOT] Sent text to 97826621157619@lid
+[2026-01-30T12:54:40.783Z] [INFO] 📤 [BOT] Sent options menu to 97826621157619@lid
+[2026-01-30T12:54:58.546Z] [INFO] 📨 [BOT-CONV] Processing message from 97826621157619@lid
+[2026-01-30T12:54:58.620Z] [INFO] 🔀 [BOT-CONV] Routing to state: MAIN_MENU
+[2026-01-30T12:54:58.620Z] [INFO] 🤖 [BOT-CONV] Using AI fallback for: Show me the insurance covers
+[2026-01-30T12:54:59.141Z] [INFO] 🔍 [BOT-CONV] AI Detected Intent: BUY_INSURANCE
+[2026-01-30T12:54:59.959Z] [INFO] 📤 [BOT] Sent text to 97826621157619@lid
+[2026-01-30T12:55:00.136Z] [INFO] 📤 [BOT] Sent text to 97826621157619@lid
+[2026-01-30T12:55:00.136Z] [INFO] 📤 [BOT] Sent options menu to 97826621157619@lid
+[2026-01-30T12:55:18.164Z] [INFO] 📨 [BOT-CONV] Processing message from 97826621157619@lid
+[2026-01-30T12:55:18.238Z] [INFO] 🔀 [BOT-CONV] Routing to state: BUY_SELECT_COVER
+[2026-01-30T12:55:18.974Z] [INFO] 📤 [BOT] Sent text to 97826621157619@lid
+[2026-01-30T12:55:32.373Z] [INFO] 📨 [BOT-CONV] Processing message from 97826621157619@lid
+[2026-01-30T12:55:32.446Z] [INFO] 🔀 [BOT-CONV] Routing to state: BUY_SELECT_COVER
+[2026-01-30T12:55:33.516Z] [INFO] 📤 [BOT] Sent text to 97826621157619@lid
+[2026-01-30T12:55:42.404Z] [INFO] 📨 [BOT-CONV] Processing message from 97826621157619@lid
+[2026-01-30T12:55:42.479Z] [INFO] 👋 [BOT-CONV] Greeting detected from 97826621157619@lid
+[2026-01-30T12:55:42.514Z] [INFO] 📤 [BOT] Sent text to 97826621157619@lid
+[2026-01-30T12:55:42.634Z] [INFO] 📤 [BOT] Sent text to 97826621157619@lid
+[2026-01-30T12:55:42.634Z] [INFO] 📤 [BOT] Sent options menu to 97826621157619@lid
+[2026-01-30T12:56:17.642Z] [INFO] 📨 [BOT-CONV] Processing message from 97826621157619@lid
+[2026-01-30T12:56:17.716Z] [INFO] 🔀 [BOT-CONV] Routing to state: MAIN_MENU
+[2026-01-30T12:56:17.716Z] [INFO] 🤖 [BOT-CONV] Using AI fallback for: How do i chat with  hime
+[2026-01-30T12:56:18.256Z] [INFO] 🔍 [BOT-CONV] AI Detected Intent: UNKNOWN
+[2026-01-30T12:56:18.794Z] [INFO] 📤 [BOT] Sent text to 97826621157619@lid
+[2026-01-30T12:56:27.633Z] [INFO] 📨 [BOT-CONV] Processing message from 97826621157619@lid
+[2026-01-30T12:56:27.708Z] [INFO] 🔀 [BOT-CONV] Routing to state: MAIN_MENU
+[2026-01-30T12:56:27.708Z] [INFO] 🤖 [BOT-CONV] Using AI fallback for: Hima
+[2026-01-30T12:56:28.289Z] [INFO] 🔍 [BOT-CONV] AI Detected Intent: FILE_CLAIM
+[2026-01-30T12:56:28.879Z] [INFO] 📤 [BOT] Sent text to 97826621157619@lid
+[2026-01-30T12:57:44.720Z] [INFO] 📨 [BOT-CONV] Processing message from 105330029633625@lid
+[2026-01-30T12:57:44.901Z] [INFO] 👤 [BOT-CONV] New user created: 105330029633625@lid
+[2026-01-30T12:57:44.927Z] [INFO] 📤 [BOT] Sent text to 105330029633625@lid
+[2026-01-30T12:57:45.028Z] [INFO] 📤 [BOT] Sent text to 105330029633625@lid
+[2026-01-30T12:57:45.028Z] [INFO] 📤 [BOT] Sent options menu to 105330029633625@lid
+[2026-01-30T12:57:57.969Z] [INFO] 📨 [BOT-CONV] Processing message from 105330029633625@lid
+[2026-01-30T12:57:58.044Z] [INFO] 🔀 [BOT-CONV] Routing to state: LANG_SELECT
+[2026-01-30T12:57:58.224Z] [INFO] 📤 [BOT] Sent text to 105330029633625@lid
+[2026-01-30T12:57:58.225Z] [INFO] 📤 [BOT] Sent options menu to 105330029633625@lid
+[2026-01-30T12:58:15.717Z] [INFO] 📨 [BOT-CONV] Processing message from 105330029633625@lid
+[2026-01-30T12:58:15.806Z] [INFO] 🔀 [BOT-CONV] Routing to state: REGISTER_START
+[2026-01-30T12:58:16.546Z] [INFO] 📤 [BOT] Sent text to 105330029633625@lid
+[2026-01-30T12:58:33.770Z] [INFO] 📨 [BOT-CONV] Processing message from 105330029633625@lid
+[2026-01-30T12:58:33.841Z] [INFO] 🔀 [BOT-CONV] Routing to state: REG_FULL_NAME
+[2026-01-30T12:58:34.545Z] [INFO] 📤 [BOT] Sent text to 105330029633625@lid
+[2026-01-30T12:58:49.819Z] [INFO] 📨 [BOT-CONV] Processing message from 105330029633625@lid
+[2026-01-30T12:58:49.895Z] [INFO] 🔀 [BOT-CONV] Routing to state: REG_ID_NUMBER
+[2026-01-30T12:58:50.756Z] [INFO] 📤 [BOT] Sent text to 105330029633625@lid
+[2026-01-30T12:59:09.877Z] [INFO] 📨 [BOT-CONV] Processing message from 105330029633625@lid
+[2026-01-30T12:59:09.953Z] [INFO] 🔀 [BOT-CONV] Routing to state: REG_DOB
+[2026-01-30T12:59:10.982Z] [INFO] 📤 [BOT] Sent text to 105330029633625@lid
+[2026-01-30T12:59:25.756Z] [INFO] 📨 [BOT-CONV] Processing message from 105330029633625@lid
+[2026-01-30T12:59:25.829Z] [INFO] 🔀 [BOT-CONV] Routing to state: REG_PLATE_NUMBER
+[2026-01-30T12:59:26.595Z] [INFO] 📤 [BOT] Sent text to 105330029633625@lid
+[2026-01-30T12:59:50.055Z] [INFO] 📨 [BOT-CONV] Processing message from 105330029633625@lid
+[2026-01-30T12:59:50.136Z] [INFO] 🔀 [BOT-CONV] Routing to state: REG_ID_PHOTO
+[2026-01-30T12:59:50.745Z] [INFO] ✅ [BOT] Media downloaded successfully
+[2026-01-30T12:59:51.912Z] [INFO] 📤 [BOT] Sent text to 105330029633625@lid
+[2026-01-30T13:00:16.237Z] [INFO] 📨 [BOT-CONV] Processing message from 105330029633625@lid
+[2026-01-30T13:00:16.311Z] [INFO] 🔀 [BOT-CONV] Routing to state: REG_LOGBOOK_PHOTO
+[2026-01-30T13:00:16.426Z] [INFO] ✅ [BOT] Media downloaded successfully
+[2026-01-30T13:00:17.145Z] [INFO] 📤 [BOT] Sent text to 105330029633625@lid
+[2026-01-30T13:00:56.787Z] [INFO] 📨 [BOT-CONV] Processing message from 105330029633625@lid
+[2026-01-30T13:00:56.863Z] [INFO] 🔀 [BOT-CONV] Routing to state: REG_BIKE_PHOTO
+[2026-01-30T13:00:56.906Z] [INFO] ✅ [BOT] Media downloaded successfully
+[2026-01-30T13:00:57.577Z] [INFO] 📤 [BOT] Sent text to 105330029633625@lid
+[2026-01-30T13:01:10.840Z] [INFO] 📨 [BOT-CONV] Processing message from 105330029633625@lid
+[2026-01-30T13:01:10.920Z] [INFO] 🔀 [BOT-CONV] Routing to state: REG_SELFIE_PHOTO
+[2026-01-30T13:01:10.987Z] [INFO] ✅ [BOT] Media downloaded successfully
+[2026-01-30T13:01:11.202Z] [INFO] 🔐 [WALLET] Created new wallet: 0xBc16271B968779AaD79B03417ea376B924817198
+[2026-01-30T13:01:11.281Z] [INFO] ✅ [WALLET] Wallet created for user: 105330029633625@lid -> 0xBc16271B968779AaD79B03417ea376B924817198
+[2026-01-30T13:01:11.363Z] [INFO] 📤 [BOT] Sent text to 105330029633625@lid
+[2026-01-30T13:01:11.364Z] [INFO] ✅ [BOT-CONV] KYC submitted for 105330029633625@lid, wallet: 0xBc16271B968779AaD79B03417ea376B924817198
+[2026-01-30T13:02:45.027Z] [INFO] [ACTIVITY LOG] KYC_APPROVED: Admin approved KYC for 105330029633625@lid
+[2026-01-30T13:03:17.374Z] [INFO] 📨 [BOT-CONV] Processing message from 105330029633625@lid
+[2026-01-30T13:03:17.455Z] [INFO] 👋 [BOT-CONV] Greeting detected from 105330029633625@lid
+[2026-01-30T13:03:17.662Z] [INFO] 📤 [BOT] Sent text to 105330029633625@lid
+[2026-01-30T13:03:18.107Z] [INFO] 📤 [BOT] Sent text to 105330029633625@lid
+[2026-01-30T13:03:18.108Z] [INFO] 📤 [BOT] Sent options menu to 105330029633625@lid
+[2026-01-30T13:03:29.256Z] [INFO] 📨 [BOT-CONV] Processing message from 105330029633625@lid
+[2026-01-30T13:03:29.330Z] [INFO] 🔀 [BOT-CONV] Routing to state: MAIN_MENU
+[2026-01-30T13:03:29.423Z] [INFO] 📤 [BOT] Sent text to 105330029633625@lid
+[2026-01-30T13:03:29.423Z] [INFO] 📤 [BOT] Sent options menu to 105330029633625@lid
+[2026-01-30T13:03:53.576Z] [INFO] 📨 [BOT-CONV] Processing message from 105330029633625@lid
+[2026-01-30T13:03:53.648Z] [INFO] 🔀 [BOT-CONV] Routing to state: MAIN_MENU
+[2026-01-30T13:03:53.648Z] [INFO] 🤖 [BOT-CONV] Using AI fallback for: what my bick number plste
+[2026-01-30T13:03:54.239Z] [INFO] 🔍 [BOT-CONV] AI Detected Intent: UNKNOWN
+[2026-01-30T13:03:54.755Z] [INFO] 📤 [BOT] Sent text to 105330029633625@lid
+[2026-01-30T13:04:20.011Z] [INFO] 📨 [BOT-CONV] Processing message from 105330029633625@lid
+[2026-01-30T13:04:20.087Z] [INFO] 🔀 [BOT-CONV] Routing to state: MAIN_MENU
+[2026-01-30T13:04:20.088Z] [INFO] 🤖 [BOT-CONV] Using AI fallback for: what is my id number
+[2026-01-30T13:04:20.685Z] [INFO] 🔍 [BOT-CONV] AI Detected Intent: VIEW_PROFILE
+[2026-01-30T13:04:20.781Z] [INFO] 📤 [BOT] Sent text to 105330029633625@lid
+[2026-01-30T13:04:20.781Z] [INFO] 📤 [BOT] Sent options menu to 105330029633625@lid
+[2026-01-30T13:04:47.263Z] [INFO] 📨 [BOT-CONV] Processing message from 105330029633625@lid
+[2026-01-30T13:04:47.336Z] [INFO] 🔀 [BOT-CONV] Routing to state: MAIN_MENU
+[2026-01-30T13:04:47.336Z] [INFO] 🤖 [BOT-CONV] Using AI fallback for: how can i get covered
+[2026-01-30T13:04:47.850Z] [INFO] 🔍 [BOT-CONV] AI Detected Intent: BUY_INSURANCE
+[2026-01-30T13:04:48.482Z] [INFO] 📤 [BOT] Sent text to 105330029633625@lid
+[2026-01-30T13:04:48.567Z] [INFO] 📤 [BOT] Sent text to 105330029633625@lid
+[2026-01-30T13:04:48.568Z] [INFO] 📤 [BOT] Sent options menu to 105330029633625@lid
+[2026-01-30T13:05:12.852Z] [INFO] 📨 [BOT-CONV] Processing message from 105330029633625@lid
+[2026-01-30T13:05:12.927Z] [INFO] 🔀 [BOT-CONV] Routing to state: BUY_SELECT_COVER
+[2026-01-30T13:05:13.869Z] [INFO] 📤 [BOT] Sent text to 105330029633625@lid
+[2026-01-30T13:05:37.339Z] [INFO] 📨 [BOT-CONV] Processing message from 105330029633625@lid
+[2026-01-30T13:05:37.416Z] [INFO] 🔀 [BOT-CONV] Routing to state: BUY_SELECT_COVER
+[2026-01-30T13:05:38.607Z] [INFO] 📤 [BOT] Sent text to 105330029633625@lid
+[2026-01-30T13:06:19.002Z] [INFO] 📨 [BOT-CONV] Processing message from 105330029633625@lid
+[2026-01-30T13:06:19.074Z] [INFO] 🔀 [BOT-CONV] Routing to state: BUY_SELECT_COVER
+[2026-01-30T13:06:20.368Z] [INFO] 📤 [BOT] Sent text to 105330029633625@lid
+[2026-01-30T13:06:43.460Z] [INFO] 📨 [BOT-CONV] Processing message from 105330029633625@lid
+[2026-01-30T13:06:43.536Z] [INFO] 🔀 [BOT-CONV] Routing to state: BUY_SELECT_COVER
+[2026-01-30T13:06:44.749Z] [INFO] 📤 [BOT] Sent text to 105330029633625@lid
+[2026-01-30T13:07:17.642Z] [INFO] 📨 [BOT-CONV] Processing message from 105330029633625@lid
+[2026-01-30T13:07:17.715Z] [INFO] 🔀 [BOT-CONV] Routing to state: BUY_SELECT_COVER
+[2026-01-30T13:07:18.749Z] [INFO] 📤 [BOT] Sent text to 105330029633625@lid
+[2026-01-30T13:09:41.570Z] [INFO] 📨 [BOT-CONV] Processing message from 97826621157619@lid
+[2026-01-30T13:09:41.648Z] [INFO] 🔀 [BOT-CONV] Routing to state: CLAIM_DATE
+[2026-01-30T13:09:41.673Z] [INFO] 📤 [BOT] Sent text to 97826621157619@lid
+[2026-01-30T13:10:06.222Z] [INFO] 📨 [BOT-CONV] Processing message from 97826621157619@lid
+[2026-01-30T13:10:06.293Z] [INFO] 🔀 [BOT-CONV] Routing to state: CLAIM_DATE
+[2026-01-30T13:10:06.302Z] [INFO] 📤 [BOT] Sent text to 97826621157619@lid
+[2026-01-30T13:15:44.584Z] [INFO] 🚀 Server started on port 8100
+[2026-01-30T13:15:47.042Z] [INFO] 🚀 [BOT] Starting WhatsApp bot...
+[2026-01-30T13:15:47.044Z] [INFO] 🤖 [BOT] Initializing WhatsApp bot...
+[2026-01-30T13:15:47.046Z] [INFO] ⚠️ [BOT] No Chrome installation found in any cache directory
+[2026-01-30T13:15:47.047Z] [INFO] ⚠️ [BOT] No custom Chrome path found, using default
+[2026-01-30T13:16:26.953Z] [INFO] 🚀 Server started on port 8100
+[2026-01-30T13:16:29.585Z] [INFO] 🚀 [BOT] Starting WhatsApp bot...
+[2026-01-30T13:16:29.585Z] [INFO] 🤖 [BOT] Initializing WhatsApp bot...
+[2026-01-30T13:16:29.586Z] [INFO] ⚠️ [BOT] No Chrome installation found in any cache directory
+[2026-01-30T13:16:29.586Z] [INFO] ⚠️ [BOT] No custom Chrome path found, using default
+[2026-01-30T13:17:15.039Z] [INFO] ✅ [BOT] WhatsApp bot initialized successfully
+[2026-01-30T13:17:15.040Z] [INFO] ✅ [BOT] WhatsApp bot started successfully
+[2026-01-30T13:17:39.062Z] [INFO] 📨 [BOT-CONV] Processing message from 97826621157619@lid
+[2026-01-30T13:17:39.298Z] [INFO] 🔀 [BOT-CONV] Routing to state: CLAIM_DATE
+[2026-01-30T13:17:39.544Z] [INFO] 📤 [BOT] Sent text to 97826621157619@lid
+[2026-01-30T13:18:00.837Z] [INFO] 🚀 Server started on port 8100
+[2026-01-30T13:18:03.728Z] [INFO] 🚀 [BOT] Starting WhatsApp bot...
+[2026-01-30T13:18:03.729Z] [INFO] 🤖 [BOT] Initializing WhatsApp bot...
+[2026-01-30T13:18:03.730Z] [INFO] ⚠️ [BOT] No Chrome installation found in any cache directory
+[2026-01-30T13:18:03.730Z] [INFO] ⚠️ [BOT] No custom Chrome path found, using default
+[2026-01-30T13:18:24.830Z] [INFO] 🚀 Server started on port 8100
+[2026-01-30T13:18:27.657Z] [INFO] 🚀 [BOT] Starting WhatsApp bot...
+[2026-01-30T13:18:27.657Z] [INFO] 🤖 [BOT] Initializing WhatsApp bot...
+[2026-01-30T13:18:27.658Z] [INFO] ⚠️ [BOT] No Chrome installation found in any cache directory
+[2026-01-30T13:18:27.658Z] [INFO] ⚠️ [BOT] No custom Chrome path found, using default
+[2026-01-30T13:19:01.388Z] [INFO] ✅ [BOT] WhatsApp bot initialized successfully
+[2026-01-30T13:19:01.394Z] [INFO] ✅ [BOT] WhatsApp bot started successfully
+[2026-01-30T13:20:48.018Z] [INFO] 📨 [BOT-CONV] Processing message from 97826621157619@lid
+[2026-01-30T13:20:48.191Z] [INFO] 👋 [BOT-CONV] Greeting detected from 97826621157619@lid
+[2026-01-30T13:20:48.277Z] [INFO] 📤 [BOT] Sent text to 97826621157619@lid
+[2026-01-30T13:20:48.585Z] [INFO] 📤 [BOT] Sent text to 97826621157619@lid
+[2026-01-30T13:20:48.585Z] [INFO] 📤 [BOT] Sent options menu to 97826621157619@lid
+[2026-01-30T13:21:09.875Z] [INFO] 🚀 Server started on port 8100
+[2026-01-30T13:21:11.862Z] [INFO] 🚀 [BOT] Starting WhatsApp bot...
+[2026-01-30T13:21:11.864Z] [INFO] 🤖 [BOT] Initializing WhatsApp bot...
+[2026-01-30T13:21:11.865Z] [INFO] ⚠️ [BOT] No Chrome installation found in any cache directory
+[2026-01-30T13:21:11.865Z] [INFO] ⚠️ [BOT] No custom Chrome path found, using default
+[2026-01-30T13:21:39.945Z] [INFO] ✅ [BOT] WhatsApp bot initialized successfully
+[2026-01-30T13:21:39.950Z] [INFO] ✅ [BOT] WhatsApp bot started successfully
+[2026-01-30T13:21:51.716Z] [INFO] 📨 [BOT-CONV] Processing message from 97826621157619@lid
+[2026-01-30T13:21:51.805Z] [INFO] 🔀 [BOT-CONV] Routing to state: MAIN_MENU
+[2026-01-30T13:21:51.806Z] [INFO] 🤖 [BOT-CONV] Using AI fallback for: I want tubuy udbsy
+[2026-01-30T13:21:52.371Z] [INFO] 🔍 [BOT-CONV] AI Detected Intent: BUY_INSURANCE
+[2026-01-30T13:21:53.774Z] [INFO] 📤 [BOT] Sent text to 97826621157619@lid
+[2026-01-30T13:21:53.950Z] [INFO] 📤 [BOT] Sent text to 97826621157619@lid
+[2026-01-30T13:21:53.950Z] [INFO] 📤 [BOT] Sent options menu to 97826621157619@lid
+[2026-01-30T13:22:18.569Z] [INFO] 📨 [BOT-CONV] Processing message from 97826621157619@lid
+[2026-01-30T13:22:18.642Z] [INFO] 🔀 [BOT-CONV] Routing to state: BUY_SELECT_COVER
+[2026-01-30T13:22:20.523Z] [INFO] 📤 [BOT] Sent text to 97826621157619@lid
+[2026-01-30T13:22:40.064Z] [INFO] 📨 [BOT-CONV] Processing message from 97826621157619@lid
+[2026-01-30T13:22:40.141Z] [INFO] 🔀 [BOT-CONV] Routing to state: BUY_SELECT_COVER
+[2026-01-30T13:22:42.372Z] [INFO] 📤 [BOT] Sent text to 97826621157619@lid
+[2026-01-30T13:26:39.978Z] [INFO] 🚀 Server started on port 8100
+[2026-01-30T13:26:42.012Z] [INFO] 🚀 [BOT] Starting WhatsApp bot...
+[2026-01-30T13:26:42.013Z] [INFO] 🤖 [BOT] Initializing WhatsApp bot...
+[2026-01-30T13:26:42.014Z] [INFO] ⚠️ [BOT] No Chrome installation found in any cache directory
+[2026-01-30T13:26:42.014Z] [INFO] ⚠️ [BOT] No custom Chrome path found, using default
+[2026-01-30T13:27:08.112Z] [INFO] ✅ [BOT] WhatsApp bot initialized successfully
+[2026-01-30T13:27:08.117Z] [INFO] ✅ [BOT] WhatsApp bot started successfully
+[2026-01-30T13:27:46.139Z] [INFO] 🚀 Server started on port 8100
+[2026-01-30T13:27:48.125Z] [INFO] 🚀 [BOT] Starting WhatsApp bot...
+[2026-01-30T13:27:48.126Z] [INFO] 🤖 [BOT] Initializing WhatsApp bot...
+[2026-01-30T13:27:48.127Z] [INFO] ⚠️ [BOT] No Chrome installation found in any cache directory
+[2026-01-30T13:27:48.127Z] [INFO] ⚠️ [BOT] No custom Chrome path found, using default
+[2026-01-30T13:30:31.368Z] [INFO] 🚀 Server started on port 8100
+[2026-01-30T13:30:33.805Z] [INFO] 🚀 [BOT] Starting WhatsApp bot...
+[2026-01-30T13:30:33.806Z] [INFO] 🤖 [BOT] Initializing WhatsApp bot...
+[2026-01-30T13:30:33.808Z] [INFO] ⚠️ [BOT] No Chrome installation found in any cache directory
+[2026-01-30T13:30:33.809Z] [INFO] ⚠️ [BOT] No custom Chrome path found, using default
+[2026-01-30T13:31:44.140Z] [INFO] ✅ [BOT] WhatsApp bot initialized successfully
+[2026-01-30T13:31:44.145Z] [INFO] ✅ [BOT] WhatsApp bot started successfully
+[2026-01-30T13:32:10.462Z] [INFO] 📨 [BOT-CONV] Processing message from 97826621157619@lid
+[2026-01-30T13:32:10.553Z] [INFO] 👋 [BOT-CONV] Greeting detected from 97826621157619@lid
+[2026-01-30T13:32:10.821Z] [INFO] 📤 [BOT] Sent text to 97826621157619@lid
+[2026-01-30T13:32:11.031Z] [INFO] 📤 [BOT] Sent text to 97826621157619@lid
+[2026-01-30T13:32:11.032Z] [INFO] 📤 [BOT] Sent options menu to 97826621157619@lid
+[2026-01-30T13:32:45.321Z] [INFO] 📨 [BOT-CONV] Processing message from 97826621157619@lid
+[2026-01-30T13:32:45.429Z] [INFO] 🔀 [BOT-CONV] Routing to state: MAIN_MENU
+[2026-01-30T13:32:45.431Z] [INFO] 🤖 [BOT-CONV] Using AI fallback for: I want to change my language
+[2026-01-30T13:32:46.102Z] [INFO] 🔍 [BOT-CONV] AI Detected Intent: CHANGE_LANGUAGE
+[2026-01-30T13:32:46.332Z] [INFO] 📤 [BOT] Sent text to 97826621157619@lid
+[2026-01-30T13:32:46.332Z] [INFO] 📤 [BOT] Sent options menu to 97826621157619@lid
+[2026-01-30T13:33:09.036Z] [INFO] 📨 [BOT-CONV] Processing message from 97826621157619@lid
+[2026-01-30T13:33:09.132Z] [INFO] 🔀 [BOT-CONV] Routing to state: LANG_SELECT
+[2026-01-30T13:33:09.356Z] [INFO] 📤 [BOT] Sent text to 97826621157619@lid
+[2026-01-30T13:33:09.471Z] [INFO] 📤 [BOT] Sent text to 97826621157619@lid
+[2026-01-30T13:33:09.472Z] [INFO] 📤 [BOT] Sent options menu to 97826621157619@lid
+[2026-01-30T13:33:40.409Z] [INFO] 📨 [BOT-CONV] Processing message from 97826621157619@lid
+[2026-01-30T13:33:40.568Z] [INFO] 🔀 [BOT-CONV] Routing to state: MAIN_MENU
+[2026-01-30T13:33:40.569Z] [INFO] 🤖 [BOT-CONV] Using AI fallback for: Buy insurance
+[2026-01-30T13:33:41.641Z] [INFO] 🔍 [BOT-CONV] AI Detected Intent: BUY_INSURANCE
+[2026-01-30T13:33:44.480Z] [INFO] 📤 [BOT] Sent text to 97826621157619@lid
+[2026-01-30T13:33:44.591Z] [INFO] 📤 [BOT] Sent text to 97826621157619@lid
+[2026-01-30T13:33:44.592Z] [INFO] 📤 [BOT] Sent options menu to 97826621157619@lid
+[2026-01-30T13:34:06.131Z] [INFO] 📨 [BOT-CONV] Processing message from 97826621157619@lid
+[2026-01-30T13:34:06.208Z] [INFO] 🔀 [BOT-CONV] Routing to state: BUY_SELECT_COVER
+[2026-01-30T13:34:09.711Z] [INFO] 📤 [BOT] Sent text to 97826621157619@lid
+[2026-01-30T13:35:00.191Z] [INFO] 📨 [BOT-CONV] Processing message from 97826621157619@lid
+[2026-01-30T13:35:00.294Z] [INFO] 🔀 [BOT-CONV] Routing to state: BUY_SELECT_COVER
+[2026-01-30T13:35:01.712Z] [INFO] 📤 [BOT] Sent text to 97826621157619@lid
+[2026-01-30T14:00:53.029Z] [INFO] 🚀 Server started on port 8100
+[2026-01-30T14:00:55.014Z] [INFO] 🚀 [BOT] Starting WhatsApp bot...
+[2026-01-30T14:00:55.015Z] [INFO] 🤖 [BOT] Initializing WhatsApp bot...
+[2026-01-30T14:00:55.015Z] [INFO] ⚠️ [BOT] No Chrome installation found in any cache directory
+[2026-01-30T14:00:55.015Z] [INFO] ⚠️ [BOT] No custom Chrome path found, using default
+[2026-01-30T14:01:26.806Z] [ERROR] ❌ [BOT] Failed to initialize bot: TimeoutError: Navigation timeout of 30000 ms exceeded
+[2026-01-30T14:01:26.807Z] [ERROR] ❌ [BOT] Failed to start bot: TimeoutError: Navigation timeout of 30000 ms exceeded
+[2026-01-30T14:02:13.460Z] [INFO] 🚀 Server started on port 8100
+[2026-01-30T14:02:14.922Z] [INFO] 🚀 [BOT] Starting WhatsApp bot...
+[2026-01-30T14:02:14.923Z] [INFO] 🤖 [BOT] Initializing WhatsApp bot...
+[2026-01-30T14:02:14.924Z] [INFO] ⚠️ [BOT] No Chrome installation found in any cache directory
+[2026-01-30T14:02:14.924Z] [INFO] ⚠️ [BOT] No custom Chrome path found, using default
+[2026-01-30T14:08:47.708Z] [INFO] 🚀 Server started on port 8100
+[2026-01-30T14:08:53.462Z] [INFO] 🚀 Server started on port 8100
+[2026-01-30T14:08:55.141Z] [INFO] 🚀 [BOT] Starting WhatsApp bot...
+[2026-01-30T14:08:55.142Z] [INFO] 🤖 [BOT] Initializing WhatsApp bot...
+[2026-01-30T14:08:55.142Z] [INFO] ⚠️ [BOT] No Chrome installation found in any cache directory
+[2026-01-30T14:08:55.142Z] [INFO] ⚠️ [BOT] No custom Chrome path found, using default
+[2026-01-30T14:10:52.722Z] [INFO] 🚀 Server started on port 8100
+[2026-01-30T14:10:54.776Z] [INFO] 🚀 [BOT] Starting WhatsApp bot...
+[2026-01-30T14:10:54.777Z] [INFO] 🤖 [BOT] Initializing WhatsApp bot...
+[2026-01-30T14:10:54.778Z] [INFO] ⚠️ [BOT] No Chrome installation found in any cache directory
+[2026-01-30T14:10:54.778Z] [INFO] ⚠️ [BOT] No custom Chrome path found, using default
+[2026-01-30T14:11:27.692Z] [INFO] ✅ [BOT] WhatsApp bot initialized successfully
+[2026-01-30T14:11:27.697Z] [INFO] ✅ [BOT] WhatsApp bot started successfully
+[2026-01-30T14:12:09.251Z] [INFO] 📨 [BOT-CONV] Processing message from 97826621157619@lid
+[2026-01-30T14:12:10.244Z] [INFO] 🔀 [BOT-CONV] Routing to state: BUY_SELECT_COVER
+[2026-01-30T14:12:14.446Z] [INFO] 📤 [BOT] Sent text to 97826621157619@lid
+[2026-01-30T14:13:11.066Z] [INFO] 📨 [BOT-CONV] Processing message from 97826621157619@lid
+[2026-01-30T14:13:11.173Z] [INFO] 🔀 [BOT-CONV] Routing to state: BUY_SELECT_COVER
+[2026-01-30T14:13:19.907Z] [INFO] 📤 [BOT] Sent text to 97826621157619@lid
+[2026-01-30T14:13:46.536Z] [INFO] 📨 [BOT-CONV] Processing message from 97826621157619@lid
+[2026-01-30T14:13:46.756Z] [INFO] 🔀 [BOT-CONV] Routing to state: BUY_SELECT_COVER
+[2026-01-30T14:13:49.410Z] [INFO] 📤 [BOT] Sent text to 97826621157619@lid
+[2026-01-30T14:47:56.794Z] [INFO] 🚀 Server started on port 8100
+[2026-01-30T14:47:57.825Z] [INFO] 🚀 [BOT] Starting WhatsApp bot...
+[2026-01-30T14:47:57.825Z] [INFO] 🤖 [BOT] Initializing WhatsApp bot...
+[2026-01-30T14:47:57.826Z] [INFO] ⚠️ [BOT] No Chrome installation found in any cache directory
+[2026-01-30T14:47:57.826Z] [INFO] ⚠️ [BOT] No custom Chrome path found, using default
+[2026-01-30T14:51:07.606Z] [INFO] 🚀 Server started on port 8100
+[2026-01-30T14:51:08.648Z] [INFO] 🚀 [BOT] Starting WhatsApp bot...
+[2026-01-30T14:51:08.649Z] [INFO] 🤖 [BOT] Initializing WhatsApp bot...
+[2026-01-30T14:51:08.649Z] [INFO] ⚠️ [BOT] No Chrome installation found in any cache directory
+[2026-01-30T14:51:08.649Z] [INFO] ⚠️ [BOT] No custom Chrome path found, using default
+[2026-01-30T14:52:04.806Z] [INFO] ✅ [BOT] WhatsApp bot initialized successfully
+[2026-01-30T14:52:04.806Z] [INFO] ✅ [BOT] WhatsApp bot started successfully
+[2026-01-30T14:52:15.811Z] [INFO] 📨 [BOT-CONV] Processing message from 97826621157619@lid
+[2026-01-30T14:52:15.917Z] [INFO] 🔀 [BOT-CONV] Routing to state: BUY_SELECT_COVER
+[2026-01-30T14:52:19.860Z] [INFO] 📤 [BOT] Sent text to 97826621157619@lid
+[2026-01-30T14:52:24.869Z] [INFO] 📨 [BOT-CONV] Processing message from 96658339709027@lid
+[2026-01-30T14:52:25.066Z] [INFO] 👤 [BOT-CONV] New user created: 96658339709027@lid
+[2026-01-30T14:52:25.488Z] [INFO] 📤 [BOT] Sent text to 96658339709027@lid
+[2026-01-30T14:52:25.788Z] [INFO] 📤 [BOT] Sent text to 96658339709027@lid
+[2026-01-30T14:52:25.788Z] [INFO] 📤 [BOT] Sent options menu to 96658339709027@lid
+[2026-01-30T14:52:35.821Z] [INFO] 📨 [BOT-CONV] Processing message from 96658339709027@lid
+[2026-01-30T14:52:36.029Z] [INFO] 🔀 [BOT-CONV] Routing to state: LANG_SELECT
+[2026-01-30T14:52:36.995Z] [INFO] 📤 [BOT] Sent text to 96658339709027@lid
+[2026-01-30T14:52:36.996Z] [INFO] 📤 [BOT] Sent options menu to 96658339709027@lid
+[2026-01-30T14:52:57.922Z] [INFO] 📨 [BOT-CONV] Processing message from 96658339709027@lid
+[2026-01-30T14:52:57.997Z] [INFO] 🔀 [BOT-CONV] Routing to state: REGISTER_START
+[2026-01-30T14:52:58.918Z] [INFO] 📤 [BOT] Sent text to 96658339709027@lid
+[2026-01-30T14:53:16.695Z] [INFO] 📨 [BOT-CONV] Processing message from 96658339709027@lid
+[2026-01-30T14:53:16.776Z] [INFO] 🔀 [BOT-CONV] Routing to state: REG_FULL_NAME
+[2026-01-30T14:53:17.695Z] [INFO] 📤 [BOT] Sent text to 96658339709027@lid
+[2026-01-30T14:53:29.279Z] [INFO] 📨 [BOT-CONV] Processing message from 96658339709027@lid
+[2026-01-30T14:53:29.364Z] [INFO] 🔀 [BOT-CONV] Routing to state: REG_ID_NUMBER
+[2026-01-30T14:53:30.761Z] [INFO] 📤 [BOT] Sent text to 96658339709027@lid
+[2026-01-30T14:54:24.776Z] [INFO] 📨 [BOT-CONV] Processing message from 96658339709027@lid
+[2026-01-30T14:54:24.857Z] [INFO] 🔀 [BOT-CONV] Routing to state: REG_DOB
+[2026-01-30T14:54:25.117Z] [INFO] 📤 [BOT] Sent text to 96658339709027@lid
+[2026-01-30T14:54:45.910Z] [INFO] 📨 [BOT-CONV] Processing message from 96658339709027@lid
+[2026-01-30T14:54:46.061Z] [INFO] 🔀 [BOT-CONV] Routing to state: REG_DOB
+[2026-01-30T14:54:47.331Z] [INFO] 📤 [BOT] Sent text to 96658339709027@lid
+[2026-01-30T14:55:00.166Z] [INFO] 📨 [BOT-CONV] Processing message from 96658339709027@lid
+[2026-01-30T14:55:00.255Z] [INFO] 🔀 [BOT-CONV] Routing to state: REG_PLATE_NUMBER
+[2026-01-30T14:55:01.213Z] [INFO] 📤 [BOT] Sent text to 96658339709027@lid
+[2026-01-30T14:55:24.893Z] [INFO] 📨 [BOT-CONV] Processing message from 96658339709027@lid
+[2026-01-30T14:55:25.361Z] [INFO] 🔀 [BOT-CONV] Routing to state: REG_ID_PHOTO
+[2026-01-30T14:55:25.464Z] [INFO] ✅ [BOT] Media downloaded successfully
+[2026-01-30T14:55:26.317Z] [INFO] 📤 [BOT] Sent text to 96658339709027@lid
+[2026-01-30T14:55:42.514Z] [INFO] 📨 [BOT-CONV] Processing message from 96658339709027@lid
+[2026-01-30T14:55:42.598Z] [INFO] 🔀 [BOT-CONV] Routing to state: REG_LOGBOOK_PHOTO
+[2026-01-30T14:55:42.765Z] [INFO] ✅ [BOT] Media downloaded successfully
+[2026-01-30T14:55:43.618Z] [INFO] 📤 [BOT] Sent text to 96658339709027@lid
+[2026-01-30T14:55:53.149Z] [INFO] 📨 [BOT-CONV] Processing message from 96658339709027@lid
+[2026-01-30T14:55:53.227Z] [INFO] 🔀 [BOT-CONV] Routing to state: REG_BIKE_PHOTO
+[2026-01-30T14:55:53.426Z] [INFO] ✅ [BOT] Media downloaded successfully
+[2026-01-30T14:55:54.546Z] [INFO] 📤 [BOT] Sent text to 96658339709027@lid
+[2026-01-30T14:56:49.176Z] [INFO] 📨 [BOT-CONV] Processing message from 96658339709027@lid
+[2026-01-30T14:56:49.249Z] [INFO] 🔀 [BOT-CONV] Routing to state: REG_SELFIE_PHOTO
+[2026-01-30T14:56:49.467Z] [INFO] ✅ [BOT] Media downloaded successfully
+[2026-01-30T14:56:49.816Z] [INFO] ✅ [WALLET] WalletService initialized
+[2026-01-30T14:56:49.929Z] [INFO] 🔐 [WALLET] Created new wallet: 0xe83225DdfA6D2a2AB0d2E7697743238dF8236b6F
+[2026-01-30T14:56:50.010Z] [INFO] ✅ [WALLET] Wallet created for user: 96658339709027@lid -> 0xe83225DdfA6D2a2AB0d2E7697743238dF8236b6F
+[2026-01-30T14:56:50.383Z] [INFO] 📤 [BOT] Sent text to 96658339709027@lid
+[2026-01-30T14:56:50.383Z] [INFO] ✅ [BOT-CONV] KYC submitted for 96658339709027@lid, wallet: 0xe83225DdfA6D2a2AB0d2E7697743238dF8236b6F
+[2026-01-30T14:57:24.425Z] [INFO] [ACTIVITY LOG] KYC_APPROVED: Admin approved KYC for 96658339709027@lid
+[2026-01-31T11:18:06.838Z] [INFO] 🚀 Server started on port 8100
+[2026-01-31T11:18:08.522Z] [INFO] 🚀 [BOT] Starting WhatsApp bot...
+[2026-01-31T11:18:08.522Z] [INFO] 🤖 [BOT] Initializing WhatsApp bot...
+[2026-01-31T11:18:08.523Z] [INFO] ⚠️ [BOT] No Chrome installation found in any cache directory
+[2026-01-31T11:18:08.523Z] [INFO] ⚠️ [BOT] No custom Chrome path found, using default
+[2026-01-31T11:18:41.622Z] [INFO] ✅ [BOT] WhatsApp bot initialized successfully
+[2026-01-31T11:18:41.622Z] [INFO] ✅ [BOT] WhatsApp bot started successfully
+[2026-01-31T11:19:42.893Z] [INFO] 📨 [BOT-CONV] Processing message from 97826621157619@lid
+[2026-01-31T11:19:42.989Z] [INFO] 🔀 [BOT-CONV] Routing to state: BUY_SELECT_COVER
+[2026-01-31T11:19:44.430Z] [INFO] 📤 [BOT] Sent text to 97826621157619@lid
+[2026-01-31T11:20:15.816Z] [INFO] 📨 [BOT-CONV] Processing message from 97826621157619@lid
+[2026-01-31T11:20:15.890Z] [INFO] 🔀 [BOT-CONV] Routing to state: BUY_SELECT_COVER
+[2026-01-31T11:20:19.287Z] [INFO] 📤 [BOT] Sent text to 97826621157619@lid
+[2026-01-31T11:22:31.612Z] [INFO] 📨 [BOT-CONV] Processing message from 97826621157619@lid
+[2026-01-31T11:22:31.685Z] [INFO] 🔀 [BOT-CONV] Routing to state: BUY_SELECT_COVER
+[2026-01-31T11:22:33.605Z] [INFO] 📤 [BOT] Sent text to 97826621157619@lid
+[2026-01-31T11:29:45.593Z] [INFO] 🚀 Server started on port 8100
+[2026-01-31T11:29:47.086Z] [INFO] 🚀 [BOT] Starting WhatsApp bot...
+[2026-01-31T11:29:47.086Z] [INFO] 🤖 [BOT] Initializing WhatsApp bot...
+[2026-01-31T11:29:47.087Z] [INFO] ⚠️ [BOT] No Chrome installation found in any cache directory
+[2026-01-31T11:29:47.087Z] [INFO] ⚠️ [BOT] No custom Chrome path found, using default
+[2026-01-31T11:29:55.295Z] [INFO] 🚀 Server started on port 8100
+[2026-01-31T11:29:55.954Z] [INFO] 🚀 [BOT] Starting WhatsApp bot...
+[2026-01-31T11:29:55.954Z] [INFO] 🤖 [BOT] Initializing WhatsApp bot...
+[2026-01-31T11:29:55.960Z] [INFO] ⚠️ [BOT] No Chrome installation found in any cache directory
+[2026-01-31T11:29:55.960Z] [INFO] ⚠️ [BOT] No custom Chrome path found, using default
+[2026-01-31T11:30:21.692Z] [INFO] ✅ [BOT] WhatsApp bot initialized successfully
+[2026-01-31T11:30:21.692Z] [INFO] ✅ [BOT] WhatsApp bot started successfully
+[2026-01-31T11:31:16.770Z] [INFO] 📨 [BOT-CONV] Processing message from 97826621157619@lid
+[2026-01-31T11:31:16.881Z] [INFO] 🔀 [BOT-CONV] Routing to state: BUY_SELECT_COVER
+[2026-01-31T11:31:18.166Z] [INFO] 📤 [BOT] Sent text to 97826621157619@lid
+[2026-01-31T11:31:32.481Z] [INFO] 📨 [BOT-CONV] Processing message from 97826621157619@lid
+[2026-01-31T11:31:32.555Z] [INFO] 🔀 [BOT-CONV] Routing to state: BUY_SELECT_COVER
+[2026-01-31T11:31:33.792Z] [INFO] 📤 [BOT] Sent text to 97826621157619@lid
+[2026-01-31T11:33:04.630Z] [INFO] 🚀 Server started on port 8100
+[2026-01-31T11:33:06.012Z] [INFO] 🚀 [BOT] Starting WhatsApp bot...
+[2026-01-31T11:33:06.012Z] [INFO] 🤖 [BOT] Initializing WhatsApp bot...
+[2026-01-31T11:33:06.013Z] [INFO] ⚠️ [BOT] No Chrome installation found in any cache directory
+[2026-01-31T11:33:06.013Z] [INFO] ⚠️ [BOT] No custom Chrome path found, using default
+[2026-01-31T11:33:32.274Z] [INFO] ✅ [BOT] WhatsApp bot initialized successfully
+[2026-01-31T11:33:32.274Z] [INFO] ✅ [BOT] WhatsApp bot started successfully
+[2026-01-31T11:33:39.714Z] [INFO] 📨 [BOT-CONV] Processing message from 97826621157619@lid
+[2026-01-31T11:33:39.814Z] [INFO] 🔀 [BOT-CONV] Routing to state: BUY_SELECT_COVER
+[2026-01-31T11:33:40.901Z] [INFO] 📤 [BOT] Sent text to 97826621157619@lid
+[2026-01-31T11:33:53.302Z] [INFO] 📨 [BOT-CONV] Processing message from 97826621157619@lid
+[2026-01-31T11:33:53.379Z] [INFO] 🔀 [BOT-CONV] Routing to state: BUY_SELECT_COVER
+[2026-01-31T11:33:55.112Z] [INFO] 📤 [BOT] Sent text to 97826621157619@lid
+[2026-01-31T11:34:12.044Z] [INFO] 📨 [BOT-CONV] Processing message from 97826621157619@lid
+[2026-01-31T11:34:12.118Z] [INFO] 🔀 [BOT-CONV] Routing to state: BUY_SELECT_COVER
+[2026-01-31T11:34:13.558Z] [INFO] 📤 [BOT] Sent text to 97826621157619@lid
+[2026-01-31T11:38:20.670Z] [INFO] 🚀 Server started on port 8100
+[2026-01-31T11:38:22.143Z] [INFO] 🚀 [BOT] Starting WhatsApp bot...
+[2026-01-31T11:38:22.143Z] [INFO] 🤖 [BOT] Initializing WhatsApp bot...
+[2026-01-31T11:38:22.144Z] [INFO] ⚠️ [BOT] No Chrome installation found in any cache directory
+[2026-01-31T11:38:22.144Z] [INFO] ⚠️ [BOT] No custom Chrome path found, using default
+[2026-01-31T11:38:47.901Z] [INFO] 🚀 Server started on port 8100
+[2026-01-31T11:38:49.418Z] [INFO] 🚀 [BOT] Starting WhatsApp bot...
+[2026-01-31T11:38:49.418Z] [INFO] 🤖 [BOT] Initializing WhatsApp bot...
+[2026-01-31T11:38:49.418Z] [INFO] ⚠️ [BOT] No Chrome installation found in any cache directory
+[2026-01-31T11:38:49.418Z] [INFO] ⚠️ [BOT] No custom Chrome path found, using default
+[2026-01-31T11:41:55.008Z] [ERROR] ❌ [BOT] Failed to initialize bot: Error: App Offline
+[2026-01-31T11:41:55.009Z] [ERROR] ❌ [BOT] Failed to start bot: Error: App Offline
+[2026-01-31T11:48:44.042Z] [INFO] 🚀 Server started on port 8100
+[2026-01-31T11:48:45.651Z] [INFO] 🚀 [BOT] Starting WhatsApp bot...
+[2026-01-31T11:48:45.651Z] [INFO] 🤖 [BOT] Initializing WhatsApp bot...
+[2026-01-31T11:48:45.652Z] [INFO] ⚠️ [BOT] No Chrome installation found in any cache directory
+[2026-01-31T11:48:45.652Z] [INFO] ⚠️ [BOT] No custom Chrome path found, using default
+[2026-01-31T11:49:11.575Z] [INFO] ✅ [BOT] WhatsApp bot initialized successfully
+[2026-01-31T11:49:11.575Z] [INFO] ✅ [BOT] WhatsApp bot started successfully
+[2026-01-31T11:53:51.120Z] [INFO] 📨 [BOT-CONV] Processing message from 97826621157619@lid
+[2026-01-31T11:53:51.212Z] [INFO] 👋 [BOT-CONV] Greeting detected from 97826621157619@lid
+[2026-01-31T11:53:51.426Z] [INFO] 📤 [BOT] Sent text to 97826621157619@lid
+[2026-01-31T11:53:51.681Z] [INFO] 📤 [BOT] Sent text to 97826621157619@lid
+[2026-01-31T11:53:51.681Z] [INFO] 📤 [BOT] Sent options menu to 97826621157619@lid
+[2026-01-31T11:54:17.732Z] [INFO] 📨 [BOT-CONV] Processing message from 97826621157619@lid
+[2026-01-31T11:54:17.808Z] [INFO] 🔀 [BOT-CONV] Routing to state: MAIN_MENU
+[2026-01-31T11:54:17.809Z] [INFO] 🤖 [BOT-CONV] Using AI fallback for: Show me my profile
+[2026-01-31T11:54:18.469Z] [INFO] 🔍 [BOT-CONV] AI Detected Intent: PROFILE
+[2026-01-31T11:54:18.622Z] [INFO] 🧠 [MISTRAL-CTX] Context generated for 97826621157619@lid. Name: Anwar magara sadat, Policies: 0
+[2026-01-31T11:54:19.754Z] [INFO] 📤 [BOT] Sent text to 97826621157619@lid
+[2026-01-31T11:54:34.682Z] [INFO] 📨 [BOT-CONV] Processing message from 97826621157619@lid
+[2026-01-31T11:54:34.755Z] [INFO] 🔀 [BOT-CONV] Routing to state: MAIN_MENU
+[2026-01-31T11:54:34.755Z] [INFO] 🤖 [BOT-CONV] Using AI fallback for: Change my language
+[2026-01-31T11:54:35.155Z] [INFO] 🔍 [BOT-CONV] AI Detected Intent: CHANGE_LANGUAGE
+[2026-01-31T11:54:35.422Z] [INFO] 📤 [BOT] Sent text to 97826621157619@lid
+[2026-01-31T11:54:35.422Z] [INFO] 📤 [BOT] Sent options menu to 97826621157619@lid
+[2026-01-31T11:57:01.036Z] [INFO] 🚀 Server started on port 8100
+[2026-01-31T11:57:02.517Z] [INFO] 🚀 [BOT] Starting WhatsApp bot...
+[2026-01-31T11:57:02.518Z] [INFO] 🤖 [BOT] Initializing WhatsApp bot...
+[2026-01-31T11:57:02.518Z] [INFO] ⚠️ [BOT] No Chrome installation found in any cache directory
+[2026-01-31T11:57:02.518Z] [INFO] ⚠️ [BOT] No custom Chrome path found, using default
+[2026-01-31T11:59:27.894Z] [INFO] 🚀 Server started on port 8100
+[2026-01-31T11:59:29.191Z] [INFO] 🚀 [BOT] Starting WhatsApp bot...
+[2026-01-31T11:59:29.192Z] [INFO] 🤖 [BOT] Initializing WhatsApp bot...
+[2026-01-31T11:59:29.192Z] [INFO] ⚠️ [BOT] No Chrome installation found in any cache directory
+[2026-01-31T11:59:29.192Z] [INFO] ⚠️ [BOT] No custom Chrome path found, using default
+[2026-01-31T11:59:55.472Z] [INFO] ✅ [BOT] WhatsApp bot initialized successfully
+[2026-01-31T11:59:55.473Z] [INFO] ✅ [BOT] WhatsApp bot started successfully
+[2026-01-31T12:00:05.966Z] [INFO] 📨 [BOT-CONV] Processing message from 97826621157619@lid
+[2026-01-31T12:00:06.063Z] [INFO] 🔀 [BOT-CONV] Routing to state: LANG_SELECT
+[2026-01-31T12:00:06.347Z] [INFO] 📤 [BOT] Sent text to 97826621157619@lid
+[2026-01-31T12:00:06.348Z] [INFO] 📤 [BOT] Sent options menu to 97826621157619@lid
+[2026-01-31T12:00:12.985Z] [INFO] 📨 [BOT-CONV] Processing message from 97826621157619@lid
+[2026-01-31T12:00:13.058Z] [INFO] 🔀 [BOT-CONV] Routing to state: LANG_SELECT
+[2026-01-31T12:00:13.498Z] [INFO] 📤 [BOT] Sent text to 97826621157619@lid
+[2026-01-31T12:00:13.744Z] [INFO] 📤 [BOT] Sent text to 97826621157619@lid
+[2026-01-31T12:00:13.745Z] [INFO] 📤 [BOT] Sent options menu to 97826621157619@lid
+[2026-01-31T12:00:20.952Z] [INFO] 📨 [BOT-CONV] Processing message from 97826621157619@lid
+[2026-01-31T12:00:21.575Z] [INFO] 🔀 [BOT-CONV] Routing to state: MAIN_MENU
+[2026-01-31T12:00:21.577Z] [INFO] 🤖 [BOT-CONV] Using AI fallback for: Show me my profile
+[2026-01-31T12:00:23.374Z] [ERROR] ❌ [MISTRAL] Error generating response: Error
+[2026-01-31T12:00:23.376Z] [INFO] 🔍 [BOT-CONV] AI Detected Intent: UNKNOWN
+[2026-01-31T12:00:24.325Z] [INFO] 🧠 [MISTRAL-CTX] Context generated for 97826621157619@lid. Name: undefined, Policies: 0
+[2026-01-31T12:00:25.430Z] [INFO] 📤 [BOT] Sent text to 97826621157619@lid
+[2026-01-31T12:00:47.313Z] [INFO] 📨 [BOT-CONV] Processing message from 97826621157619@lid
+[2026-01-31T12:00:47.429Z] [INFO] 🔀 [BOT-CONV] Routing to state: MAIN_MENU
+[2026-01-31T12:00:47.430Z] [INFO] 🤖 [BOT-CONV] Using AI fallback for: What is my full wallet address
+[2026-01-31T12:00:50.702Z] [INFO] 🔍 [BOT-CONV] AI Detected Intent: UNKNOWN
+[2026-01-31T12:00:50.886Z] [INFO] 🧠 [MISTRAL-CTX] Context generated for 97826621157619@lid. Name: undefined, Policies: 0
+[2026-01-31T12:00:51.787Z] [INFO] 📤 [BOT] Sent text to 97826621157619@lid
+[2026-01-31T12:01:39.518Z] [INFO] 📨 [BOT-CONV] Processing message from 97826621157619@lid
+[2026-01-31T12:01:39.592Z] [INFO] 🔀 [BOT-CONV] Routing to state: MAIN_MENU
+[2026-01-31T12:01:39.595Z] [INFO] 🤖 [BOT-CONV] Using AI fallback for: I want to buy a policy
+[2026-01-31T12:01:40.055Z] [INFO] 🔍 [BOT-CONV] AI Detected Intent: BUY_INSURANCE
+[2026-01-31T12:01:40.931Z] [INFO] 📤 [BOT] Sent text to 97826621157619@lid
+[2026-01-31T12:01:41.132Z] [INFO] 📤 [BOT] Sent text to 97826621157619@lid
+[2026-01-31T12:01:41.133Z] [INFO] 📤 [BOT] Sent options menu to 97826621157619@lid
+[2026-01-31T12:02:24.174Z] [INFO] 📨 [BOT-CONV] Processing message from 97826621157619@lid
+[2026-01-31T12:02:24.246Z] [INFO] 🔀 [BOT-CONV] Routing to state: BUY_SELECT_COVER
+[2026-01-31T12:02:25.055Z] [INFO] 📤 [BOT] Sent text to 97826621157619@lid

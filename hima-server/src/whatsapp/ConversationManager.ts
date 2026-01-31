@@ -6,6 +6,8 @@ import { createWallet } from "../libs/walletManager.js";
 import MpesaService from "../services/MpesaService.js";
 import { v4 as uuidv4 } from 'uuid';
 import { fileLogger } from "../libs/fileLogger.js";
+import MistralService from "../services/MistralService.js";
+import config from "../Configs/configs.js";
 
 export class ConversationManager {
     private static instance: ConversationManager;
@@ -45,57 +47,47 @@ export class ConversationManager {
                 });
                 await user.save();
                 fileLogger.log(`✅ [WHATSAPP] New user created: ${user._id}`);
-
             }
 
-            // Handle "hi" / "hello" to restart or show menu
-            // Handle greetings
-            if (
-                type === "text" &&
-                typeof message.text?.body === "string"
-            ) {
-                const body = message.text.body.trim().toLowerCase();
-                const greetingRegex = /^(hi|hello|hey|hola|habari|morning|good\s?morning|evening|good\s?evening|afternoon|good\s?afternoon)$/i;
+            // Standardize Text Body
+            let body = "";
+            if (type === "text" && message.text?.body) {
+                body = message.text.body.trim();
+            } else if (type === "interactive" && message.interactive.type === "button_reply") {
+                body = message.interactive.button_reply.id;
+            }
 
-                if (greetingRegex.test(body)) {
-                    fileLogger.log(`[CONVERSATION] User said '${body}', checking status...`);
+            // Handle Reset/Greeting/Cancel
+            if (type === "text") {
+                const greetingRegex = /^(hi|hello|hey|hola|habari|start|menu|help)$/i;
+                const cancelRegex = /^(cancel|stop|quit|exit|reset)$/i;
 
-                    if (user.registrationComplete) {
-                        // Ensure we aren't overwriting an active flow unless it's a hard reset? 
-                        // For now, greetings always show the menu if registered.
-                        user.conversationState = "registered";
-                        await user.save();
-                        await WhatsAppClient.sendTextMessage(from, `Welcome back, ${user.firstName}! 👋`);
-                    } else {
-                        // If not registered, we might want to continue the registration flow or restart it?
-                        // If they say "hi" in the middle of registration, maybe we shouldn't reset?
-                        // The original logic reset to "initial". I'll keep it simple: greetings reset to initial or registered menu.
-                        if (user.conversationState !== "initial") {
-                            // Optional: Ask if they want to restart? 
-                            // For now, let's reset to initial to be safe if they are stuck.
-                            user.conversationState = "initial";
-                            await user.save();
-                        }
+                if (greetingRegex.test(body) || cancelRegex.test(body) || body.toUpperCase() === "RESET") {
+                    if (cancelRegex.test(body)) {
+                        const cancelMsg = await MistralService.getConversationalPrompt('BUY', 'PURCHASE_CANCELLED', 'en');
+                        await WhatsAppClient.sendTextMessage(from, cancelMsg);
                     }
 
                     if (user.registrationComplete) {
+                        user.conversationState = "registered";
+                        await user.save();
                         await this.sendMainMenu(from);
                         return;
                     } else {
-                        // Re-trigger the initial state logic
-                        // await this.handleMessage({ ...message, type: "system_trigger" });
-                        // return;
+                        user.conversationState = "initial";
+                        await user.save();
                     }
                 }
             }
-
 
             // State machine
             console.log(`[CONVERSATION] User: ${user.phoneNumber}, State: ${user.conversationState}`);
             switch (user.conversationState) {
                 case "initial":
                     console.log("[CONVERSATION] Handling state: initial");
-                    await WhatsAppClient.sendTextMessage(from, `Hello ${name}! 👋\nWelcome to Hima Insurance.\nLet's get you registered.\nWhat is your first name?`);
+                    const introPrompt = await MistralService.getConversationalPrompt('REGISTER', 'FULL_NAME', 'en');
+                    await WhatsAppClient.sendTextMessage(from, introPrompt);
+
                     user.conversationState = "awaiting_first_name";
                     await user.save();
                     break;
@@ -103,46 +95,53 @@ export class ConversationManager {
                 case "awaiting_first_name":
                     console.log("[CONVERSATION] Handling state: awaiting_first_name");
                     if (type === "text") {
-                        user.firstName = message.text.body;
-                        user.conversationState = "awaiting_last_name";
+                        user.firstName = body;
+                        user.conversationState = "awaiting_id_number";
                         await user.save();
-                        await WhatsAppClient.sendTextMessage(from, "Great. What is your last name?");
+
+                        const prompt = await MistralService.getConversationalPrompt('REGISTER', 'ID_NUMBER', 'en', body);
+                        await WhatsAppClient.sendTextMessage(from, prompt);
                     } else {
-                        await WhatsAppClient.sendTextMessage(from, "Please tell me your first name.");
+                        const retryPrompt = await MistralService.getConversationalPrompt('REGISTER', 'FULL_NAME', 'en');
+                        await WhatsAppClient.sendTextMessage(from, retryPrompt);
                     }
                     break;
 
-                case "awaiting_last_name":
-                    console.log("[CONVERSATION] Handling state: awaiting_last_name");
+                case "awaiting_id_number":
                     if (type === "text") {
-                        user.lastName = message.text.body;
                         user.conversationState = "awaiting_email";
                         await user.save();
-                        await WhatsAppClient.sendTextMessage(from, "Got it. What is your email address?");
-                    } else {
-                        await WhatsAppClient.sendTextMessage(from, "Please tell me your last name.");
+
+                        const prompt = await MistralService.getConversationalPrompt('REGISTER', 'ID_NUMBER', 'en', body);
+                        await WhatsAppClient.sendTextMessage(from, prompt);
                     }
                     break;
 
                 case "awaiting_email":
                     console.log("[CONVERSATION] Handling state: awaiting_email");
-                    if (type === "text" && message.text.body.includes("@")) {
-                        user.email = message.text.body;
+                    if (type === "text" && body.includes("@")) {
+                        user.email = body;
 
                         // Create wallet
                         console.log("[CONVERSATION] Creating wallet for user");
                         const wallet = createWallet();
                         user.walletAddress = wallet.address;
-                        user.walletPrivateKey = wallet.privateKey; // This should be encrypted
+                        user.walletPrivateKey = wallet.privateKey;
 
                         user.registrationComplete = true;
                         user.conversationState = "registered";
                         await user.save();
 
-                        await WhatsAppClient.sendTextMessage(from, "🎉 Registration complete! Your wallet has been created.\n\nWhat would you like to do next?");
+                        // AI-generated success message
+                        const successMsg = await MistralService.getHimaResponse(
+                            "User just completed registration successfully. Congratulate them and let them know they can now buy insurance.",
+                            'en'
+                        );
+                        await WhatsAppClient.sendTextMessage(from, successMsg);
                         await this.sendMainMenu(from);
                     } else {
-                        await WhatsAppClient.sendTextMessage(from, "Please provide a valid email address.");
+                        const retryPrompt = await MistralService.getConversationalPrompt('REGISTER', 'ID_NUMBER', 'en', body);
+                        await WhatsAppClient.sendTextMessage(from, retryPrompt);
                     }
                     break;
 
@@ -150,30 +149,32 @@ export class ConversationManager {
                     console.log("[CONVERSATION] Handling state: registered");
                     if (message.interactive && message.interactive.type === "button_reply") {
                         const btnId = message.interactive.button_reply.id;
-                        if (btnId === 'buy_insurance') {
-                            await WhatsAppClient.sendTextMessage(from, "Let's get you covered. Please choose a product from the list below.");
-                            user.conversationState = "purchase_flow_start";
-                            await user.save();
-                            await this.handleMessage(message);
-                        } else if (btnId === 'my_policies') {
-                            await WhatsAppClient.sendTextMessage(from, "This feature is coming soon.");
+                        await this.handleMenuSelection(user, from, btnId);
+                    } else if (type === "text") {
+                        // AI Fallback / Intent Detection
+                        const intent = await MistralService.detectIntent(body);
+
+                        if (intent === 'BUY_INSURANCE') {
+                            await this.startBuyFlow(user, from);
+                        } else if (intent === 'FILE_CLAIM') {
+                            await this.startClaimFlow(user, from);
+                        } else if (intent === 'VIEW_PROFILE') {
+                            await this.handleViewProfile(user, from);
+                        } else if (intent === 'CONTACT_SUPPORT') {
+                            const supportMsg = await MistralService.getHimaResponse("User wants to contact support", 'en');
+                            await WhatsAppClient.sendTextMessage(from, supportMsg);
                         } else {
-                            await this.sendMainMenu(from);
+                            const response = await MistralService.getHimaResponse(body, 'en');
+                            await WhatsAppClient.sendTextMessage(from, response);
                         }
                     } else {
                         await this.sendMainMenu(from);
                     }
                     break;
 
-                case "purchase_flow_start":
-                    console.log("[CONVERSATION] Handling state: purchase_flow_start");
-                    const products = await InsuranceProduct.find({ isActive: true });
-                    const productButtons = products.map(p => ({ id: `product_${p._id}`, title: p.name }));
-                    await WhatsAppClient.sendButtonMessage(from, "Please select a product:", productButtons);
-                    user.conversationState = "awaiting_product_selection";
-                    await user.save();
-                    break;
-
+                // ============================================
+                // BUYING FLOW (Step-by-step)
+                // ============================================
                 case "awaiting_product_selection":
                     console.log("[CONVERSATION] Handling state: awaiting_product_selection");
                     if (message.interactive && message.interactive.type === "button_reply") {
@@ -181,34 +182,57 @@ export class ConversationManager {
                         if (btnId.startsWith("product_")) {
                             const productId = btnId.replace("product_", "");
                             user.selectedProductId = productId;
-                            user.conversationState = "awaiting_plate_number";
+                            user.conversationState = "awaiting_coverage_duration";
                             await user.save();
-                            await WhatsAppClient.sendTextMessage(from, "Great choice! What is your motorcycle's plate number?");
-                        } else {
-                            await WhatsAppClient.sendTextMessage(from, "Please select a product from the list.");
+
+                            // AI prompt for duration selection
+                            const durationPrompt = await MistralService.getConversationalPrompt('BUY', 'COVERAGE_DURATION', 'en');
+                            await WhatsAppClient.sendTextMessage(from, durationPrompt);
+
+                            // Send duration buttons
+                            const durationButtons = [
+                                { id: "duration_daily", title: "Daily (~50 KES)" },
+                                { id: "duration_weekly", title: "Weekly (~300 KES)" },
+                                { id: "duration_monthly", title: "Monthly (~1000 KES)" }
+                            ];
+                            await WhatsAppClient.sendButtonMessage(from, "Choose your coverage period:", durationButtons);
                         }
-                    } else {
-                        await WhatsAppClient.sendTextMessage(from, "Please select a product from the list.");
+                    } else if (type === 'text') {
+                        // Handle conversational questions about products
+                        const response = await MistralService.getHimaResponse(body, 'en');
+                        await WhatsAppClient.sendTextMessage(from, response);
+                    }
+                    break;
+
+                case "awaiting_coverage_duration":
+                    console.log("[CONVERSATION] Handling state: awaiting_coverage_duration");
+                    if (message.interactive && message.interactive.type === "button_reply") {
+                        const btnId = message.interactive.button_reply.id;
+                        let duration = "daily";
+                        if (btnId === "duration_daily") duration = "daily";
+                        else if (btnId === "duration_weekly") duration = "weekly";
+                        else if (btnId === "duration_monthly") duration = "monthly";
+
+                        // Store duration (you may want to add this field to User model)
+                        user.conversationState = "awaiting_plate_number";
+                        await user.save();
+
+                        // AI prompt for plate number
+                        const platePrompt = await MistralService.getConversationalPrompt('BUY', 'BUY_PLATE_NUMBER', 'en', duration);
+                        await WhatsAppClient.sendTextMessage(from, platePrompt);
+                    } else if (type === 'text') {
+                        const response = await MistralService.getHimaResponse(body, 'en');
+                        await WhatsAppClient.sendTextMessage(from, response);
                     }
                     break;
 
                 case "awaiting_plate_number":
                     console.log("[CONVERSATION] Handling state: awaiting_plate_number");
                     if (type === "text") {
-                        user.plateNumber = message.text.body;
+                        user.plateNumber = body;
                         user.conversationState = "awaiting_confirmation";
                         await user.save();
-
-                        const selectedProduct = await InsuranceProduct.findById(user.selectedProductId);
-
-                        const confirmationText = `Please confirm your selection:\n\n*Product:* ${selectedProduct?.name}\n*Plate Number:* ${user.plateNumber}\n*Premium:* KES ${selectedProduct?.premiumAmountKES}\n\nDo you want to proceed with the purchase?`;
-                        const confirmationButtons = [
-                            { id: "confirm_purchase", title: "Yes, proceed" },
-                            { id: "cancel_purchase", title: "No, cancel" },
-                        ];
-                        await WhatsAppClient.sendButtonMessage(from, confirmationText, confirmationButtons);
-                    } else {
-                        await WhatsAppClient.sendTextMessage(from, "Please provide your motorcycle's plate number.");
+                        await this.sendPurchaseConfirmation(user, from, body);
                     }
                     break;
 
@@ -217,60 +241,12 @@ export class ConversationManager {
                     if (message.interactive && message.interactive.type === "button_reply") {
                         const btnId = message.interactive.button_reply.id;
                         if (btnId === "confirm_purchase") {
-                            const selectedProduct = await InsuranceProduct.findById(user.selectedProductId);
-                            if (!selectedProduct) {
-                                await WhatsAppClient.sendTextMessage(from, "Sorry, something went wrong. Please try again.");
-                                user.conversationState = "registered";
-                                await user.save();
-                                return;
-                            }
-
-                            const policyNumber = `HIMA-${uuidv4().toUpperCase()}`;
-                            const newPolicy = new Policy({
-                                userId: user._id,
-                                productId: user.selectedProductId,
-                                policyNumber,
-                                motorcycleMake: user.motorcycleMake,
-                                motorcycleModel: user.motorcycleModel,
-                                motorcycleYear: user.motorcycleYear,
-                                registrationNumber: user.plateNumber,
-                                coverageType: selectedProduct.coverageType,
-                                tier: selectedProduct.tier,
-                                premiumAmount: selectedProduct.premiumAmountKES,
-                                sumAssuredKES: selectedProduct.sumAssuredKES,
-                                policyStartDate: new Date(),
-                                policyEndDate: new Date(new Date().setDate(new Date().getDate() + 7)), // Assuming weekly policy for now
-                                maturityDate: new Date(new Date().setDate(new Date().getDate() + 7)),
-                                paymentStatus: "pending",
-                                policyStatus: "pending",
-                                offChainMetadata: {},
-                            });
-
-
-                            console.log("[CONVERSATION] Initiating STK push");
-                            const mpesaResponse = await MpesaService.initiateSTKPush(
-                                user.phoneNumber,
-                                selectedProduct.premiumAmountKES,
-                                policyNumber,
-                                `Payment for policy ${policyNumber}`
-                            );
-
-
-                            if (!newPolicy.offChainMetadata) {
-                                newPolicy.offChainMetadata = {};
-                            }
-                            newPolicy.offChainMetadata.checkoutRequestID = mpesaResponse.CheckoutRequestID;
-                            await newPolicy.save();
-
-                            user.conversationState = "awaiting_payment";
-                            await user.save();
-
-                            await WhatsAppClient.sendTextMessage(from, "Please check your phone to complete the payment.");
-
+                            await this.executePurchase(user, from);
                         } else if (btnId === "cancel_purchase") {
                             user.conversationState = "registered";
                             await user.save();
-                            await WhatsAppClient.sendTextMessage(from, "Purchase cancelled. What would you like to do next?");
+                            const cancelMsg = await MistralService.getConversationalPrompt('BUY', 'PURCHASE_CANCELLED', 'en');
+                            await WhatsAppClient.sendTextMessage(from, cancelMsg);
                             await this.sendMainMenu(from);
                         }
                     }
@@ -278,17 +254,48 @@ export class ConversationManager {
 
                 case "awaiting_payment":
                     console.log("[CONVERSATION] Handling state: awaiting_payment");
-                    // The user will be in this state until the payment is confirmed via the callback
-                    await WhatsAppClient.sendTextMessage(from, "We are still waiting for your payment to be confirmed. Please complete the payment on your phone.");
+                    const pendingMsg = await MistralService.getConversationalPrompt('BUY', 'PAYMENT_PENDING', 'en');
+                    await WhatsAppClient.sendTextMessage(from, pendingMsg);
                     break;
 
+                // ============================================
+                // CLAIMS FLOW (Step-by-step)
+                // ============================================
+                case "claim_date":
+                    if (type === "text") {
+                        user.conversationState = "claim_location";
+                        await user.save();
+                        const prompt = await MistralService.getConversationalPrompt('CLAIM', 'CLAIM_LOCATION', 'en', body);
+                        await WhatsAppClient.sendTextMessage(from, prompt);
+                    }
+                    break;
+
+                case "claim_location":
+                    if (type === "text") {
+                        user.conversationState = "claim_description";
+                        await user.save();
+                        const prompt = await MistralService.getConversationalPrompt('CLAIM', 'CLAIM_DESCRIPTION', 'en', body);
+                        await WhatsAppClient.sendTextMessage(from, prompt);
+                    }
+                    break;
+
+                case "claim_description":
+                    if (type === "text") {
+                        user.conversationState = "registered";
+                        await user.save();
+                        // AI-generated submission confirmation
+                        const confirmMsg = await MistralService.getConversationalPrompt('CLAIM', 'CLAIM_SUBMITTED', 'en', body);
+                        await WhatsAppClient.sendTextMessage(from, confirmMsg);
+                        await this.sendMainMenu(from);
+                    }
+                    break;
 
                 default:
                     console.log(`[CONVERSATION] Handling unknown state: ${user.conversationState}`);
-                    await WhatsAppClient.sendTextMessage(from, "I'm not sure how to handle this. Let me restart the conversation for you.");
-                    user.conversationState = "initial";
+                    const errorMsg = await MistralService.getConversationalPrompt('BUY', 'ERROR_FALLBACK', 'en');
+                    await WhatsAppClient.sendTextMessage(from, errorMsg);
+                    user.conversationState = user.registrationComplete ? "registered" : "initial";
                     await user.save();
-                    await this.handleMessage(message); // Re-run the logic
                     break;
             }
 
@@ -298,12 +305,94 @@ export class ConversationManager {
     }
 
     private async sendMainMenu(to: string) {
+        // AI-generated greeting
+        const greeting = await MistralService.getConversationalPrompt('BUY', 'MENU_GREETING', 'en');
+
         const buttons = [
             { id: "buy_insurance", title: "Buy Insurance" },
-            { id: "my_policies", title: "My Policies" },
-            { id: "help", title: "Help" },
+            { id: "file_claim", title: "File Claim" },
+            { id: "my_profile", title: "My Profile" },
         ];
-        await WhatsAppClient.sendButtonMessage(to, "How can I help you?", buttons);
+        await WhatsAppClient.sendButtonMessage(to, greeting, buttons);
+    }
+
+    private async handleMenuSelection(user: User, from: string, btnId: string) {
+        if (btnId === 'buy_insurance') {
+            await this.startBuyFlow(user, from);
+        } else if (btnId === 'file_claim') {
+            await this.startClaimFlow(user, from);
+        } else if (btnId === 'my_profile') {
+            await this.handleViewProfile(user, from);
+        }
+    }
+
+    private async startBuyFlow(user: User, from: string) {
+        // AI-generated intro to buying
+        const prompt = await MistralService.getConversationalPrompt('BUY', 'SELECT_COVER', 'en');
+        await WhatsAppClient.sendTextMessage(from, prompt);
+
+        const products = await InsuranceProduct.find({ isActive: true });
+        const productButtons = products.map(p => ({ id: `product_${p._id}`, title: p.name }));
+
+        await WhatsAppClient.sendButtonMessage(from, "Choose your insurance type:", productButtons);
+        user.conversationState = "awaiting_product_selection";
+        await user.save();
+    }
+
+    private async startClaimFlow(user: User, from: string) {
+        user.conversationState = "claim_date";
+        await user.save();
+        const prompt = await MistralService.getConversationalPrompt('CLAIM', 'CLAIM_DATE', 'en');
+        await WhatsAppClient.sendTextMessage(from, prompt);
+    }
+
+    private async handleViewProfile(user: User, from: string) {
+        const policy = await Policy.findOne({ userId: user._id, policyStatus: 'active' });
+
+        // AI-generated profile intro
+        const intro = await MistralService.getHimaResponse("Show user their profile information", 'en');
+        await WhatsAppClient.sendTextMessage(from, intro);
+
+        const profileMsg = `👤 **Profile**\nName: ${user.firstName} ${user.lastName}\nEmail: ${user.email}\nWallet: ${user.walletAddress}\n\n📄 **Active Policy**: ${policy ? policy.policyNumber : "None"}`;
+        await WhatsAppClient.sendTextMessage(from, profileMsg);
+    }
+
+    private async sendPurchaseConfirmation(user: User, from: string, plateNumber: string) {
+        const selectedProduct = await InsuranceProduct.findById(user.selectedProductId);
+
+        // AI-generated confirmation prompt with details
+        const confirmPrompt = await MistralService.getConversationalPrompt(
+            'BUY',
+            'CONFIRM_PURCHASE',
+            'en',
+            `Product: ${selectedProduct?.name}, Price: ${selectedProduct?.premiumAmountKES} KES, Plate: ${plateNumber}`
+        );
+
+        const buttons = [
+            { id: "confirm_purchase", title: "✅ Confirm" },
+            { id: "cancel_purchase", title: "❌ Cancel" },
+        ];
+        await WhatsAppClient.sendButtonMessage(from, confirmPrompt, buttons);
+    }
+
+    private async executePurchase(user: User, from: string) {
+        // AI-generated payment initiation message
+        const paymentMsg = await MistralService.getConversationalPrompt('BUY', 'PAYMENT_INITIATED', 'en');
+        await WhatsAppClient.sendTextMessage(from, paymentMsg);
+
+        const product = await InsuranceProduct.findById(user.selectedProductId);
+        const policyNumber = `HIMA-${uuidv4().toUpperCase()}`;
+
+        const mpesaResponse = await MpesaService.initiateSTKPush(
+            user.phoneNumber,
+            product ? product.premiumAmountKES : 100,
+            policyNumber,
+            `Payment for policy ${policyNumber}`
+        );
+
+        user.conversationState = "registered";
+        await user.save();
+        await this.sendMainMenu(from);
     }
 }
 

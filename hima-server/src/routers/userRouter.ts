@@ -34,10 +34,15 @@ router.put("/:id/status", async (req: Request, res: Response) => {
         switch (action) {
             case "approve_kyc":
                 user.kycStatus = "verified";
-                // Optionally proceed conversation state if they were waiting
-                if (user.conversationState === "WAITING_FOR_APPROVAL") {
-                    // We don't change state here blindly, but the next message will trigger the success flow
-                    // Or we could proactively send a message if we had access to the client here
+                // Notify user via WhatsApp
+                try {
+                    const whatsappClient = (await import("../whatsapp/WhatsAppClient.js")).default;
+                    await whatsappClient.sendTextMessage(user.phoneNumber, "🎉 Congratulations! Your KYC documents have been approved. You are now fully verified and can purchase insurance coverage instantly.");
+                    // Reset state to ensure they get main menu next time
+                    user.conversationState = "registered";
+                    user.botConversationState = "MAIN_MENU";
+                } catch (err) {
+                    console.error("Failed to send KYC approval notification:", err);
                 }
                 break;
             case "reject_kyc":

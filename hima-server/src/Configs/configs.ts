@@ -61,6 +61,11 @@ function getConfig() {
             headless: process.env.BOT_HEADLESS !== "false",
             qrTimeout: parseInt(process.env.BOT_QR_TIMEOUT || "60000", 10),
             sessionDataPath: process.env.BOT_SESSION_DATA_PATH || "./sessions"
+        },
+        mistral: {
+            apiKey: process.env.MISTRAL_API_KEY || "",
+            apiUrl: process.env.MISTRAL_API_URL || "https://api.mistral.ai/v1",
+            model: process.env.MISTRAL_MODEL || "mistral-tiny"
         }
     };
 }

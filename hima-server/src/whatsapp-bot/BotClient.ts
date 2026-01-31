@@ -4,7 +4,7 @@
  */
 
 import { create, Client } from '@open-wa/wa-automate';
-import type { Message, Chat } from '@open-wa/wa-automate';
+import type { Message, Chat, ConfigObject } from '@open-wa/wa-automate';
 import config from '../Configs/configs.js';
 import { fileLogger } from '../libs/fileLogger.js';
 import * as fs from 'fs';
@@ -97,7 +97,7 @@ export class BotClient {
                 fileLogger.log(`⚠️ [BOT] No custom Chrome path found, using default`);
             }
 
-            const clientConfig: any = {
+            const clientConfig: ConfigObject = {
                 sessionId: config.bot?.sessionName || 'hima-bot',
                 headless: true, // Force headless on server
                 qrTimeout: config.bot?.qrTimeout || 60000,
@@ -112,8 +112,9 @@ export class BotClient {
                 qrLogSkip: false,
 
                 // Performance optimizations
-                skipBrokenMethodsCheck: true,
-                cacheEnabled: false,
+                skipBrokenMethodsCheck: false,
+                cacheEnabled: true,
+                safeMode: true,
 
                 // Session management
                 killProcessOnBrowserClose: true,
@@ -127,7 +128,10 @@ export class BotClient {
                     '--no-sandbox',
                     '--disable-setuid-sandbox',
                     '--disable-dev-shm-usage',
-                    '--disable-gpu'
+                    '--disable-gpu',
+                    '--disable-extensions',
+                    '--disable-infobars',
+                    '--window-size=1280,720'
                 ]
             };
 

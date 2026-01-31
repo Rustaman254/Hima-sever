@@ -5,7 +5,7 @@ export interface IInsuranceProduct extends Document {
     description: string;
     premiumAmountKES: number;
     sumAssuredKES: number;
-    coverageType: "trip" | "daily" | "weekly";
+    coverageType: "trip" | "daily" | "weekly" | "monthly";
     tier: "basic" | "standard" | "plus";
     isActive: boolean;
     createdAt: Date;
@@ -33,7 +33,7 @@ const InsuranceProductSchema = new Schema<IInsuranceProduct>(
         },
         coverageType: {
             type: String,
-            enum: ["trip", "daily", "weekly"],
+            enum: ["trip", "daily", "weekly", "monthly"],
             required: true,
         },
         tier: {
