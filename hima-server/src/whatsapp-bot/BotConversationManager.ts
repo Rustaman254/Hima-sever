@@ -748,6 +748,7 @@ export class BotConversationManager {
                 name: user.kycData?.fullName || user.firstName || 'Not recorded',
                 id_number: user.kycData?.idNumber || 'Not recorded',
                 plate: user.kycData?.plateNumber || 'Not recorded',
+                login_phone: user.loginPhoneNumber || 'Not recorded',
                 account_status: user.kycStatus || 'pending',
                 wallet: user.walletAddress || 'None',
                 hima_policies: policies.length > 0

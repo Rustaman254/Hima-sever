@@ -2335,3 +2335,25 @@ Webhook Error: AxiosError: Request failed with status code 401
 [2026-01-31T13:50:45.233Z] [INFO] ⚠️ [BOT] No custom Chrome path found, using default
 [2026-01-31T13:51:10.432Z] [INFO] ✅ [BOT] WhatsApp bot initialized successfully
 [2026-01-31T13:51:10.432Z] [INFO] ✅ [BOT] WhatsApp bot started successfully
+[2026-01-31T14:14:20.604Z] [INFO] 📨 [BOT-CONV] Processing message from 97826621157619@lid
+[2026-01-31T14:14:21.029Z] [INFO] 🔀 [BOT-CONV] Routing to state: WAITING_KYC_APPROVAL
+[2026-01-31T14:14:22.275Z] [WARN] ⚠️ [BOT-CONV] Unknown state or unhandled input in state: WAITING_KYC_APPROVAL
+[2026-01-31T14:14:22.718Z] [INFO] 🧠 [MISTRAL-CTX] Context generated for 97826621157619@lid. Policies: 0
+[2026-01-31T14:14:23.878Z] [INFO] 📤 [BOT] Sent text to 97826621157619@lid
+[2026-01-31T14:14:39.719Z] [INFO] 📨 [BOT-CONV] Processing message from 97826621157619@lid
+[2026-01-31T14:14:40.079Z] [INFO] 🔀 [BOT-CONV] Routing to state: WAITING_KYC_APPROVAL
+[2026-01-31T14:14:40.554Z] [WARN] ⚠️ [BOT-CONV] Unknown state or unhandled input in state: WAITING_KYC_APPROVAL
+[2026-01-31T14:14:41.006Z] [INFO] 🧠 [MISTRAL-CTX] Context generated for 97826621157619@lid. Policies: 0
+[2026-01-31T14:14:41.833Z] [INFO] 📤 [BOT] Sent text to 97826621157619@lid
+[2026-01-31T14:20:37.196Z] [INFO] 🚀 Server started on port 8100
+[2026-01-31T14:20:37.594Z] [INFO] 🚀 [BOT] Starting WhatsApp bot...
+[2026-01-31T14:20:37.595Z] [INFO] 🤖 [BOT] Initializing WhatsApp bot...
+[2026-01-31T14:20:37.598Z] [INFO] ⚠️ [BOT] No Chrome installation found in any cache directory
+[2026-01-31T14:20:37.599Z] [INFO] ⚠️ [BOT] No custom Chrome path found, using default
+[2026-01-31T14:23:56.500Z] [ERROR] ❌ [BOT] Failed to initialize bot: Error: App Offline
+[2026-01-31T14:23:56.501Z] [ERROR] ❌ [BOT] Failed to start bot: Error: App Offline
+[2026-01-31T14:39:06.262Z] [INFO] 🚀 Server started on port 8100
+[2026-01-31T14:39:06.313Z] [INFO] 🚀 [BOT] Starting WhatsApp bot...
+[2026-01-31T14:39:06.313Z] [INFO] 🤖 [BOT] Initializing WhatsApp bot...
+[2026-01-31T14:39:06.314Z] [INFO] ⚠️ [BOT] No Chrome installation found in any cache directory
+[2026-01-31T14:39:06.314Z] [INFO] ⚠️ [BOT] No custom Chrome path found, using default

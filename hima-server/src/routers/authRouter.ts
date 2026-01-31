@@ -44,20 +44,18 @@ router.post("/otp/request", async (req: Request, res: Response) => {
         await user.save();
 
         // Send via WhatsApp
-        // Try to send as text message for simplicity (or use template if configured)
-        // In production, this MUST be a template message to initiate conversation
         try {
             const BotClient = (await import("../whatsapp-bot/BotClient.js")).default;
-            console.log(`📤 [AUTH] Sending login code to ${cleanedPhone} via Bot`);
+            console.log(`📤 [AUTH] Sending login code to ${user.phoneNumber} via Bot`);
 
             await BotClient.sendText(
-                cleanedPhone,
+                user.phoneNumber,
                 `Your Hima Insurance login code is: *${code}*\n\nIt expires in 10 minutes. Do not share this code.`
             );
             console.log(`✅ [AUTH] WhatsApp message sent successfully via Bot`);
         } catch (error) {
             console.warn(`⚠️ [AUTH] Failed to send WhatsApp message via Bot, falling back to console log: ${error}`);
-            console.log(`🔐 [AUTH] Generated Login Code for ${cleanedPhone}: ${code}`);
+            console.log(`🔐 [AUTH] Generated Login Code for ${user.phoneNumber}: ${code}`);
         }
 
         res.json({ success: true, message: "Login code sent via WhatsApp" });

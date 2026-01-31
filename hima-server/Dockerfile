@@ -27,8 +27,8 @@ COPY . .
 # Build the application
 RUN pnpm run build
 
-# Expose the port the app runs on
-EXPOSE 8100
+# Expose the port the app runs on (Render/Railway default)
+EXPOSE 10000
 
 # Define environment variables
 ENV NODE_ENV=production
