@@ -13,7 +13,7 @@ export interface IPolicy extends Document {
     registrationNumber?: string;
 
     // Coverage details
-    coverageType: "basic" | "comprehensive" | "premium" | "trip" | "daily" | "weekly";
+    coverageType: "basic" | "comprehensive" | "premium" | "trip" | "daily" | "weekly" | "monthly";
     tier?: string;
     premiumAmount: number;
     premiumAmountKES?: number; // Optional for backward compatibility

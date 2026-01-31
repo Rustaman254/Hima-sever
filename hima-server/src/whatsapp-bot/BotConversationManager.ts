@@ -39,6 +39,19 @@ export class BotConversationManager {
             // Get or create user
             let user = await User.findOne({ phoneNumber });
             if (!user) {
+                // Fallback: Check if user exists with just digits (from previous version's truncated ID)
+                const cleanPhone = phoneNumber.split(/[@:]/)[0];
+                if (cleanPhone !== phoneNumber) {
+                    user = await User.findOne({ phoneNumber: cleanPhone });
+                    if (user) {
+                        fileLogger.log(`👤 [BOT-CONV] Migrating user ${cleanPhone} to full ChatID ${phoneNumber}`);
+                        user.phoneNumber = phoneNumber;
+                        await user.save();
+                    }
+                }
+            }
+
+            if (!user) {
                 user = new User({
                     phoneNumber,
                     botConversationState: 'LANG_SELECT',
@@ -123,12 +136,12 @@ export class BotConversationManager {
         }
 
         if (user.kycStatus === 'verified') {
-            // KYC approved - show main menu
-            const name = user.kycData?.fullName || user.firstName || 'User';
-            await BotClient.sendText(phoneNumber, t(lang, 'greeting_registered', { name }));
+            // KYC approved - show conversational main menu
+            const context = await this.getUserContext(user);
+            const prompt = await MistralService.getHimaResponse("Greet me and ask how you can help. Remind me I can buy insurance, file a claim, or view my profile.", context, lang);
+            await BotClient.sendText(phoneNumber, prompt);
             user.botConversationState = 'MAIN_MENU';
             await user.save();
-            await this.sendMainMenu(user, phoneNumber);
             return;
         }
     }
@@ -141,11 +154,9 @@ export class BotConversationManager {
         fileLogger.log(`🔀 [BOT-CONV] Routing to state: ${currentState}`);
 
         // GLOBAL INTENT CHECK (Middleware-like)
-        // Only run for text messages to avoid breaking media flows
         if (message.type === 'chat') {
             const body = message.body.trim();
 
-            // Simple keyword check first to save API calls
             if (/^(cancel|stop|quit|exit|reset)$/i.test(body)) {
                 await BotClient.sendText(phoneNumber, "⛔ Cancelled.");
                 user.botConversationState = 'MAIN_MENU';
@@ -154,11 +165,16 @@ export class BotConversationManager {
                 return;
             }
 
-            // For other inputs, if we are in a specific flow (like Registration), we might want to check for 'CANCEL' intent
-            // But doing an API call on every step might be slow. 
-            // Compromise: If the input is NOT what we expect (e.g. not a number for ID), we fall back to AI in the specific handler.
-            // However, the user asked for "Global Cancel intent". 
-            // Let's rely on the keyword check above for speed, and if the specific handler fails to validate input, it calls handleAIFallback which detects CANCEL.
+            const intent = await MistralService.detectIntent(body);
+
+            if (intent === 'EXIT') {
+                const lang = getUserLanguage(user);
+                const exitMsg = lang === 'sw' ? "Asante! Karibu tena HIMA insurance. 🙏" : "You're welcome! Thank you for choosing HIMA insurance. Have a great day! 🙏";
+                await BotClient.sendText(phoneNumber, exitMsg);
+                user.botConversationState = 'MAIN_MENU';
+                await user.save();
+                return;
+            }
         }
 
         switch (currentState) {
@@ -195,14 +211,33 @@ export class BotConversationManager {
             case 'MAIN_MENU':
                 await this.handleMainMenu(user, message, phoneNumber);
                 break;
+
+            // Buying Flows
             case 'BUY_SELECT_COVER':
                 await this.handleBuySelectCover(user, message, phoneNumber);
+                break;
+            case 'BUY_BIKE_COLOR':
+                await this.handleBuyBikeColor(user, message, phoneNumber);
+                break;
+            case 'BUY_BIKE_YEAR':
+                await this.handleBuyBikeYear(user, message, phoneNumber);
+                break;
+            case 'BUY_BIKE_PHOTO':
+                await this.handleBuyBikePhoto(user, message, phoneNumber);
+                break;
+            case 'BUY_PA_BENEFICIARY':
+                await this.handleBuyPABeneficiary(user, message, phoneNumber);
                 break;
             case 'BUY_CONFIRM':
                 await this.handleBuyConfirm(user, message, phoneNumber);
                 break;
+
+            // Claims Flows
             case 'CLAIM_DATE':
                 await this.handleClaimDate(user, message, phoneNumber);
+                break;
+            case 'CLAIM_TIME':
+                await this.handleClaimTime(user, message, phoneNumber);
                 break;
             case 'CLAIM_LOCATION':
                 await this.handleClaimLocation(user, message, phoneNumber);
@@ -210,12 +245,16 @@ export class BotConversationManager {
             case 'CLAIM_DESCRIPTION':
                 await this.handleClaimDescription(user, message, phoneNumber);
                 break;
+            case 'CLAIM_BIKE_PHOTO':
+                await this.handleClaimBikePhoto(user, message, phoneNumber);
+                break;
             case 'CLAIM_DAMAGE_PHOTO':
                 await this.handleClaimDamagePhoto(user, message, phoneNumber);
                 break;
             case 'CLAIM_POLICE_ABSTRACT':
                 await this.handleClaimPoliceAbstract(user, message, phoneNumber);
                 break;
+
             default:
                 fileLogger.log(`⚠️ [BOT-CONV] Unknown state or unhandled input in state: ${currentState}`, 'WARN');
                 if (currentState === 'MAIN_MENU' || currentState === 'WAITING_KYC_APPROVAL') {
@@ -232,16 +271,8 @@ export class BotConversationManager {
     // ============================================
 
     private async sendLanguageSelection(phoneNumber: string): Promise<void> {
-        await BotClient.sendButtons(
-            phoneNumber,
-            t('en', 'language_select_prompt'), // Default to English prompt for selection
-            [
-                { id: 'LANG_EN', text: t('en', 'lang_button_english') },
-                { id: 'LANG_SW', text: t('sw', 'lang_button_swahili') }
-            ],
-            t('en', 'language_select_title'),
-            t('en', 'button_tap_prompt')
-        );
+        const prompt = "Please choose your preferred language: \n1. English\n2. Swahili\n(You can just say 'English' or 'Swahili')";
+        await BotClient.sendText(phoneNumber, prompt);
     }
 
     private async handleLanguageSelection(user: IUser, message: Message, phoneNumber: string): Promise<void> {
@@ -289,29 +320,35 @@ export class BotConversationManager {
 
     private async sendRegistrationStart(user: IUser, phoneNumber: string): Promise<void> {
         const lang = getUserLanguage(user);
-        await BotClient.sendButtons(
-            phoneNumber,
-            t(lang, 'welcome_no_account'),
-            [{ id: 'REG_START', text: t(lang, 'reg_start_button') }],
-            'HIMA Registration',
-            t(lang, 'button_tap_prompt')
-        );
+        const prompt = await MistralService.getConversationalPrompt('REGISTER', 'REG_START', lang);
+        await BotClient.sendText(phoneNumber, prompt);
     }
 
     private async handleRegistrationStart(user: IUser, message: Message, phoneNumber: string): Promise<void> {
         const lang = getUserLanguage(user);
 
-        // Initialize kycData if not exists
-        if (!user.kycData) {
-            user.kycData = {};
+        if (message.type !== 'chat') {
+            await this.sendRegistrationStart(user, phoneNumber);
+            return;
         }
 
-        user.botConversationState = 'REG_FULL_NAME';
-        await user.save();
+        const body = message.body.trim().toLowerCase();
 
-        // Context: User clicked "Register"
-        const prompt = await MistralService.getConversationalPrompt('REGISTER', 'FULL_NAME', lang);
-        await BotClient.sendText(phoneNumber, prompt);
+        // Match: yes, start, anza, ndio, ok, or just '1' (common habit)
+        const positiveIntent = body.includes('yes') || body.includes('ndio') || body.includes('start') ||
+            body.includes('anza') || body.includes('ready') || body.match(/^(1|ok|okay|sawa|let's go)$/);
+
+        if (positiveIntent) {
+            if (!user.kycData) user.kycData = {};
+            user.botConversationState = 'REG_FULL_NAME';
+            await user.save();
+            const prompt = await MistralService.getConversationalPrompt('REGISTER', 'FULL_NAME', lang);
+            await BotClient.sendText(phoneNumber, prompt);
+        } else {
+            // Conversational fallback - explain why it's needed
+            const aiResponse = await MistralService.getHimaResponse(message.body, "Explain that registration is required to buy insurance or file claims. Ask if they want to proceed now.", lang);
+            await BotClient.sendText(phoneNumber, aiResponse);
+        }
     }
 
     private async handleRegFullName(user: IUser, message: Message, phoneNumber: string): Promise<void> {
@@ -503,18 +540,9 @@ export class BotConversationManager {
 
     private async sendMainMenu(user: IUser, phoneNumber: string): Promise<void> {
         const lang = getUserLanguage(user);
-        await BotClient.sendButtons(
-            phoneNumber,
-            t(lang, 'main_menu_title'),
-            [
-                { id: 'BUY_INS', text: t(lang, 'main_menu_buy') },
-                { id: 'VIEW_PROFILE', text: t(lang, 'main_menu_profile') },
-                { id: 'FILE_CLAIM', text: t(lang, 'main_menu_claim') },
-                { id: 'CHANGE_LANG', text: t(lang, 'main_menu_change_lang') }
-            ],
-            'HIMA Menu',
-            t(lang, 'button_tap_prompt')
-        );
+        const context = await this.getUserContext(user);
+        const prompt = await MistralService.getHimaResponse("Greet me and list my options: Buy Insurance, View Profile, File Claim, or Change Language.", context, lang);
+        await BotClient.sendText(phoneNumber, prompt);
     }
 
     private async handleMainMenu(user: IUser, message: Message, phoneNumber: string): Promise<void> {
@@ -565,14 +593,9 @@ export class BotConversationManager {
             return;
         }
 
-        fileLogger.log(`🤖 [BOT-CONV] Using AI fallback for: ${body}`);
-
-        // 1. Detect Intent - only for structured actions
         const intent = await MistralService.detectIntent(body);
-        fileLogger.log(`🔍 [BOT-CONV] AI Detected Intent: ${intent}`);
-
-        // Handle specific keywords directly for faster response
         const lowerBody = body.toLowerCase();
+
         if (lowerBody.includes('profile') || lowerBody.includes('name') || lowerBody.includes('who am i') || lowerBody.includes('my info')) {
             const context = await this.getUserContext(user);
             const aiResponse = await MistralService.getHimaResponse(body, context, lang);
@@ -580,20 +603,18 @@ export class BotConversationManager {
             return;
         }
 
-        // 2. Route based on intent
         switch (intent) {
             case 'BUY_INSURANCE':
                 user.botConversationState = 'BUY_SELECT_COVER';
                 await user.save();
-                await this.sendBuyInsuranceList(user, phoneNumber);
+                const buyPrompt = await MistralService.getConversationalPrompt('BUY', 'SELECT_COVER', lang, body);
+                await BotClient.sendText(phoneNumber, buyPrompt);
                 break;
             case 'FILE_CLAIM':
                 user.botConversationState = 'CLAIM_DATE';
                 await user.save();
-
-                // Conversational claim start
-                const prompt = await MistralService.getConversationalPrompt('CLAIM', 'CLAIM_DATE', lang, "User wants to report accident");
-                await BotClient.sendText(phoneNumber, prompt);
+                const claimPrompt = await MistralService.getConversationalPrompt('CLAIM', 'CLAIM_START', lang, body);
+                await BotClient.sendText(phoneNumber, claimPrompt);
                 break;
             case 'CHANGE_LANGUAGE':
                 user.botConversationState = 'LANG_SELECT';
@@ -607,7 +628,6 @@ export class BotConversationManager {
                 );
                 break;
             default:
-                // Dynamic AI Response with Database Context
                 const context = await this.getUserContext(user);
                 const aiResponse = await MistralService.getHimaResponse(body, context, lang);
                 await BotClient.sendText(phoneNumber, aiResponse);
@@ -620,31 +640,46 @@ export class BotConversationManager {
      */
     private async getUserContext(user: IUser): Promise<string> {
         try {
-            const policies = await Policy.find({ userId: user._id.toString() });
-            const claims = await Claim.find({ userId: user._id.toString() });
+            const cleanPhone = user.phoneNumber.split(/[@:]/)[0];
+
+            // Search by both userId (standard) and fallbacks (linked by plate or phone)
+            const policies = await Policy.find({
+                $or: [
+                    { userId: user._id.toString() },
+                    { registrationNumber: user.kycData?.plateNumber },
+                    { userId: user.phoneNumber }, // Full chatId fallback
+                    { userId: cleanPhone } // Clean digits fallback
+                ]
+            });
+
+            const claims = await Claim.find({
+                $or: [
+                    { userId: user._id.toString() },
+                    { userId: user.phoneNumber },
+                    { userId: cleanPhone }
+                ]
+            });
 
             const contextObj = {
-                name: user.kycData?.fullName || user.firstName || 'Not set',
-                phone: user.phoneNumber,
-                id: user.kycData?.idNumber || 'Not set',
-                plate: user.kycData?.plateNumber || 'Not set',
+                name: user.kycData?.fullName || user.firstName || 'Not recorded',
+                id_number: user.kycData?.idNumber || 'Not recorded',
+                plate: user.kycData?.plateNumber || 'Not recorded',
+                account_status: user.kycStatus || 'pending',
                 wallet: user.walletAddress || 'None',
-                status: user.kycStatus || 'pending',
-                policies: policies.length > 0
-                    ? policies.map(p => `${p.coverageType} (${p.policyStatus}) exp ${p.policyEndDate.toISOString().split('T')[0]}`).join(', ')
-                    : 'None active',
-                claims: claims.length > 0
+                hima_policies: policies.length > 0
+                    ? policies.map(p => `Policy ${p.policyNumber}: ${p.coverageType.toUpperCase()} cover (${p.policyStatus})`).join(', ')
+                    : 'No policies found in database.',
+                claims_record: claims.length > 0
                     ? claims.map(c => `Claim ID ${(c as any).claimNumber || 'N/A'}: ${c.status}`).join(', ')
-                    : 'None'
+                    : 'No claims found.'
             };
 
             const contextString = JSON.stringify(contextObj, null, 2);
-            fileLogger.log(`🧠 [MISTRAL-CTX] Context generated for ${user.phoneNumber}. Name: ${contextObj.IDENTIFIED_USER_NAME}, Policies: ${policies.length}`);
-            console.log(`[BOT-DEBUG] Context for ${user.phoneNumber}:`, contextString); // Log for developer to see in pnpm run dev output
+            fileLogger.log(`🧠 [MISTRAL-CTX] Context generated for ${user.phoneNumber}. Policies: ${policies.length}`);
             return contextString;
         } catch (error) {
             fileLogger.log(`⚠️ [BOT-CONV] Error getting user context: ${error}`, 'WARN');
-            return "Error retrieving user data.";
+            return "Error retrieving database records.";
         }
     }
 
@@ -654,22 +689,8 @@ export class BotConversationManager {
 
     private async sendBuyInsuranceList(user: IUser, phoneNumber: string): Promise<void> {
         const lang = getUserLanguage(user);
-
-        // Conversational intro before buttons
         const prompt = await MistralService.getConversationalPrompt('BUY', 'SELECT_COVER', lang);
         await BotClient.sendText(phoneNumber, prompt);
-
-        // Buttons are now just the options, the AI asks the question
-        await BotClient.sendButtons(
-            phoneNumber,
-            '', // Body empty because AI already spoke
-            [
-                { id: 'COV_TP', text: t(lang, 'buy_button_tp') },
-                { id: 'COV_COMP', text: t(lang, 'buy_button_comp') },
-                { id: 'COV_PA', text: t(lang, 'buy_button_pa') }
-            ],
-            lang === 'sw' ? 'Bima ya boda' : 'Boda cover'
-        );
     }
 
     private async handleBuySelectCover(user: IUser, message: Message, phoneNumber: string): Promise<void> {
@@ -680,21 +701,17 @@ export class BotConversationManager {
             return;
         }
 
-        const choice = message.body.trim();
+        const choice = message.body.trim().toLowerCase();
 
-        // Map choice to product
-        let coverageType = 'basic';
-        if (choice === '1') coverageType = 'basic';  // Third party
-        else if (choice === '2') coverageType = 'comprehensive';
-        else if (choice === '3') coverageType = 'premium';  // Personal accident
+        // Map choice to product (1. Basic, 2. Comprehensive, 3. Personal Accident/Premium)
+        let coverageType = '';
+        if (choice === '1' || choice.includes('basic') || choice.includes('third party')) coverageType = 'basic';
+        else if (choice === '2' || choice.includes('comprehensive')) coverageType = 'comprehensive';
+        else if (choice === '3' || choice.includes('personal accident') || choice.includes('premium')) coverageType = 'premium';
         else {
-            // Conversational Q&A instead of strict menu loop
-            // If they didn't pick 1, 2, or 3, assume it's a question about the products
-            const answer = await MistralService.getHimaResponse(choice, lang);
+            // Conversational Q&A
+            const answer = await MistralService.getHimaResponse(choice, "Explain the difference between Third Party, Comprehensive, and Personal Accident insurance for boda bodas.", lang);
             await BotClient.sendText(phoneNumber, answer);
-            // Optionally remind them they can pick a plan, but don't spam the buttons again immediately
-            // unless the AI says so, or just leave it conversational. 
-            // Let's just answer. The buttons are still visible in chat.
             return;
         }
 
@@ -707,24 +724,83 @@ export class BotConversationManager {
 
         // Store selected product
         user.selectedProductId = product._id.toString();
+
+        // Dynamic Routing based on Policy Type
+        if (coverageType === 'comprehensive') {
+            user.botConversationState = 'BUY_BIKE_COLOR';
+            await user.save();
+            const prompt = await MistralService.getConversationalPrompt('BUY', 'BUY_BIKE_COLOR', lang, choice);
+            await BotClient.sendText(phoneNumber, prompt);
+        } else if (coverageType === 'premium') {
+            user.botConversationState = 'BUY_PA_BENEFICIARY';
+            await user.save();
+            const prompt = await MistralService.getConversationalPrompt('BUY', 'BUY_PA_BENEFICIARY', lang, choice);
+            await BotClient.sendText(phoneNumber, prompt);
+        } else {
+            // Third Party is fast-track
+            user.botConversationState = 'BUY_CONFIRM';
+            await user.save();
+            const prompt = await MistralService.getConversationalPrompt('BUY', 'BUY_CONFIRM', lang, `Selected ${product.name}`);
+            await BotClient.sendText(phoneNumber, prompt);
+        }
+    }
+
+    private async handleBuyBikeColor(user: IUser, message: Message, phoneNumber: string): Promise<void> {
+        const lang = getUserLanguage(user);
+        if (message.type !== 'chat') return;
+
+        if (!user.kycData) user.kycData = {};
+        (user.kycData as any).buyBikeColor = message.body.trim();
+        user.botConversationState = 'BUY_BIKE_YEAR';
+        await user.save();
+
+        const prompt = await MistralService.getConversationalPrompt('BUY', 'BUY_BIKE_YEAR', lang, message.body);
+        await BotClient.sendText(phoneNumber, prompt);
+    }
+
+    private async handleBuyBikeYear(user: IUser, message: Message, phoneNumber: string): Promise<void> {
+        const lang = getUserLanguage(user);
+        if (message.type !== 'chat') return;
+
+        if (!user.kycData) user.kycData = {};
+        (user.kycData as any).buyBikeYear = message.body.trim();
+        user.botConversationState = 'BUY_BIKE_PHOTO';
+        await user.save();
+
+        const prompt = await MistralService.getConversationalPrompt('BUY', 'BUY_BIKE_PHOTO', lang, message.body);
+        await BotClient.sendText(phoneNumber, prompt);
+    }
+
+    private async handleBuyBikePhoto(user: IUser, message: Message, phoneNumber: string): Promise<void> {
+        const lang = getUserLanguage(user);
+        if (message.type !== 'image') {
+            await BotClient.sendText(phoneNumber, t(lang, 'error_invalid_image'));
+            return;
+        }
+
+        const mediaData = await BotClient.downloadMedia(message);
+        if (!user.kycData) user.kycData = {};
+        (user.kycData as any).buyBikePhoto = mediaData;
         user.botConversationState = 'BUY_CONFIRM';
         await user.save();
 
-        // Send confirmation
-        await BotClient.sendButtons(
-            phoneNumber,
-            t(lang, 'buy_confirm_details', {
-                productName: product.name,
-                premium: product.premiumAmountKES.toString(),
-                coverage: product.coverageType
-            }),
-            [
-                { id: 'CONFIRM_BUY', text: t(lang, 'buy_button_confirm') },
-                { id: 'CANCEL_BUY', text: t(lang, 'buy_button_cancel') }
-            ],
-            'Confirm Purchase',
-            t(lang, 'button_tap_prompt')
-        );
+        const product = await InsuranceProduct.findById(user.selectedProductId);
+        const prompt = await MistralService.getConversationalPrompt('BUY', 'BUY_CONFIRM', lang, `Product: ${product?.name}`);
+        await BotClient.sendText(phoneNumber, prompt);
+    }
+
+    private async handleBuyPABeneficiary(user: IUser, message: Message, phoneNumber: string): Promise<void> {
+        const lang = getUserLanguage(user);
+        if (message.type !== 'chat') return;
+
+        if (!user.kycData) user.kycData = {};
+        (user.kycData as any).buyPaBeneficiary = message.body.trim();
+        user.botConversationState = 'BUY_CONFIRM';
+        await user.save();
+
+        const product = await InsuranceProduct.findById(user.selectedProductId);
+        const prompt = await MistralService.getConversationalPrompt('BUY', 'BUY_CONFIRM', lang, `Product: ${product?.name}`);
+        await BotClient.sendText(phoneNumber, prompt);
     }
 
     private async handleBuyConfirm(user: IUser, message: Message, phoneNumber: string): Promise<void> {
@@ -753,7 +829,7 @@ export class BotConversationManager {
             }
 
             try {
-                const policyNumber = `HIMA-${uuidv4().substring(0, 8).toUpperCase()}`;
+                const policyNumber = `HIMA - ${uuidv4().substring(0, 8).toUpperCase()} `;
 
                 // Extract actual phone number for M-Pesa (remove @lid or @c.us)
                 const cleanPhone = phoneNumber.replace(/@.*$/, '');
@@ -763,14 +839,14 @@ export class BotConversationManager {
                     cleanPhone,
                     product.premiumAmountKES,
                     policyNumber,
-                    `HIMA Insurance - ${product.name}`
+                    `HIMA Insurance - ${product.name} `
                 );
 
                 await BotClient.sendText(phoneNumber, t(lang, 'buy_payment_prompt'));
                 user.botConversationState = 'MAIN_MENU';
                 await user.save();
             } catch (error) {
-                fileLogger.log(`❌ [BOT-CONV] Payment error: ${error}`, 'ERROR');
+                fileLogger.log(`❌[BOT - CONV] Payment error: ${error} `, 'ERROR');
                 await BotClient.sendText(phoneNumber, t(lang, 'error_general'));
             }
         }
@@ -782,33 +858,9 @@ export class BotConversationManager {
 
     private async handleViewProfile(user: IUser, phoneNumber: string): Promise<void> {
         const lang = getUserLanguage(user);
-
-        // Get active policy
-        const policy = await Policy.findOne({ userId: user._id.toString(), policyStatus: 'active' });
-
-        // Ensure user has wallet
-        const WalletService = (await import('../services/WalletService.js')).default;
-        await WalletService.ensureUserHasWallet(user);
-
-        const dashboardProfileUrl = `${config.dashboardUrl}/dashboard/user/profile`;
-
-        const profileMessage = t(lang, 'profile_details', {
-            name: user.kycData?.fullName || user.firstName || 'N/A',
-            idNumber: user.kycData?.idNumber || 'N/A',
-            plate: user.kycData?.plateNumber || 'N/A',
-            policyNumber: policy?.policyNumber || t(lang, 'profile_no_policy'),
-            profileUrl: dashboardProfileUrl
-        }) + `\n\n🔐 ${lang === 'sw' ? 'Mkoba wa Blockchain' : 'Blockchain Wallet'}:\n` +
-            `${user.walletAddress ? WalletService.formatAddress(user.walletAddress) : 'N/A'}\n\n` +
-            `${lang === 'sw' ? 'Angalia kwenye Dashboard' : 'View on Dashboard'}:\n${dashboardProfileUrl}`;
-
-        await BotClient.sendButtons(
-            phoneNumber,
-            profileMessage,
-            [{ id: 'OPEN_PROFILE', text: t(lang, 'profile_button_open') }],
-            'HIMA Profile',
-            t(lang, 'button_tap_prompt')
-        );
+        const context = await this.getUserContext(user);
+        const prompt = await MistralService.getHimaResponse("Summarize my profile details naturally. Mention my name, ID, plate, and status.", context, lang);
+        await BotClient.sendText(phoneNumber, prompt);
     }
 
     // ============================================
@@ -832,10 +884,26 @@ export class BotConversationManager {
 
         if (!user.kycData) user.kycData = {};
         (user.kycData as any).claimDate = message.body.trim();
+        user.botConversationState = 'CLAIM_TIME';
+        await user.save();
+
+        const prompt = await MistralService.getConversationalPrompt('CLAIM', 'CLAIM_TIME', lang, message.body);
+        await BotClient.sendText(phoneNumber, prompt);
+    }
+
+    private async handleClaimTime(user: IUser, message: Message, phoneNumber: string): Promise<void> {
+        const lang = getUserLanguage(user);
+
+        if (message.type !== 'chat') {
+            await BotClient.sendText(phoneNumber, t(lang, 'error_invalid_input'));
+            return;
+        }
+
+        if (!user.kycData) user.kycData = {};
+        (user.kycData as any).claimTime = message.body.trim();
         user.botConversationState = 'CLAIM_LOCATION';
         await user.save();
 
-        // Conversational Prompt
         const prompt = await MistralService.getConversationalPrompt('CLAIM', 'CLAIM_LOCATION', lang, message.body);
         await BotClient.sendText(phoneNumber, prompt);
     }
@@ -867,10 +935,28 @@ export class BotConversationManager {
 
         if (!user.kycData) user.kycData = {};
         (user.kycData as any).claimDescription = message.body.trim();
+        user.botConversationState = 'CLAIM_BIKE_PHOTO';
+        await user.save();
+
+        const prompt = await MistralService.getConversationalPrompt('CLAIM', 'CLAIM_BIKE_PHOTO', lang, message.body);
+        await BotClient.sendText(phoneNumber, prompt);
+    }
+
+    private async handleClaimBikePhoto(user: IUser, message: Message, phoneNumber: string): Promise<void> {
+        const lang = getUserLanguage(user);
+
+        if (message.type !== 'image') {
+            await BotClient.sendText(phoneNumber, t(lang, 'error_invalid_image'));
+            return;
+        }
+
+        const mediaData = await BotClient.downloadMedia(message);
+        if (!user.kycData) user.kycData = {};
+        (user.kycData as any).claimBikePhoto = mediaData;
         user.botConversationState = 'CLAIM_DAMAGE_PHOTO';
         await user.save();
 
-        const prompt = await MistralService.getConversationalPrompt('CLAIM', 'CLAIM_DAMAGE_PHOTO', lang, message.body);
+        const prompt = await MistralService.getConversationalPrompt('CLAIM', 'CLAIM_DAMAGE_PHOTO', lang);
         await BotClient.sendText(phoneNumber, prompt);
     }
 
@@ -910,30 +996,36 @@ export class BotConversationManager {
         const claimNumber = `CLM-${uuidv4().substring(0, 8).toUpperCase()}`;
         const kycData = user.kycData as any;
 
+        // Combine date and time
+        const incidentDateStr = `${kycData.claimDate} ${kycData.claimTime || '12:00'}`;
+
         const newClaim = new Claim({
             userId: user._id,
             claimNumber,
-            accidentDate: new Date(kycData.claimDate),
-            location: kycData.claimLocation,
-            description: kycData.claimDescription,
+            incidentTime: new Date(incidentDateStr),
+            incidentLocation: kycData.claimLocation,
+            incidentDescription: kycData.claimDescription,
+            bikePhotoBase64: kycData.claimBikePhoto,
             damagePhotoBase64: kycData.claimDamagePhoto,
             policeAbstractBase64: policeAbstract,
-            status: 'submitted',
-            submittedAt: new Date()
+            status: 'submitted'
         });
 
         await newClaim.save();
 
-        // Clear claim data from kycData
+        // Clear temporary data
         delete kycData.claimDate;
+        delete kycData.claimTime;
         delete kycData.claimLocation;
         delete kycData.claimDescription;
+        delete kycData.claimBikePhoto;
         delete kycData.claimDamagePhoto;
 
         user.botConversationState = 'MAIN_MENU';
         await user.save();
 
-        await BotClient.sendText(phoneNumber, t(lang, 'claim_submitted', { claimNumber }));
+        const successMsg = await MistralService.getConversationalPrompt('CLAIM', 'CLAIM_SUBMITTED', lang, claimNumber);
+        await BotClient.sendText(phoneNumber, successMsg);
         await this.sendMainMenu(user, phoneNumber);
         fileLogger.log(`✅ [BOT-CONV] Claim submitted: ${claimNumber}`);
     }

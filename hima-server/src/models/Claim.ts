@@ -1,17 +1,17 @@
 import mongoose, { Schema, Document } from "mongoose";
 
 export interface IClaim extends Document {
-    policyId: string;
     userId: string;
+    claimNumber: string;
     incidentTime: Date;
     incidentLocation: string;
     incidentDescription: string;
-    status: "received" | "review" | "approved" | "rejected" | "paid";
+    bikePhotoBase64?: string;
+    damagePhotoBase64?: string;
+    policeAbstractBase64?: string;
+    status: "received" | "review" | "approved" | "rejected" | "paid" | "submitted";
     payoutAmountKES?: number;
     mediaUrls: string[];
-    onChainClaimId?: string;
-    onChainTxHash?: string;
-    blockchainNetwork?: string;
     rejectionReason?: string;
     reviewedBy?: string;
     reviewedAt?: Date;
@@ -21,15 +21,15 @@ export interface IClaim extends Document {
 
 const ClaimSchema = new Schema<IClaim>(
     {
-        policyId: {
-            type: String,
-            required: true,
-            index: true,
-        },
         userId: {
             type: String,
             required: true,
             index: true,
+        },
+        claimNumber: {
+            type: String,
+            required: true,
+            unique: true,
         },
         incidentTime: {
             type: Date,
@@ -43,10 +43,13 @@ const ClaimSchema = new Schema<IClaim>(
             type: String,
             required: true,
         },
+        bikePhotoBase64: String,
+        damagePhotoBase64: String,
+        policeAbstractBase64: String,
         status: {
             type: String,
-            enum: ["received", "review", "approved", "rejected", "paid"],
-            default: "received",
+            enum: ["received", "review", "approved", "rejected", "paid", "submitted"],
+            default: "submitted",
             index: true,
         },
         payoutAmountKES: {
@@ -56,12 +59,6 @@ const ClaimSchema = new Schema<IClaim>(
             type: [String],
             default: [],
         },
-        onChainClaimId: {
-            type: String,
-            index: true,
-        },
-        onChainTxHash: String,
-        blockchainNetwork: String,
         rejectionReason: {
             type: String,
         },

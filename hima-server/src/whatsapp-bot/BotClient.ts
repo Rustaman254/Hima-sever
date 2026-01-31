@@ -299,7 +299,7 @@ export class BotClient {
      * @returns Full chat ID (preserving @lid or @c.us for proper routing)
      */
     public extractPhoneNumber(chatId: string): string {
-        // Return the full chat ID to preserve @lid or @c.us
+        // Return the full chat ID to preserve @lid or @c.us for proper routing and license compliance
         return chatId;
     }
 
